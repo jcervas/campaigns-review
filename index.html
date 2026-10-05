@@ -1,0 +1,1276 @@
+<meta charset="utf-8">
+<title>Campaigns Review: Chapters 1–5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap">
+<style>
+/* Layout: a fixed 16:9 stage scaled to the window, a quiz-show scoreboard docked along the bottom; stacked reader mode on phones. */
+:root{
+  --paper:#F4F5F2; --panel:#FCFCFA; --well:#E9ECE8; --ink:#12181D; --ink-2:#46525B; --ink-3:#5F6B74; --rule:#D3D8D7;
+  --accent:#C41230; --accent-ink:#A30F28; --accent-soft:#F7E4E7; --on-accent:#FFFFFF;
+  --slab:#12181D; --slab-ink:#F4F5F2; --slab-2:#AEB9C0;
+  --t1:#00857C; --t2:#A4590F; --t3:#8856A7; --t4:#2C7FB8; --t5:#5E7A1F; --t6:#B23A7E;
+  --ok:#2F7A3B; --no:#A4290F;
+  --display:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --text:"Barlow", "Helvetica Neue", Arial, sans-serif;
+  --micro:"Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#12181D; --panel:#1A2229; --well:#222C34; --ink:#EDF0F1; --ink-2:#BAC4CA; --ink-3:#98A4AC; --rule:#33404A;
+    --accent:#F4677F; --accent-ink:#F4677F; --accent-soft:#3B1D25; --on-accent:#12181D;
+    --slab:#0A0E11; --slab-ink:#EDF0F1; --slab-2:#98A4AC;
+    --t1:#4DB8A8; --t2:#E08214; --t3:#B48CD9; --t4:#6FA8DC; --t5:#A3C460; --t6:#E584BA;
+    --ok:#7FBF4D; --no:#F08A6C;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#12181D; --panel:#1A2229; --well:#222C34; --ink:#EDF0F1; --ink-2:#BAC4CA; --ink-3:#98A4AC; --rule:#33404A;
+  --accent:#F4677F; --accent-ink:#F4677F; --accent-soft:#3B1D25; --on-accent:#12181D;
+  --slab:#0A0E11; --slab-ink:#EDF0F1; --slab-2:#98A4AC;
+  --t1:#4DB8A8; --t2:#E08214; --t3:#B48CD9; --t4:#6FA8DC; --t5:#A3C460; --t6:#E584BA;
+  --ok:#7FBF4D; --no:#F08A6C;
+}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--text);overflow:hidden}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:.18rem solid var(--accent);outline-offset:.15rem}
+
+/* stage */
+#viewport{position:fixed;inset:0 0 3.6rem 0;display:grid;place-items:center}
+#stage{position:relative;width:100rem;height:56.25rem;background:var(--paper)}
+.slide{position:absolute;inset:0;padding:3.6rem 5rem 3.2rem;display:none;flex-direction:column;gap:1.4rem;background:var(--paper);overflow:hidden}
+.slide.on{display:flex}
+.slide > .notes{display:none}
+
+/* bottom bar = scoreboard */
+#bar{position:fixed;left:0;right:0;bottom:0;min-height:3.6rem;display:flex;align-items:center;gap:1rem;padding:0 1.2rem env(safe-area-inset-bottom,0px);
+  border-top:1px solid var(--rule);background:var(--panel);font-family:var(--micro);font-size:1rem;color:var(--ink-2)}
+#bar .part{flex:0 1 16rem;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.06em;text-transform:uppercase;font-weight:700;font-size:.9rem}
+#bar .navb{background:none;border:1px solid var(--rule);border-radius:.3rem;padding:.25rem .8rem;cursor:pointer}
+#bar .navb:hover{border-color:var(--ink-3)}
+#count{font-variant-numeric:tabular-nums;min-width:4rem;text-align:center}
+#board{flex:1;display:flex;gap:.6rem;justify-content:flex-end;min-width:0}
+.chip{display:flex;align-items:center;gap:.5rem;border:1px solid var(--rule);border-radius:2rem;padding:.2rem .35rem .2rem .8rem;background:var(--paper)}
+.chip .dot{width:.75rem;height:.75rem;border-radius:50%;flex:none}
+.chip .nm{font-weight:600;color:var(--ink);max-width:9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip .sc{font-family:var(--display);font-weight:700;font-size:1.25rem;color:var(--ink);font-variant-numeric:tabular-nums;min-width:3rem;text-align:right}
+.chip .adj{border:none;background:var(--well);border-radius:50%;width:1.5rem;height:1.5rem;cursor:pointer;line-height:1;font-weight:700;color:var(--ink-2);padding:0}
+.chip .adj:hover{background:var(--rule)}
+.chip.bump .sc{animation:bump .5s}
+@keyframes bump{30%{transform:scale(1.35);color:var(--accent-ink)}}
+#progress{position:fixed;left:0;bottom:3.6rem;height:.22rem;background:var(--accent);transition:width .25s}
+#notes-panel{position:fixed;right:1rem;bottom:4.4rem;width:34rem;max-width:calc(100vw - 2rem);max-height:60vh;overflow:auto;background:var(--panel);border:1px solid var(--rule);
+  border-radius:.4rem;padding:1.2rem 1.4rem;font-size:1.05rem;line-height:1.5;color:var(--ink-2);box-shadow:0 .6rem 2rem rgba(0,0,0,.18)}
+#notes-panel h4{margin:0 0 .4rem;font-family:var(--micro);font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink)}
+
+/* type */
+.kicker{font-family:var(--micro);font-size:1.05rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-ink);margin:0}
+h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:5.2rem;line-height:1.0}
+h2{font-size:3rem;line-height:1.08}
+h3{font-size:1.6rem;line-height:1.2}
+p,li{font-size:1.4rem;line-height:1.42;margin:0;color:var(--ink-2)}
+.lede{font-size:1.8rem;line-height:1.35;color:var(--ink);max-width:62rem}
+.small,.small p{font-size:1.2rem;line-height:1.4}
+.micro{font-family:var(--micro);font-size:1rem;color:var(--ink-3);letter-spacing:.02em}
+b,strong{color:var(--ink);font-weight:600}
+.head{display:flex;flex-direction:column;gap:.55rem}
+.headrow{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem}
+
+/* layout */
+.row{display:flex;gap:2.2rem}
+.col{display:flex;flex-direction:column;gap:1rem}
+.grow{flex:1;min-width:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:.45rem;padding:1.2rem 1.4rem;display:flex;flex-direction:column;gap:.5rem;min-width:0}
+.card h3{font-size:1.45rem}
+.card p{font-size:1.18rem;line-height:1.4}
+.bigstat{font-family:var(--display);font-size:4.2rem;font-weight:600;line-height:1;color:var(--accent-ink);font-variant-numeric:lining-nums tabular-nums}
+.statcard{background:var(--slab);color:var(--slab-ink);border-radius:.45rem;padding:1.6rem 1.6rem;display:flex;flex-direction:column;gap:.7rem;justify-content:center}
+.statcard .bigstat{color:var(--accent)}
+.statcard p{color:var(--slab-2);font-size:1.2rem}
+.statcard b{color:var(--slab-ink)}
+
+/* buttons */
+.btn{background:var(--panel);border:1px solid var(--rule);border-radius:.35rem;padding:.45rem .95rem;cursor:pointer;font-family:var(--micro);font-size:1.1rem;font-weight:600;color:var(--ink)}
+.btn:hover{border-color:var(--ink-3)}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn:disabled{opacity:.4;cursor:default}
+.btns{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+
+/* title / setup */
+.framework{display:grid;grid-template-columns:repeat(4,1fr);border-top:.25rem solid var(--ink)}
+.framework div{padding:1rem 1.2rem 0;border-right:1px solid var(--rule);display:flex;flex-direction:column;gap:.3rem}
+.framework div:last-child{border-right:none}
+.framework b{font-family:var(--display);font-size:1.8rem}
+.framework span{font-size:1.15rem;color:var(--ink-2);line-height:1.35}
+.framework i{font-style:normal;font-family:var(--micro);font-weight:700;color:var(--accent-ink);font-size:1rem;letter-spacing:.1em}
+.setup{background:var(--panel);border:1px solid var(--rule);border-radius:.5rem;padding:1.3rem 1.5rem;display:grid;grid-template-columns:auto 1fr;gap:.9rem 1.4rem;align-items:center}
+.setup label.l{font-family:var(--micro);font-size:.95rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.teamnames{display:flex;gap:.6rem;flex-wrap:wrap}
+.teamnames .tn{display:flex;align-items:center;gap:.4rem;border:1px solid var(--rule);border-radius:.35rem;padding:.2rem .3rem .2rem .7rem;background:var(--paper)}
+.teamnames input{border:none;background:transparent;width:9.5rem;font-size:1.1rem;font-weight:600;padding:.25rem}
+.teamnames .dot{width:.8rem;height:.8rem;border-radius:50%}
+.confirm{font-family:var(--micro);font-size:1rem;color:var(--no)}
+
+/* recap slides */
+.recap .grid4 .card{border-top:.3rem solid var(--ink)}
+.recap .num{font-family:var(--micro);font-weight:700;font-size:.95rem;letter-spacing:.1em;color:var(--accent-ink)}
+.eras{display:grid;grid-template-columns:repeat(5,1fr);border-top:.25rem solid var(--ink)}
+.eras div{padding:.9rem 1rem;border-right:1px solid var(--rule);display:flex;flex-direction:column;gap:.35rem}
+.eras div:last-child{border-right:none}
+.eras .yr{font-family:var(--micro);font-weight:700;color:var(--accent-ink);font-size:1rem;letter-spacing:.06em}
+.eras b{font-family:var(--display);font-size:1.45rem;line-height:1.15}
+.eras span{font-size:1.1rem;line-height:1.35;color:var(--ink-2)}
+.changed{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+.changed ul{margin:0;padding-left:1.2rem;display:flex;flex-direction:column;gap:.25rem}
+.changed li{font-size:1.15rem}
+
+/* divider-ish round header */
+.roundtag{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--micro);font-weight:700;font-size:1rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--on-accent);background:var(--accent);border-radius:2rem;padding:.3rem .9rem;white-space:nowrap}
+
+/* quiz */
+.quiz{display:flex;flex-direction:column;gap:1rem;flex:1;min-height:0}
+.qtop{display:flex;align-items:center;gap:1rem}
+.qdots{display:flex;gap:.35rem;flex:1;flex-wrap:wrap}
+.qdots button{width:1.9rem;height:1.9rem;border-radius:50%;border:1px solid var(--rule);background:var(--panel);font-family:var(--micro);font-size:.85rem;font-weight:700;cursor:pointer;color:var(--ink-3);padding:0}
+.qdots button.cur{border:.15rem solid var(--ink);color:var(--ink)}
+.qdots button.done{background:var(--well)}
+.qdots button.good{background:var(--ok);border-color:var(--ok);color:var(--paper)}
+.qdots button.bad{background:var(--no);border-color:var(--no);color:var(--paper)}
+.qcard{background:var(--panel);border:1px solid var(--rule);border-radius:.45rem;padding:1.4rem 1.7rem 1.2rem;display:flex;flex-direction:column;gap:.8rem;position:relative;overflow:hidden}
+.qcard .q{font-family:var(--display);font-size:2.5rem;line-height:1.22;color:var(--ink);text-wrap:balance}
+.qcard.case{border-left:.45rem solid var(--ink)}
+.qcard.case .q{font-style:italic}
+.timer{height:.35rem;background:var(--well);border-radius:.2rem;overflow:hidden;position:relative}
+.timer i{position:absolute;inset:0 auto 0 0;width:100%;background:var(--accent);border-radius:.2rem}
+.timer.out i{background:var(--no)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.opt{display:flex;align-items:center;gap:1rem;text-align:left;background:var(--panel);border:1px solid var(--rule);border-radius:.45rem;padding:.85rem 1.1rem;cursor:pointer;font-size:1.55rem;line-height:1.3;color:var(--ink);min-height:5.4rem}
+.opt:hover{border-color:var(--ink-3)}
+.opt .let{flex:none;width:2.2rem;height:2.2rem;border-radius:.3rem;display:grid;place-items:center;background:var(--well);font-family:var(--micro);font-weight:700;font-size:1.1rem;color:var(--ink-2)}
+.opt.right{border:.15rem solid var(--ok);background:color-mix(in srgb,var(--ok) 13%,var(--panel))}
+.opt.right .let{background:var(--ok);color:var(--paper)}
+.opt.wrong{border:.15rem solid var(--no);background:color-mix(in srgb,var(--no) 9%,var(--panel))}
+.opt.wrong .let{background:var(--no);color:var(--paper)}
+.opt.dim{opacity:.55}
+.opt.picked{border:.15rem solid var(--ink)}
+.fb{font-size:1.45rem;line-height:1.42;color:var(--ink-2);min-height:3.8rem}
+.fb b.ok{color:var(--ok)} .fb b.nope{color:var(--no)}
+.qfoot{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:auto}
+.award{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;font-family:var(--micro);font-size:1rem;color:var(--ink-3)}
+.award .tb{display:inline-flex;align-items:center;gap:.4rem;border:1px solid var(--rule);background:var(--panel);border-radius:2rem;padding:.3rem .8rem;cursor:pointer;font-weight:600;color:var(--ink);font-size:1rem}
+.award .tb .dot{width:.7rem;height:.7rem;border-radius:50%}
+.award .tb[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-.4rem)}75%{transform:translateX(.4rem)}}
+
+/* sort game */
+.sortgrid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem 1.4rem}
+.sitem{display:grid;grid-template-columns:1fr auto;align-items:center;gap:.8rem;background:var(--panel);border:1px solid var(--rule);border-radius:.4rem;padding:.65rem .8rem .65rem 1.1rem}
+.sitem .lab{font-size:1.2rem;color:var(--ink);line-height:1.3}
+.sitem .why{grid-column:1 / -1;font-size:1.02rem;color:var(--ink-2);line-height:1.35}
+.sitem .cats{display:flex;gap:.35rem}
+.sitem .cats button{border:1px solid var(--rule);background:var(--paper);border-radius:.3rem;padding:.3rem .65rem;font-family:var(--micro);font-weight:700;font-size:.95rem;cursor:pointer;color:var(--ink-2)}
+.sitem .cats button:hover{border-color:var(--ink-3)}
+.sitem .cats button.right{background:var(--ok);border-color:var(--ok);color:var(--paper)}
+.sitem .cats button.wrong{background:transparent;border-color:var(--no);color:var(--no);text-decoration:line-through}
+.sitem.solved{border-color:var(--ok)}
+
+/* era order game */
+.slots{display:grid;grid-template-columns:repeat(5,1fr);gap:.8rem}
+.slot{border:.12rem dashed var(--rule);border-radius:.45rem;min-height:8.2rem;padding:.9rem 1rem;display:flex;flex-direction:column;gap:.3rem}
+.slot .n{font-family:var(--display);font-size:2rem;color:var(--ink-3);line-height:1}
+.slot.filled{border-style:solid;border-color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,var(--panel))}
+.slot.filled .n{color:var(--ok)}
+.slot b{font-family:var(--display);font-size:1.35rem;line-height:1.15}
+.slot span{font-family:var(--micro);font-weight:700;color:var(--accent-ink);font-size:1rem}
+.pool{display:grid;grid-template-columns:repeat(5,1fr);gap:.8rem}
+.ecard{background:var(--panel);border:1px solid var(--rule);border-radius:.45rem;padding:1rem 1.1rem;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:.4rem;min-height:9.5rem}
+.ecard:hover{border-color:var(--ink-3)}
+.ecard b{font-family:var(--display);font-size:1.35rem;line-height:1.15;color:var(--ink)}
+.ecard span{font-size:1.08rem;color:var(--ink-2);line-height:1.35}
+.ecard.used{visibility:hidden}
+.ecard.miss{border-color:var(--no)}
+
+/* calculator */
+.calc{display:grid;grid-template-columns:30rem 1fr;gap:2.4rem;flex:1;min-height:0}
+.sl{display:grid;grid-template-columns:1fr auto;gap:.15rem .8rem;align-items:center}
+.sl label{font-size:1.15rem;color:var(--ink)}
+.sl output{font-family:var(--micro);font-weight:700;font-size:1.2rem;font-variant-numeric:tabular-nums;color:var(--ink)}
+.sl input{grid-column:1 / -1;width:100%;accent-color:var(--accent)}
+.ledger{width:100%;border-collapse:collapse;font-size:1.25rem}
+.ledger td{padding:.5rem .4rem;border-bottom:1px solid var(--rule);color:var(--ink-2)}
+.ledger td:last-child{text-align:right;font-family:var(--micro);font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600}
+.ledger td.op{font-family:var(--micro);color:var(--ink-3);font-size:1.05rem;white-space:nowrap}
+.meter{height:2.2rem;background:var(--well);border-radius:.3rem;position:relative;overflow:hidden}
+.meter i{position:absolute;inset:0 auto 0 0;background:var(--accent);transition:width .25s}
+.meter span{position:absolute;top:0;bottom:0;width:.15rem;background:var(--ink)}
+.calc .verdict{font-family:var(--display);font-size:4.2rem;font-weight:600;line-height:1;color:var(--accent-ink);font-variant-numeric:tabular-nums}
+
+/* final + standings */
+.wagers{display:flex;gap:1rem;flex-wrap:wrap}
+.wager{display:flex;flex-direction:column;gap:.4rem;background:var(--panel);border:1px solid var(--rule);border-radius:.45rem;padding:.8rem 1rem;min-width:13rem}
+.wager .who{display:flex;align-items:center;gap:.5rem;font-weight:600;font-size:1.15rem;color:var(--ink)}
+.wager .who .dot{width:.75rem;height:.75rem;border-radius:50%}
+.wager input{width:100%;padding:.4rem .6rem;border:1px solid var(--rule);border-radius:.3rem;background:var(--paper);font-size:1.3rem;font-family:var(--micro);font-variant-numeric:tabular-nums}
+.wager .res{display:flex;gap:.4rem}
+.wager .res button{flex:1}
+.standings{display:flex;flex-direction:column;gap:1rem;max-width:80rem}
+.srow{display:grid;grid-template-columns:3rem 14rem 1fr 7rem;align-items:center;gap:1.2rem}
+.srow .rk{font-family:var(--display);font-size:2.6rem;color:var(--ink-3);text-align:right}
+.srow .nm{font-size:1.6rem;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.srow .barw{height:2.6rem;background:var(--well);border-radius:.3rem;overflow:hidden}
+.srow .barw i{display:block;height:100%;border-radius:.3rem;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.srow .pt{font-family:var(--display);font-size:2.4rem;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
+.srow.first .rk,.srow.first .nm{color:var(--accent-ink)}
+#confetti{position:absolute;inset:0;pointer-events:none}
+
+.howto{display:flex;gap:1rem;align-items:baseline;background:var(--accent-soft);border-radius:.4rem;padding:.7rem 1.1rem;font-size:1.2rem;line-height:1.4;color:var(--ink)}
+.howto::before{content:"How to play";flex:none;font-family:var(--micro);font-weight:700;font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink)}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;counter-reset:st}
+.steps li{counter-increment:st;display:flex;flex-direction:column;gap:.45rem;border-top:.25rem solid var(--ink);padding-top:.9rem;font-size:1.25rem}
+.steps li::before{content:counter(st);font-family:var(--display);font-size:3rem;line-height:1;color:var(--accent-ink);font-weight:600}
+.steps li b{font-family:var(--display);font-size:1.6rem;font-weight:600}
+table.rounds{border-collapse:collapse;width:100%}
+table.rounds td{padding:.45rem .6rem;border-bottom:1px solid var(--rule);font-size:1.2rem;color:var(--ink-2);vertical-align:top}
+table.rounds td:first-child{font-weight:600;color:var(--ink);white-space:nowrap}
+table.rounds td:last-child{text-align:right;font-family:var(--micro);font-weight:700;color:var(--accent-ink);white-space:nowrap}
+body.reader .steps{display:flex;flex-direction:column}
+body.reader .howto{flex-direction:column;gap:.3rem}
+/* reader mode (phones, narrow windows) */
+body.reader{overflow-y:auto;overflow-x:hidden;padding-inline:16px;padding-bottom:5rem}
+body.reader #viewport{position:static;display:block}
+body.reader #stage{width:auto;height:auto;background:none}
+body.reader .slide{position:relative;display:flex;inset:auto;padding:2.4rem 0 2.8rem;border-bottom:1px solid var(--rule);overflow:visible;max-width:100%}
+body.reader .grid4,body.reader .grid2,body.reader .row,body.reader .framework,body.reader .eras,body.reader .changed,body.reader .calc,body.reader .slots,body.reader .pool,body.reader .sortgrid,body.reader .headrow{display:flex;flex-direction:column;align-items:stretch}
+body.reader .opts{grid-template-columns:1fr}
+body.reader .framework div,body.reader .eras div{border-right:none;border-bottom:1px solid var(--rule);padding-bottom:.8rem}
+body.reader .setup{grid-template-columns:1fr}
+body.reader .sitem{grid-template-columns:1fr}
+body.reader .srow{grid-template-columns:2rem 1fr 4rem}
+body.reader .srow .barw{grid-column:1 / -1;order:4}
+body.reader h1{font-size:3.6rem}
+body.reader #bar{gap:.5rem;padding-inline:.6rem}
+body.reader #bar .part,body.reader #bar .navb,body.reader #count,body.reader #progress,body.reader #notesbtn{display:none}
+body.reader #board{justify-content:center;flex-wrap:wrap}
+body.reader .ecard.used{display:none}
+body.reader .slot{min-height:0}
+@media (prefers-reduced-motion: reduce){#progress,.meter i,.srow .barw i{transition:none}.chip.bump .sc,.shake{animation:none}}
+
+/* live play: join panel, answer status, results */
+.joinbox{display:grid;grid-template-columns:auto 1fr;gap:.4rem 1.6rem;align-items:center;background:var(--slab);color:var(--slab-ink);border-radius:.5rem;padding:1.1rem 1.5rem}
+.joinbox .code{grid-row:span 2;font-family:var(--display);font-weight:700;font-size:4.2rem;letter-spacing:.12em;line-height:1;color:var(--accent)}
+.joinbox .url{font-family:var(--micro);font-size:1.25rem;color:var(--slab-ink);word-break:break-all}
+.joinbox .lbl{font-family:var(--micro);font-size:.9rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--slab-2)}
+.devs{display:flex;gap:.5rem;flex-wrap:wrap}
+.dev{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--micro);font-size:1rem;border:1px solid var(--rule);border-radius:2rem;padding:.25rem .75rem;background:var(--panel);color:var(--ink-2)}
+.dev .dot{width:.7rem;height:.7rem;border-radius:50%}
+.dev.on{color:var(--ink);font-weight:600}
+.liveline{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;font-family:var(--micro);font-size:1rem;color:var(--ink-3)}
+.lt{display:inline-flex;align-items:center;gap:.45rem;border:1px solid var(--rule);border-radius:2rem;padding:.3rem .8rem;background:var(--panel);font-weight:600;color:var(--ink-3);font-size:1rem}
+.lt .dot{width:.7rem;height:.7rem;border-radius:50%}
+.lt.in{color:var(--ink);border-color:var(--ink)}
+.lt.ok{border-color:var(--ok);color:var(--ink);background:color-mix(in srgb,var(--ok) 12%,var(--panel))}
+.lt.no{border-color:var(--no);color:var(--ink-2)}
+.lt b{font-family:var(--display);font-size:1.15rem}
+.clock{font-family:var(--display);font-weight:700;font-size:1.6rem;color:var(--ink);font-variant-numeric:tabular-nums;min-width:3rem;text-align:right}
+.livenote{font-family:var(--micro);font-size:1rem;color:var(--no)}
+
+/* player screen */
+#player{display:none}
+body.player{overflow:auto}
+body.player #viewport,body.player #bar,body.player #progress,body.player #notes-panel{display:none!important}
+body.player #player{display:flex;flex-direction:column;min-height:100%;max-width:44rem;margin:0 auto;padding:1.4rem 16px 2.4rem;gap:1.2rem;font-size:16px}
+#player .ptop{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+#player .brand{font-family:var(--micro);font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-ink)}
+#player .me{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--micro);font-weight:600;font-size:1rem;border:1px solid var(--rule);border-radius:2rem;padding:.3rem .5rem .3rem .8rem;background:var(--panel)}
+#player .me .dot{width:.8rem;height:.8rem;border-radius:50%}
+#player .me b{font-family:var(--display);font-size:1.2rem;font-variant-numeric:tabular-nums}
+#player h2{font-size:1.9rem;line-height:1.15}
+#player p{font-size:1.05rem}
+#player .pq{font-family:var(--display);font-size:1.5rem;line-height:1.25;color:var(--ink)}
+#player .pin{width:100%;padding:.8rem 1rem;font-size:1.6rem;letter-spacing:.2em;text-transform:uppercase;border:1px solid var(--rule);border-radius:.4rem;background:var(--panel);font-family:var(--micro);font-weight:700}
+#player .big{display:flex;align-items:center;gap:.9rem;width:100%;text-align:left;padding:1rem 1.1rem;border-radius:.5rem;border:1px solid var(--rule);background:var(--panel);font-size:1.1rem;line-height:1.3;cursor:pointer;color:var(--ink)}
+#player .big .let{flex:none;width:2.2rem;height:2.2rem;border-radius:.35rem;display:grid;place-items:center;background:var(--well);font-family:var(--micro);font-weight:700}
+#player .big.sel{border:.15rem solid var(--ink)}
+#player .big.right{border:.15rem solid var(--ok);background:color-mix(in srgb,var(--ok) 13%,var(--panel))}
+#player .big.wrong{border:.15rem solid var(--no)}
+#player .big:disabled{cursor:default}
+#player .teamb{border-left:.5rem solid}
+#player .stack{display:flex;flex-direction:column;gap:.7rem}
+#player .ptimer{height:.45rem;background:var(--well);border-radius:.25rem;overflow:hidden}
+#player .ptimer i{display:block;height:100%;background:var(--accent)}
+#player .verdict{font-family:var(--display);font-weight:700;font-size:2.4rem;line-height:1.05}
+#player .verdict.ok{color:var(--ok)} #player .verdict.no{color:var(--no)}
+#player .mini{display:flex;flex-direction:column;gap:.35rem;border-top:1px solid var(--rule);padding-top:.9rem}
+#player .mini div{display:flex;justify-content:space-between;font-family:var(--micro);font-size:1rem;color:var(--ink-2)}
+#player .mini div.mine{color:var(--ink);font-weight:700}
+#player .muted{font-family:var(--micro);font-size:.95rem;color:var(--ink-3)}
+#player .err{font-family:var(--micro);font-size:1rem;color:var(--no)}
+</style>
+
+<div id="viewport"><main id="stage">
+
+<!-- ============ TITLE + SETUP ============ -->
+<section class="slide" data-part="Setup" style="justify-content:center;gap:1.5rem">
+  <p class="kicker">Campaigns and Elections · Review · Chapters 1–5</p>
+  <h1 style="max-width:80rem;font-size:4.6rem">Rules, Reality, Strategy, Choice: the review game</h1>
+  <div class="setup" id="setup">
+    <label class="l">Play as</label>
+    <div class="btns"><button class="btn" id="m-live">Teams on their own computers</button><button class="btn" id="m-teams">Teams on one shared screen</button><button class="btn" id="m-solo">Solo study</button></div>
+    <label class="l" id="tl-l">Teams</label>
+    <div class="btns" id="team-row"><span class="btns" id="team-count"></span><span class="teamnames" id="team-names"></span></div>
+    <label class="l" id="tm-l">Timer</label>
+    <div class="btns" id="tm-row"><button class="btn" id="timer-btn">20 seconds per question</button><span class="micro" id="timer-note"></span></div>
+    <label class="l">Scores</label>
+    <div class="btns"><button class="btn" id="reset-btn">Start a new game</button><span class="confirm" id="reset-confirm" hidden>This clears every score. <button class="btn" id="reset-yes">Clear scores</button> <button class="btn" id="reset-no">Keep playing</button></span></div>
+  </div>
+  <div id="joinpanel" class="col" style="gap:.8rem" hidden>
+    <div class="joinbox"><span class="code" id="j-code">····</span><span class="lbl">On each team's computer, open</span><span class="url" id="j-url"></span></div>
+    <div class="liveline"><span id="j-status">Connecting…</span><span class="devs" id="j-devs"></span><button class="btn" id="newcode">New code</button></div>
+  </div>
+  <p class="micro" id="keys-hint">→ reveals the answer, then the next question, then the next slide · N shows notes</p>
+  <aside class="notes">Pick a mode. "Teams on their own computers" gives you a four-letter code: each team opens the link on one computer, types the code and picks its team, then answers every question there. The presenter screen collects the answers and scores them, half for being right and half for speed. "Teams on one shared screen" is the old version: you click the answer the room calls out and tap the teams that got it. Solo is for students studying alone. Everything is saved in this browser.</aside>
+</section>
+
+<!-- ============ HOW TO PLAY ============ -->
+<section class="slide" data-part="How to play">
+  <div class="head"><p class="kicker">Before we start</p><h2>How the game works</h2></div>
+  <ol class="steps" id="hp-steps"></ol>
+  <div class="card" style="gap:.8rem">
+    <h3>Today's rounds</h3>
+    <table class="rounds"><tbody>
+      <tr><td>Warm-up</td><td>Sort eight items into rules, reality, strategy or choice</td><td>200</td></tr>
+      <tr><td>Rounds 1–5</td><td>A recap slide, then eight questions per chapter. Half the points for a right answer, half for speed.</td><td>Up to 100 each</td></tr>
+      <tr><td>Case files</td><td>Name the Supreme Court case from its holding</td><td>Up to 200 each</td></tr>
+      <tr><td>Mini-games</td><td>Order the five campaign eras (Ch. 3) · sort who discloses donors (Ch. 4)</td><td>200</td></tr>
+      <tr><td>Calculator</td><td>Build the book's 2028 North Carolina vote target (Ch. 5)</td><td>No points</td></tr>
+      <tr><td>Final</td><td>Wager any part of your score on one last question</td><td>Your bet</td></tr>
+    </tbody></table>
+  </div>
+  <aside class="notes">Read the steps aloud once. Every game slide repeats its own directions in the box under the title. Every question comes from Chapters 1–5 of the book.</aside>
+</section>
+
+<!-- ============ WARM-UP ============ -->
+<section class="slide" data-part="Warm-up">
+  <div class="headrow">
+    <div class="head"><p class="kicker">Warm-up · the book's framework</p><h2>Rules, reality, strategy, or choice?</h2></div>
+    <span class="roundtag" id="fw-tag">Sort all eight</span>
+  </div>
+  <div class="howto" data-how="sort"></div>
+  <div class="sort" id="sort-fw"></div>
+  <aside class="notes">Rules are set before the race. Reality is the context candidates cannot control. Strategy is what candidates, parties, groups and the media choose to do. Choice is whether and how citizens vote.</aside>
+</section>
+
+<!-- ============ CH 1 ============ -->
+<section class="slide recap" data-part="Chapter 1 · Analyzing campaigns">
+  <div class="head"><p class="kicker">Chapter 1 in one slide</p><h2>The top line is not the election</h2></div>
+  <div class="row grow" style="min-height:0">
+    <div class="grid2 grow">
+      <div class="card"><span class="num">THE 2024 PUZZLE</span><h3>Down the ballot, no wave</h3><p>Trump won the electoral college and the popular vote. Republicans won the Senate but <b>lost two House seats</b>. No governorship changed hands, and only the Michigan House flipped.</p></div>
+      <div class="card"><span class="num">THE FRAMEWORK</span><h3>Rules, reality, strategy, choice</h3><p>Rules govern every actor. Reality is the context candidates cannot control. Strategy is the part they can. Citizens choose whether and how to vote.</p></div>
+      <div class="card"><span class="num">THE STANDARDS</span><h3>Free choice, equality, deliberation, free speech</h3><p>The standards for judging elections sometimes conflict. Free speech, as the Court read it in <i>Buckley v. Valeo</i>, limits campaign finance reforms meant to promote equality.</p></div>
+      <div class="card"><span class="num">THE STAKES</span><h3>Democratic backsliding</h3><p>Leaders can degrade democracy to keep power without banning elections. The aftermath of 2020 showed that democratic elections cannot be taken for granted.</p></div>
+    </div>
+    <div class="statcard" style="width:24rem"><span class="bigstat">48%</span><p>of 2024 U.S. House primaries had <b>at least two candidates</b>. With one name on the ballot, there is no choice to make.</p><span class="bigstat" style="font-size:3rem">+3 pts</span><p>turnout from <b>same-day registration</b>, according to research the book cites.</p></div>
+  </div>
+  <aside class="notes">Ninety seconds, then play. The framework is the one idea that recurs in every chapter.</aside>
+</section>
+<section class="slide" data-part="Chapter 1 · Analyzing campaigns">
+  <div class="headrow"><div class="head"><p class="kicker">Round 1 · Chapter 1</p><h2>Analyzing campaigns and elections</h2></div><span class="roundtag">Up to 100 each</span></div>
+  <div class="howto" data-how="quiz"></div>
+  <div class="quiz" data-round="ch1"></div>
+  <aside class="notes">Eight questions.</aside>
+</section>
+
+<!-- ============ CH 2 ============ -->
+<section class="slide recap" data-part="Chapter 2 · The electoral process">
+  <div class="head"><p class="kicker">Chapter 2 in one slide</p><h2>Six questions the rules answer</h2></div>
+  <div class="row grow" style="min-height:0">
+    <div class="grid2 grow">
+      <div class="card"><span class="num">WHO VOTES · HOW</span><h3>Two national limits, fifty sets of rules</h3><p>Only citizenship and age 18 apply everywhere. States set registration, ID and mail rules. Absentee voters request a ballot; vote-by-mail sends one to everyone.</p></div>
+      <div class="card"><span class="num">WHO RUNS · WHEN</span><h3>Competence, loyalty, a fixed calendar</h3><p>Age, citizenship and residency rules reflect competence and loyalty. States may not term-limit Congress. Fixed election dates make the campaign permanent.</p></div>
+      <div class="card"><span class="num">WHERE</span><h3>Somebody draws the lines</h3><p>Reapportionment moves House seats among states. Redistricting redraws districts to equal populations. Gerrymanders pack or crack the other side's voters.</p></div>
+      <div class="card"><span class="num">WHO WINS</span><h3>Plurality rule and Duverger's Law</h3><p>Single-member districts plus plurality rule push toward two parties. Maine and Alaska use ranked-choice voting; other democracies use proportional representation.</p></div>
+    </div>
+    <div class="statcard" style="width:24rem"><span class="bigstat">36</span><p>states have <b>voter identification laws</b>.</p><span class="bigstat">47</span><p>states plus D.C. allowed <b>early voting</b> as of 2024.</p></div>
+  </div>
+  <aside class="notes">Chapter 2 gets two rounds: the regular round and the court-case round.</aside>
+</section>
+<section class="slide" data-part="Chapter 2 · The electoral process">
+  <div class="headrow"><div class="head"><p class="kicker">Round 2 · Chapter 2</p><h2>The American electoral process</h2></div><span class="roundtag">Up to 100 each</span></div>
+  <div class="howto" data-how="quiz"></div>
+  <div class="quiz" data-round="ch2"></div>
+  <aside class="notes">Eight questions.</aside>
+</section>
+<section class="slide" data-part="Case files · Chapters 2 & 4">
+  <div class="headrow"><div class="head"><p class="kicker">Bonus round · Chapters 2 and 4</p><h2>Case files: name the case from the holding</h2></div><span class="roundtag">Up to 200 each</span></div>
+  <div class="howto" data-how="case"></div>
+  <div class="quiz" data-round="cases"></div>
+  <aside class="notes">Double points. Every case here is discussed in Chapter 2 or Chapter 4.</aside>
+</section>
+
+<!-- ============ CH 3 ============ -->
+<section class="slide recap" data-part="Chapter 3 · Five eras">
+  <div class="head"><p class="kicker">Chapter 3 in one slide</p><h2>Five eras, and less change than you think</h2></div>
+  <div class="eras">
+    <div><span class="yr">1788–1824</span><b>Pre-democratic</b><span>State legislatures pick electors. Candidates barely campaign; other party members do it for them.</span></div>
+    <div><span class="yr">1828–92</span><b>Mass mobilization</b><span>Jackson's template: a loyal inner circle, organized voters, entertainment. Turnout reaches 80% in 1840.</span></div>
+    <div><span class="yr">1896–1948</span><b>Progressive</b><span>Civil service, the Australian ballot and primaries weaken parties. Turnout falls.</span></div>
+    <div><span class="yr">1952–2012</span><b>Candidate</b><span>Television, primaries and polling. The media market replaces the county.</span></div>
+    <div><span class="yr">2016–now</span><b>Contemporary</b><span>Polarization, sorting, big data and digital outreach.</span></div>
+  </div>
+  <div class="changed">
+    <div class="card"><h3>Changed</h3><ul><li>Technology: broadcast, then digital and social media</li><li>The rules: ballots, primaries, finance</li><li>Who sits in each party's coalition</li></ul></div>
+    <div class="card"><h3>Didn't</h3><ul><li>More focus on character than on policy</li><li>Negative campaigning, since the Federalists</li><li>Door-to-door work and voter mobilization</li></ul></div>
+  </div>
+  <aside class="notes">The eras are separated by abrupt changes in rules and reality. The next slide asks teams to rebuild the order.</aside>
+</section>
+<section class="slide" data-part="Chapter 3 · Five eras">
+  <div class="headrow"><div class="head"><p class="kicker">Mini-game · Chapter 3</p><h2>Put the five eras in order</h2></div><span class="roundtag" id="era-tag">200 points</span></div>
+  <div class="howto" data-how="order"></div>
+  <div class="order" id="order-eras"></div>
+  <aside class="notes">The descriptions are the clues; the dates appear once each era lands in its slot.</aside>
+</section>
+<section class="slide" data-part="Chapter 3 · Five eras">
+  <div class="headrow"><div class="head"><p class="kicker">Round 3 · Chapter 3</p><h2>The transformation of American campaigns</h2></div><span class="roundtag">Up to 100 each</span></div>
+  <div class="howto" data-how="quiz"></div>
+  <div class="quiz" data-round="ch3"></div>
+  <aside class="notes">Eight questions.</aside>
+</section>
+
+<!-- ============ CH 4 ============ -->
+<section class="slide recap" data-part="Chapter 4 · Financing campaigns">
+  <div class="head"><p class="kicker">Chapter 4 in one slide</p><h2>Contributions are limited. Spending is not.</h2></div>
+  <div class="row grow" style="min-height:0">
+    <div class="grid2 grow">
+      <div class="card"><span class="num">WHO GIVES</span><h3>Individuals and PACs</h3><p>Citizens and permanent residents of any age may give. Corporations and unions give only through PACs. Donors of $200 or more are disclosed to the FEC.</p></div>
+      <div class="card"><span class="num">THE LAWS</span><h3>Tillman, FECA, BCRA</h3><p>Tillman (1907) banned corporate donations. FECA (1971) required disclosure. BCRA (2002) banned party soft money and indexed limits to inflation.</p></div>
+      <div class="card"><span class="num">THE CASES</span><h3>From <i>Buckley</i> to <i>Citizens United</i></h3><p><i>Buckley</i> (1976) allowed contribution limits but not spending limits. <i>Citizens United</i> (2010) freed corporate and union spending. <i>McCutcheon</i> (2014) ended the aggregate limit.</p></div>
+      <div class="card"><span class="num">DOES IT BUY ANYTHING?</span><h3>Hard to prove either way</h3><p>Trump was outspent in 2016, 2020 and 2024. Donors may back likely winners, and access may matter more than votes.</p></div>
+    </div>
+    <div class="statcard" style="width:24rem"><span class="bigstat">$3,500</span><p>per election, what one person may give one candidate in <b>2025–26</b>.</p><span class="bigstat" style="font-size:3rem">$4.2B</span><p>spent by <b>independent groups</b> in 2024.</p></div>
+  </div>
+  <aside class="notes">The one sentence to leave with: contributions are limited, spending is not.</aside>
+</section>
+<section class="slide" data-part="Chapter 4 · Financing campaigns">
+  <div class="headrow"><div class="head"><p class="kicker">Mini-game · Chapter 4</p><h2>Who learns the donor's name?</h2></div><span class="roundtag" id="dis-tag">Sort all six</span></div>
+  <div class="howto" data-how="disc"></div>
+  <div class="sort" id="sort-dis"></div>
+  <aside class="notes">Super PACs disclose to the FEC, 527s to the IRS, and 501(c) groups to nobody.</aside>
+</section>
+<section class="slide" data-part="Chapter 4 · Financing campaigns">
+  <div class="headrow"><div class="head"><p class="kicker">Round 4 · Chapter 4</p><h2>Financing campaigns</h2></div><span class="roundtag">Up to 100 each</span></div>
+  <div class="howto" data-how="quiz"></div>
+  <div class="quiz" data-round="ch4"></div>
+  <aside class="notes">Eight questions.</aside>
+</section>
+
+<!-- ============ CH 5 ============ -->
+<section class="slide recap" data-part="Chapter 5 · Campaign strategy">
+  <div class="head"><p class="kicker">Chapter 5 in one slide</p><h2>Who a campaign talks to, and who it ignores</h2></div>
+  <div class="row grow" style="min-height:0">
+    <div class="grid2 grow">
+      <div class="card"><span class="num">BRADSHAW</span><h3>Your base, their base, the undecided</h3><p>All three can be estimated. You do not need every vote, so direct resources to the groups that decide the outcome.</p></div>
+      <div class="card"><span class="num">VOTE TARGETS</span><h3>Turnout, floor, ceiling</h3><p>Past results set a floor and a ceiling. The gap between them is the persuadable vote, and county shares turn the target into local quotas.</p></div>
+      <div class="card"><span class="num">THE INSTRUMENTS</span><h3>Samples, focus groups, voter files</h3><p>Probability samples measure opinion. Focus groups add depth. Microtargeting needs a poll of about 6,000 matched to the voter file.</p></div>
+      <div class="card"><span class="num">THE DECISIONS</span><h3>Whether to run, what to stress, whom to attack</h3><p>Strategic politicians run when they can win. Parties own issues. Candidates who are behind are the likeliest to attack.</p></div>
+    </div>
+    <div class="statcard" style="width:24rem"><span class="bigstat">80%</span><p>of the persuadable voters a 2028 Republican for North Carolina governor would need, in the book's worked example.</p></div>
+  </div>
+  <aside class="notes">The next slide is the book's North Carolina arithmetic as a calculator.</aside>
+</section>
+<section class="slide" data-part="Chapter 5 · Campaign strategy">
+  <div class="headrow"><div class="head"><p class="kicker">Interactive · Chapter 5</p><h2>Build the vote target for a 2028 Republican</h2></div><span class="roundtag">Predict, then drag</span></div>
+  <div class="howto" data-how="calc"></div>
+  <div class="calc">
+    <div class="col" style="gap:1rem">
+      <div class="sl"><label for="c-reg">Registered voters</label><output id="o-reg"></output><input type="range" id="c-reg" min="7" max="9.5" step="0.1" value="8.2"></div>
+      <div class="sl"><label for="c-to">Turnout</label><output id="o-to"></output><input type="range" id="c-to" min="55" max="85" step="1" value="75"></div>
+      <div class="sl"><label for="c-tg">Target share, padded</label><output id="o-tg"></output><input type="range" id="c-tg" min="50" max="56" step="0.5" value="52"></div>
+      <div class="sl"><label for="c-fl">Floor: the base that never leaves</label><output id="o-fl"></output><input type="range" id="c-fl" min="30" max="50" step="1" value="40"></div>
+      <div class="sl"><label for="c-ce">Ceiling: the best recent showing</label><output id="o-ce"></output><input type="range" id="c-ce" min="45" max="65" step="1" value="55"></div>
+      <div class="btns"><button class="btn" id="c-reset">Back to the book's numbers</button></div>
+      <p class="micro">Book defaults: 8.2M × 75%, a 52% target, a 40% floor (Robinson, 2024) and a 55% ceiling (McCrory, 2012).</p>
+    </div>
+    <div class="col" style="gap:1rem;min-width:0">
+      <table class="ledger"><tbody>
+        <tr><td>Votes cast</td><td class="op">registered × turnout</td><td id="r-cast"></td></tr>
+        <tr><td>Target to win</td><td class="op">× target, rounded up</td><td id="r-target"></td></tr>
+        <tr><td>Base</td><td class="op">× floor</td><td id="r-base"></td></tr>
+        <tr><td><b>Still needed</b></td><td class="op">target − base</td><td id="r-need"></td></tr>
+        <tr><td>Persuadable voters</td><td class="op">× (ceiling − floor)</td><td id="r-pers"></td></tr>
+      </tbody></table>
+      <div class="row" style="align-items:center;gap:1.6rem"><span class="verdict" id="r-share"></span><p id="r-say" style="font-size:1.3rem"></p></div>
+      <div class="meter" aria-hidden="true"><i id="r-bar"></i><span style="left:50%"></span></div>
+      <p class="micro">The black mark is half the persuadable voters. Past the right edge, the race cannot be won on these assumptions.</p>
+    </div>
+  </div>
+  <aside class="notes">Ask first: if turnout drops, does the job get easier or harder? Then drag.</aside>
+</section>
+<section class="slide" data-part="Chapter 5 · Campaign strategy">
+  <div class="headrow"><div class="head"><p class="kicker">Round 5 · Chapter 5</p><h2>Modern campaign strategies</h2></div><span class="roundtag">Up to 100 each</span></div>
+  <div class="howto" data-how="quiz"></div>
+  <div class="quiz" data-round="ch5"></div>
+  <aside class="notes">The Wake County question is arithmetic: 8.36 percent of 3.2 million.</aside>
+</section>
+
+<!-- ============ FINAL ============ -->
+<section class="slide" data-part="Final wager">
+  <div class="headrow"><div class="head"><p class="kicker">Final round · Chapters 1 and 4</p><h2>Bet any part of your score</h2></div><span class="roundtag">Wager</span></div>
+  <div class="howto" data-how="final"></div>
+  <div id="final"></div>
+  <aside class="notes">Wagers first, then the question. Every team may bet up to its score or 500, whichever is higher.</aside>
+</section>
+<section class="slide" data-part="Final standings" style="gap:1.8rem">
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <div class="head"><p class="kicker">Final standings</p><h2 id="winner">And the winner is…</h2></div>
+  <div class="standings" id="standings"></div>
+  <p class="small" style="max-width:66rem">Next up: Chapters 6–8. Parties, interest groups and the media, the other actors in the strategy box.</p>
+  <aside class="notes">Read the standings from last place up.</aside>
+</section>
+
+</main></div>
+
+<div id="progress"></div>
+<div id="bar">
+  <button class="navb" id="prev" aria-label="Previous slide">←</button>
+  <span id="count"></span>
+  <button class="navb" id="next" aria-label="Next slide">→</button>
+  <span class="part" id="part"></span>
+  <div id="board" aria-label="Scoreboard"></div>
+  <button class="navb" id="notesbtn">Notes</button>
+</div>
+<div id="notes-panel" hidden><h4>Notes</h4><div id="notes-body"></div></div>
+
+<div id="player" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
+<script>
+/* ===================== CONTENT (Sides, Shaw, Grossmann and Lipsitz, 5e, Chapters 1–5) ===================== */
+const ROUNDS = {
+ch1:{pts:100, qs:[
+ {q:"Which 2024 result undercuts the claim that the election was a broad conservative mandate?",o:["Republicans lost two seats in the U.S. House","Democrats flipped six governorships","Trump lost the national popular vote","Republicans lost control of the Senate"],a:0,w:"Republicans won the presidency and a Senate majority but lost two House seats. No governorship changed hands, and only one legislative chamber, the Michigan House, flipped."},
+ {q:"In 2024, abortion-rights ballot measures passed even in two strongly Republican states. Which two?",o:["Texas and Florida","Ohio and Indiana","Missouri and Montana","Utah and Idaho"],a:2,w:"Missouri and Montana. The same electorates that backed Trump voted for these measures."},
+ {q:"Inflation drove down Biden's approval before the 2024 election. In the book's framework, inflation belongs to:",o:["Rules","Reality","Strategy","Choice"],a:1,w:"Reality: the context of an election, including the economy, that candidates largely cannot control."},
+ {q:"A campaign decides to spend its final two weeks in three battleground states. In the book's framework, this is:",o:["Rules","Reality","Strategy","Choice"],a:2,w:"Strategy is the part of an election that candidates and other actors can control."},
+ {q:"Control of the House changed hands in 2006, 2010, 2018 and 2022. The book's term for this pattern is:",o:["Democratic backsliding","Insecure majorities","Partisan sorting","The permanent campaign"],a:1,w:"Insecure majorities: federal elections frequently change which party controls one or more branches."},
+ {q:"Only 48% of 2024 U.S. House primaries had at least two candidates. Which standard does that most directly strain?",o:["Free speech","Deliberation","Political equality","Free choice"],a:3,w:"Free choice requires real alternatives. With one name on the ballot, there is no choice to make."},
+ {q:"In which of his three campaigns was Donald Trump outspent by his opponent?",o:["2016 only","2020 only","2016 and 2024","All three"],a:3,w:"He was outspent in 2016, 2020 and 2024 and won two of the three, a puzzle for anyone who thinks money decides elections."},
+ {q:"States that made absentee voting easier during the Covid-19 pandemic saw what, compared with other states?",o:["Much higher turnout","No higher turnout","Lower turnout","Higher turnout only among seniors"],a:1,w:"Voters' habits limit what a rule change can do. A reform helps only if participation actually hinged on that rule."}
+]},
+ch2:{pts:100, qs:[
+ {q:"Which two restrictions on voting apply nationwide?",o:["Registration and photo ID","Citizenship and age 18","Residency and literacy","Citizenship and no felony record"],a:1,w:"Only citizenship and age 18 apply everywhere. Most other rules, including those on felony convictions, vary by state."},
+ {q:"In which state can citizens vote without registering first?",o:["Oregon","Maine","North Dakota","Wyoming"],a:2,w:"North Dakota is the only state without voter registration."},
+ {q:"In Shelby County v. Holder (2013), the Court said a part of the Voting Rights Act rested on “40-year-old facts.” What did it strike down?",o:["The ban on literacy tests","The formula that decided which states and counties were covered","Section 2's ban on vote dilution","The Twenty-Sixth Amendment's age rule"],a:1,w:"Without a coverage formula, preclearance has no one to apply to."},
+ {q:"As of 2024, how many states allowed early voting?",o:["12","28","39","47"],a:3,w:"47 states and the District of Columbia. Early voting is one form of convenience voting."},
+ {q:"In an open primary, a registered voter may:",o:["Vote in either party's primary, but only one","Vote in both parties' primaries","Vote only in their own party's primary","Vote only if unaffiliated"],a:0,w:"Open primaries pull candidates toward the center, since they must win voters beyond their own party."},
+ {q:"A mapmaker splits a district dominated by the other party and spreads its voters across several districts. This is:",o:["Packing","Cracking","Malapportionment","Reapportionment"],a:1,w:"Cracking spreads the opposition thin. Packing concentrates it in a few districts it wins by huge margins."},
+ {q:"According to Duverger's Law, what produces a two-party system?",o:["Single-member districts with plurality rule","Proportional representation","Ranked-choice voting","Closed primaries"],a:0,w:"Voters avoid “wasting” votes on candidates who cannot win, so third parties struggle."},
+ {q:"Several states tried to impose term limits on their members of Congress. What happened?",o:["They are in force in 16 states","The Supreme Court struck them down","Congress repealed them","They apply only to senators"],a:1,w:"The Court ruled congressional term limits unconstitutional. Term limits do apply to the president and many state offices."}
+]},
+cases:{pts:200, kind:"case", qs:[
+ {q:"“Courts may decide questions about how legislative districts are drawn.”",o:["Reynolds v. Sims","Baker v. Carr","Shaw v. Reno","Citizens United v. FEC"],a:1,w:"Baker v. Carr (1962) opened redistricting to the courts. Equal-population requirements followed in 1964."},
+ {q:"“State legislative districts must contain roughly equal numbers of people.”",o:["Reynolds v. Sims","Smith v. Allwright","Thornburg v. Gingles","Buckley v. Valeo"],a:0,w:"Reynolds v. Sims (1964). Wesberry v. Sanders applied the same principle to congressional districts that year."},
+ {q:"“The White primary is unconstitutional.”",o:["Shelby County v. Holder","Smith v. Allwright","Baker v. Carr","Shaw v. Reno"],a:1,w:"Smith v. Allwright (1944). In the one-party South, the primary was the real election."},
+ {q:"“North Carolina's 160-mile 12th District, drawn along an interstate, is highly suspect.”",o:["Thornburg v. Gingles","Reynolds v. Sims","Shaw v. Reno","Baker v. Carr"],a:2,w:"Shaw v. Reno (1993). Racial gerrymanders get close scrutiny from the courts."},
+ {q:"“A districting plan illegally diluted Black voters' strength, and here is the test for when that happens.”",o:["Thornburg v. Gingles","Smith v. Allwright","McCutcheon v. FEC","NAACP v. Alabama"],a:0,w:"Thornburg v. Gingles (1986), under the Voting Rights Act as amended in 1982."},
+ {q:"“Corporations and unions may spend freely on ads about candidates, even close to an election.”",o:["Buckley v. Valeo","McCutcheon v. FEC","Citizens United v. FEC","Shelby County v. Holder"],a:2,w:"Citizens United v. FEC (2010) struck the old limits on ads naming candidates within 60 days of a general election."},
+ {q:"“The cap on what one donor may give to all federal candidates combined is unconstitutional.”",o:["Buckley v. Valeo","Citizens United v. FEC","NAACP v. Alabama","McCutcheon v. FEC"],a:3,w:"McCutcheon v. FEC (2014). Per-candidate limits remain."},
+ {q:"“The NAACP does not have to hand its membership list to the state.”",o:["NAACP v. Alabama","Shaw v. Reno","Thornburg v. Gingles","Smith v. Allwright"],a:0,w:"That ruling protecting members' privacy is part of why some nonprofits need not disclose their donors."}
+]},
+ch3:{pts:100, qs:[
+ {q:"What did George Washington spend on his 1788 campaign?",o:["Two casks of Virginia spirits for the electors","$10,000 in printed handbills","A tour of all thirteen states","Nothing at all"],a:0,w:"In the pre-democratic era, state legislatures chose the electors, so there was little to spend money on."},
+ {q:"In 1824, no candidate won an electoral college majority. Who decided the election?",o:["The Supreme Court","The U.S. House, one vote per state delegation","The Senate","A special commission"],a:1,w:"Jackson led with 99 of 261 electoral votes, short of 131. A reputed deal in the House made John Quincy Adams president."},
+ {q:"What share of eligible voters turned out in 1840, helped by rallies and parades?",o:["40%","55%","65%","80%"],a:3,w:"80%, more than in any previous presidential contest."},
+ {q:"How was the disputed 1876 election settled?",o:["By a commission of senators, representatives and justices who voted along party lines","By a national recount","By the Supreme Court alone","By a runoff election"],a:0,w:"Four states' results were disputed. The compromise that followed effectively ended Reconstruction in the South."},
+ {q:"Which three Progressive Era reforms weakened the parties?",o:["Television, polling, primaries","Term limits, recall, referendum","Civil service, the Australian ballot, primary elections","Poll taxes, literacy tests, White primaries"],a:2,w:"Civil service ended patronage jobs, the secret ballot ended party coercion, and primaries took nominations from party leaders. Turnout fell."},
+ {q:"Television replaced which unit as the focus of campaign geography?",o:["The precinct, replaced by the state","The county, replaced by the media market","The state, replaced by the region","The district, replaced by the precinct"],a:1,w:"Strategists came to study media markets, which are bounded by broadcast reach."},
+ {q:"By the mid-1970s, how many states held primaries to pick nominees?",o:["10","25","40","All 50"],a:2,w:"Forty of fifty, which forced long, well-funded campaigns that start early."},
+ {q:"In 2024, what share of presidential TV ads were pure attack ads?",o:["About 10%","About 25%","About 50%","About 90%"],a:2,w:"About 50% attack and 40% contrast. Negative campaigning dates back to the Federalists."}
+]},
+ch4:{pts:100, qs:[
+ {q:"A law caps how much a Senate campaign may spend. Under Buckley v. Valeo, that law is:",o:["Constitutional, like contribution limits","Unconstitutional; spending limits restrict speech","Constitutional only for incumbents","Unconstitutional only in presidential races"],a:1,w:"Buckley allowed limits on contributions but not on spending. Contributions are limited; spending is not."},
+ {q:"In the 2025–26 cycle, how much may one person give one candidate?",o:["$2,000 per election","$3,500 per election","$7,000 per election","Any amount"],a:1,w:"$3,500 per election, or $7,000 across a primary and a general."},
+ {q:"What does the book show about state limits on giving to state legislative candidates?",o:["Every state copies the federal limit","They vary widely, and some states have none","Only Ohio has any limit","They are higher than federal limits everywhere"],a:1,w:"Massachusetts allows $2,000 over two years, Ohio about $15,500, and eleven states, including Pennsylvania, set no limit."},
+ {q:"Corporations were banned from giving directly to federal candidates in:",o:["1907","1947","1971","2002"],a:0,w:"The Tillman Act of 1907. Direct union donations were banned later."},
+ {q:"You give a House candidate $250. What follows?",o:["Nothing; only gifts over $3,500 are reported","The campaign must report your name to the FEC","The gift is illegal","Your gift goes into public funding"],a:1,w:"FECA requires disclosure of donors who give $200 or more."},
+ {q:"Americans spent nearly as much in 2020 on all federal elections as on:",o:["Pizza delivery","Halloween candy","Movie tickets","Video games"],a:0,w:"About $14 billion on pizza delivery. By that measure, American campaigns are cheap."},
+ {q:"Bloomberg and Steyer spent heavily on the 2020 Democratic primaries. What did they win?",o:["The nomination","Three states","Only Bloomberg's win in American Samoa","Nothing at all"],a:2,w:"Steyer won no primaries, and Bloomberg won only American Samoa."},
+ {q:"A business PAC gives to incumbents in both parties so its lobbyists get a meeting. This is:",o:["A replacement strategy","An access strategy","Express advocacy","A clean elections strategy"],a:1,w:"Access strategies support incumbents of both parties to secure a hearing."}
+]},
+ch5:{pts:100, qs:[
+ {q:"Joel Bradshaw divides every electorate into which three groups?",o:["Your base, their base, the undecided","Voters, nonvoters, donors","Liberals, moderates, conservatives","Registered, unregistered, ineligible"],a:0,w:"Each group's size can be estimated, and a campaign need not win everyone."},
+ {q:"In the North Carolina example, the Republican floor (40%) and ceiling (55%) come from:",o:["National polls","Robinson's 2024 result and McCrory's 2012 result","Exit polls","The 2028 voter file"],a:1,w:"The worst recent result sets the floor, the best sets the ceiling, and the 15 points between them are persuadable."},
+ {q:"6.15M votes cast, a 3.2M target and a 40% base. What share of persuadable voters must the campaign win?",o:["About 52%","About 60%","About 80%","About 100%"],a:2,w:"740,000 needed out of 922,500 persuadable voters."},
+ {q:"Wake County averages 8.36% of the statewide Republican vote. What is its quota of a 3.2M target?",o:["26,752","267,520","836,000","2.67 million"],a:1,w:"8.36% × 3,200,000 = 267,520."},
+ {q:"Microtargeting needs a poll of roughly how many respondents?",o:["400","1,000","6,000","100,000"],a:2,w:"About 6,000, which is why smaller campaigns rarely use it."},
+ {q:"A campaign has one weekend of volunteers and wants to raise turnout among its supporters. The evidence says:",o:["Knock on doors","Buy radio ads","Mail a brochure","Post on social media"],a:0,w:"In-person contact is the most effective element of mobilization programs."},
+ {q:"Two weeks out, which candidate is most likely to start running attack ads?",o:["The candidate leading in the polls","The candidate trailing in the polls","The incumbent with no challenger","Neither; attacks are banned"],a:1,w:"Candidates who are behind attack more, and attacks can raise a challenger's name recognition."},
+ {q:"A campaign stresses the issues voters already trust its party on. This relies on:",o:["Issue ownership","The median voter theorem","Retrospective voting","Microtargeting"],a:0,w:"Parties come to “own” issues through their reputations over time."}
+]}
+};
+const FINAL = {q:"Trump was outspent in 2016, 2020 and 2024 and won two of the three. What does Chapter 4 say about whether money buys elections?",
+  o:["The bigger spender nearly always wins","Donors favor likely winners, so money and winning are hard to separate","Spending has no effect at all","Only self-funding makes a difference"],a:1,
+  w:"Popular candidates attract the most money, so a fundraising edge may reflect support rather than cause it. Spending still helps, but it does not guarantee a win."};
+const SORTS = {
+ fw:{cats:["Rules","Reality","Strategy","Choice"], tag:"fw-tag", items:[
+  {t:"A $3,500 limit on gifts to one candidate",c:0,w:"Set before the race, and it binds everyone."},
+  {t:"Inflation in 2024",c:1,w:"The economy is context candidates cannot control."},
+  {t:"A super PAC's ad buy in Pennsylvania",c:2,w:"An actor choosing where to spend."},
+  {t:"A habitual nonvoter stays home again",c:3,w:"Citizens' habits come before any campaign."},
+  {t:"The Twenty-Second Amendment's two-term limit",c:0,w:"A rule about who may run."},
+  {t:"September 11 and the 2002 midterms",c:1,w:"An event nobody planned, which lifted Bush and his party."},
+  {t:"Scoring every registrant's odds of voting",c:2,w:"Targeting decides whom the campaign contacts."},
+  {t:"A loyal partisan ignores the other side's ads",c:3,w:"Partisanship shapes how citizens vote."}
+ ]},
+ dis:{cats:["FEC","IRS","Nobody"], tag:"dis-tag", items:[
+  {t:"A candidate's own campaign committee",c:0,w:"Candidate committees report donors to the FEC."},
+  {t:"An interest group's PAC",c:0,w:"PACs raise money under the limits and disclose to the FEC."},
+  {t:"A super PAC",c:0,w:"Unlimited donations, but donors are disclosed to the FEC."},
+  {t:"A 527 political organization",c:1,w:"527s report to the IRS."},
+  {t:"A 501(c)(4) social welfare group",c:2,w:"Politics cannot be its primary purpose, and it need not disclose donors."},
+  {t:"A 501(c)(6) trade association",c:2,w:"Also a 501(c), so donors stay private."}
+ ]}
+};
+const ERAS = [
+ {n:"Pre-democratic",y:"1788–1824",d:"State legislators, not voters, choose the electors."},
+ {n:"Mass mobilization",y:"1828–92",d:"Parades, songs and party jobs. Turnout peaks."},
+ {n:"Progressive",y:"1896–1948",d:"Reforms weaken the parties. Turnout falls."},
+ {n:"Candidate",y:"1952–2012",d:"Television makes candidates the stars. Polling arrives."},
+ {n:"Contemporary",y:"2016–now",d:"Sorting, big data and digital outreach."}
+];
+const ERA_SHUFFLE = [3,0,4,2,1];
+
+/* ===================== CONFIG ===================== */
+const SB_URL = "https://renowzxywrnuomxzsydn.supabase.co";
+const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlbm93enh5d3JudW9teHpzeWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwODc1NDgsImV4cCI6MjA3MTY2MzU0OH0.8AvSHDFDPD9b-hHOTN1DPLwrtjdWnXjmjXNpumh0YL0";
+const LIVE_HOME = "https://jcervas.github.io/campaigns-review/";
+const LIMIT = 20000, FINAL_LIMIT = 30000;
+const TCOL = ["var(--t1)","var(--t2)","var(--t3)","var(--t4)","var(--t5)","var(--t6)"];
+const LET = "ABCD";
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const speedPts = (P, ms) => Math.round(P*(0.5 + 0.5*Math.max(0, 1 - ms/LIMIT)));
+const sbOK = () => !!(window.supabase && window.supabase.createClient);
+const params = new URLSearchParams(location.search);
+const IS_PLAYER = params.has("code") || params.has("play");
+
+/* ===================== HOST STATE ===================== */
+const KEY = "c5-review-ch1-5-v2";
+const reader = () => window.innerWidth < 760;
+const newCode = () => Array.from({length:4},()=>"ABCDEFGHJKMNPQRSTUVWXYZ"[Math.floor(Math.random()*23)]).join("");
+function fresh(mode){
+  return {mode, teams: mode==="solo" ? ["You"] : ["Team 1","Team 2","Team 3","Team 4"], timer:true, code:newCode(),
+    awards:{}, picks:{}, rev:{}, open:{}, live:{}, sortHits:{}, sortMiss:{}, eraDone:[], eraMiss:0, adj:[0,0,0,0,0,0],
+    wagers:[0,0,0,0,0,0], locked:false, finalRes:[null,null,null,null,null,null], fin:{phase:"wager", at:0, w:{}, p:{}}, qi:{}, slide:0};
+}
+let G;
+try { G = JSON.parse(localStorage.getItem(KEY)); } catch(e) { G = null; }
+if (!G || !G.teams) G = fresh(reader() ? "solo" : "live");
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(G)); } catch(e){} }
+
+function scores(){
+  const s = G.teams.map((_,i)=>G.adj[i]||0);
+  for (const k in G.awards){ const r=G.awards[k];
+    if (r.per) for (const t in r.per){ if(+t<s.length) s[+t]+=r.per[t]; }
+    else r.teams.forEach(t=>{ if(t<s.length) s[t]+=r.pts; }); }
+  G.finalRes.forEach((r,i)=>{ if(i<s.length && r!==null) s[i] += r ? (G.wagers[i]||0) : -(G.wagers[i]||0); });
+  return s;
+}
+let lastScores = null;
+function renderBoard(){
+  const s = scores(), b = document.getElementById("board");
+  b.innerHTML = G.teams.map((n,i)=>`<div class="chip" data-i="${i}"><span class="dot" style="background:${TCOL[i]}"></span><span class="nm">${esc(n)}</span><span class="sc">${s[i]}</span>${G.mode!=="solo"?`<button class="adj" data-d="-100" aria-label="Take 100 from ${esc(n)}">−</button><button class="adj" data-d="100" aria-label="Give 100 to ${esc(n)}">+</button>`:""}</div>`).join("");
+  if (lastScores) s.forEach((v,i)=>{ if(v!==lastScores[i]) b.children[i]?.classList.add("bump"); });
+  lastScores = s;
+  if (document.body.classList.contains("reader") && typeof slides !== "undefined") renderStandings();
+  pushSoon();
+}
+document.getElementById("board").addEventListener("click", e=>{
+  const btn = e.target.closest(".adj"); if(!btn) return;
+  const i = +btn.closest(".chip").dataset.i; G.adj[i]=(G.adj[i]||0)+ +btn.dataset.d; save(); renderBoard();
+});
+function awardRow(key, pts, label){
+  if (G.mode==="solo") return "";
+  const on = (G.awards[key]?.teams)||[];
+  return `<span>${label||"Who got it?"} +${pts}</span>` + G.teams.map((n,i)=>`<button class="tb" data-key="${key}" data-pts="${pts}" data-t="${i}" aria-pressed="${on.includes(i)}"><span class="dot" style="background:${TCOL[i]}"></span>${esc(n)}</button>`).join("");
+}
+document.addEventListener("click", e=>{
+  const tb = e.target.closest(".award .tb"); if(!tb) return;
+  const k = tb.dataset.key, t = +tb.dataset.t, pts = +tb.dataset.pts;
+  const r = G.awards[k] || (G.awards[k] = {pts, teams:[]});
+  r.teams = r.teams.includes(t) ? r.teams.filter(x=>x!==t) : [...r.teams, t];
+  tb.setAttribute("aria-pressed", r.teams.includes(t)); save(); renderBoard();
+});
+
+/* ===================== LIVE (host side) ===================== */
+const LIVE = {ch:null, ready:false, devs:{}, seq:0, timer:null};
+function liveOn(){ return G.mode==="live" && LIVE.ready; }
+function connectHost(){
+  if (LIVE.ch){ try{ LIVE.sb.removeChannel(LIVE.ch); }catch(e){} LIVE.ch=null; LIVE.ready=false; }
+  if (G.mode!=="live" || !sbOK()) { renderJoin(); return; }
+  LIVE.sb = LIVE.sb || window.supabase.createClient(SB_URL, SB_KEY);
+  const ch = LIVE.sb.channel("review-"+G.code, {config:{broadcast:{self:false}, presence:{key:"host"}}});
+  ch.on("presence", {event:"sync"}, ()=>{ readPresence(ch.presenceState()); });
+  ch.on("presence", {event:"join"}, ()=>pushNow());
+  ch.on("broadcast", {event:"ans"}, ({payload})=>takeAnswer(payload));
+  ch.on("broadcast", {event:"wager"}, ({payload})=>takeWager(payload));
+  ch.on("broadcast", {event:"fans"}, ({payload})=>takeFinal(payload));
+  ch.on("broadcast", {event:"hello"}, ()=>pushNow());
+  ch.subscribe(status=>{
+    if (status==="SUBSCRIBED"){ LIVE.ready=true; ch.track({role:"host"}); pushNow(); }
+    else if (status==="CHANNEL_ERROR"||status==="TIMED_OUT"||status==="CLOSED"){ LIVE.ready=false; }
+    renderJoin();
+  });
+  LIVE.ch = ch; renderJoin();
+  clearTimeout(LIVE.watch); LIVE.watch = setTimeout(()=>{ if (!LIVE.ready && G.mode==="live"){ LIVE.failed=true; renderJoin(); } }, 8000);
+}
+function readPresence(state){
+  const devs = {};
+  Object.values(state).flat().forEach(p=>{
+    if (p.role==="host" || typeof p.t!=="number") return;
+    devs[p.t] = (devs[p.t]||0)+1;
+    if (p.ans) takeAnswer({t:p.t, k:p.ans.k, p:p.ans.p});
+    if (typeof p.wager==="number") takeWager({t:p.t, n:p.wager});
+    if (typeof p.fp==="number") takeFinal({t:p.t, p:p.fp});
+  });
+  LIVE.devs = devs; renderJoin(); currentQuiz()?.render(); if (onFinal()) renderFinal();
+}
+function activeTeams(){ return G.teams.map((_,i)=>i).filter(i=>LIVE.devs[i]); }
+function takeAnswer(m){
+  if (G.mode!=="live" || !m || typeof m.t!=="number" || m.t>=G.teams.length) return;
+  const q = currentQuiz(); if (!q) return; const key = q.key(); if (m.k!==key || G.rev[key] || !G.open[key]) return;
+  const L = G.live[key] || (G.live[key]={}); if (L[m.t]) return;
+  const p = +m.p; if (!(p>=0 && p<4)) return;
+  L[m.t] = {p, ms: Math.min(LIMIT, Date.now()-G.open[key])}; save(); q.render(); pushSoon();
+  const act = activeTeams(); if (act.length && act.every(t=>L[t])) setTimeout(()=>{ if(!G.rev[key]) q.reveal(); }, 700);
+}
+function takeWager(m){
+  if (G.mode!=="live" || !m || typeof m.t!=="number" || G.fin.phase!=="wager") return;
+  if (G.fin.w[m.t]!==undefined) return; const s = scores();
+  const max = Math.max(500, s[m.t]||0); G.fin.w[m.t] = Math.max(0, Math.min(max, Math.round(+m.n||0)));
+  save(); if (onFinal()) renderFinal(); pushSoon();
+}
+function takeFinal(m){
+  if (G.mode!=="live" || !m || typeof m.t!=="number" || G.fin.phase!=="open") return;
+  if (G.fin.p[m.t]!==undefined) return; const p=+m.p; if (!(p>=0&&p<4)) return;
+  G.fin.p[m.t]=p; save(); renderFinal(); pushSoon();
+  const act = activeTeams(); if (act.length && act.every(t=>G.fin.p[t]!==undefined)) setTimeout(()=>finalReveal(), 700);
+}
+let pushT=null;
+function pushSoon(){ if (!liveOn()) return; clearTimeout(pushT); pushT=setTimeout(pushNow, 120); }
+function pushNow(){ if (!liveOn()) return; LIVE.ch.send({type:"broadcast", event:"state", payload:pubState()}); }
+setInterval(()=>{ if (liveOn()) pushNow(); }, 2500);
+function pubState(){
+  const s = slides[cur], st = {seq:++LIVE.seq, code:G.code, teams:G.teams, scores:scores(), part:s.dataset.part||"", view:"lobby"};
+  const qz = s.querySelector(".quiz[data-round]");
+  if (qz){ const Q=qz._ctl, i=Q.cur(), key=Q.key(), q=Q.R.qs[i], rev=!!G.rev[key], L=G.live[key]||{};
+    st.view="q"; st.q={key, n:i+1, of:Q.R.qs.length, text:q.q, opts:q.o, pts:Q.R.pts, phase: rev?"reveal":(G.open[key]?"open":"wait"),
+      endsIn: G.open[key]? Math.max(0, LIMIT-(Date.now()-G.open[key])) : LIMIT, answered:Object.keys(L).map(Number)};
+    if (rev){ st.q.ans=q.a; st.q.why=q.w; st.q.res={}; Object.entries(L).forEach(([t,r])=>{ st.q.res[t]={p:r.p, ms:r.ms, pts:(G.awards[key]?.per||{})[t]||0}; }); }
+  } else if (onFinal()){
+    const F=G.fin, sc=scores(); st.view="final";
+    st.fin={phase:F.phase, locked:G.teams.map((_,t)=>F.w[t]!==undefined), max:G.teams.map((_,t)=>Math.max(500, sc[t]||0)), answered:Object.keys(F.p).map(Number)};
+    if (F.phase!=="wager"){ st.fin.q=FINAL.q; st.fin.opts=FINAL.o; st.fin.endsIn=Math.max(0, FINAL_LIMIT-(Date.now()-F.at)); }
+    if (F.phase==="reveal"){ st.fin.ans=FINAL.a; st.fin.why=FINAL.w; st.fin.res=G.teams.map((_,t)=>({p:F.p[t], w:G.wagers[t]||0, ok:G.finalRes[t]})); }
+  } else if (s.querySelector(".sort,.order,.calc")) st.view="game";
+  else if (s.querySelector("#standings")) st.view="end";
+  return st;
+}
+function renderJoin(){
+  const panel = document.getElementById("joinpanel"); if (!panel) return;
+  panel.hidden = G.mode!=="live";
+  if (G.mode!=="live") return;
+  const base = location.protocol.startsWith("http") && !location.hostname.endsWith("claude.ai") && !location.hostname.includes("claudeusercontent") ? location.origin+location.pathname : LIVE_HOME;
+  document.getElementById("j-code").textContent = G.code;
+  document.getElementById("j-url").textContent = base.replace(/^https?:\/\//,"")+"?code="+G.code;
+  const st = document.getElementById("j-status");
+  if (!sbOK() || (LIVE.failed && !LIVE.ready)) st.innerHTML = `<span class="livenote">Live play can't connect from this page. Present from ${esc(LIVE_HOME)} instead.</span>`;
+  else st.textContent = LIVE.ready ? "Live. Teams joined:" : "Connecting…";
+  document.getElementById("j-devs").innerHTML = G.teams.map((n,i)=>`<span class="dev ${LIVE.devs[i]?"on":""}"><span class="dot" style="background:${TCOL[i]}"></span>${esc(n)} · ${LIVE.devs[i]||0}</span>`).join("");
+}
+document.getElementById("newcode").onclick=()=>{ G.code=newCode(); save(); connectHost(); };
+
+/* ===================== SETUP ===================== */
+function renderSetup(){
+  ["live","teams","solo"].forEach(m=>document.getElementById("m-"+m).setAttribute("aria-pressed", G.mode===m));
+  const solo = G.mode==="solo";
+  document.getElementById("tl-l").hidden = solo; document.getElementById("team-row").hidden = solo;
+  document.getElementById("tm-l").hidden = G.mode==="live"; document.getElementById("tm-row").hidden = G.mode==="live";
+  document.getElementById("timer-btn").setAttribute("aria-pressed", !!G.timer);
+  document.getElementById("timer-btn").textContent = G.timer ? "20 seconds per question" : "Timer off";
+  document.getElementById("timer-note").textContent = solo ? (G.timer ? "Faster right answers earn more points" : "Every right answer earns full points") : "T restarts it";
+  document.getElementById("team-count").innerHTML = [2,3,4,5,6].map(n=>`<button class="btn tc" data-n="${n}" aria-pressed="${G.teams.length===n}">${n}</button>`).join("");
+  document.getElementById("team-names").innerHTML = solo ? "" : G.teams.map((n,i)=>`<span class="tn"><span class="dot" style="background:${TCOL[i]}"></span><input id="team-${i}" value="${esc(n)}" maxlength="18" aria-label="Team ${i+1} name"></span>`).join("");
+  document.getElementById("keys-hint").textContent = G.mode==="live" ? "→ opens each question, reveals it early if you like, then moves on · N shows notes" : "→ reveals the answer, then the next question, then the next slide · A–D picks an answer · N shows notes";
+  renderJoin();
+}
+function setMode(m){ if(G.mode===m) return; const code=G.code; G = fresh(m); G.code=code; save(); connectHost(); rebuildAll(); }
+document.getElementById("m-live").onclick=()=>setMode("live");
+document.getElementById("m-teams").onclick=()=>setMode("teams");
+document.getElementById("m-solo").onclick=()=>setMode("solo");
+document.getElementById("timer-btn").onclick=()=>{ G.timer=!G.timer; save(); renderSetup(); };
+document.getElementById("team-count").addEventListener("click", e=>{
+  const b=e.target.closest(".tc"); if(!b) return; const n=+b.dataset.n;
+  while(G.teams.length<n) G.teams.push("Team "+(G.teams.length+1));
+  G.teams.length=n; save(); rebuildAll();
+});
+document.getElementById("team-names").addEventListener("input", e=>{
+  const i = +e.target.id.split("-")[1]; G.teams[i] = e.target.value || ("Team "+(i+1)); save(); renderBoard(); renderJoin();
+});
+document.getElementById("reset-btn").onclick=()=>{ document.getElementById("reset-confirm").hidden=false; };
+document.getElementById("reset-no").onclick=()=>{ document.getElementById("reset-confirm").hidden=true; };
+document.getElementById("reset-yes").onclick=()=>{ const t=G.teams.slice(), m=G.mode, tm=G.timer; G=fresh(m); G.teams=t; G.timer=tm; save(); document.getElementById("reset-confirm").hidden=true; connectHost(); rebuildAll(); };
+
+/* ===================== QUIZ ===================== */
+const quizzes = [];
+function currentQuiz(){ return slides[cur]?.querySelector(".quiz[data-round]")?._ctl || null; }
+function makeQuiz(el){
+  const id = el.dataset.round, R = ROUNDS[id];
+  el.innerHTML = `<div class="qtop"><span class="micro qn"></span><div class="qdots"></div><span class="clock" hidden></span></div>
+    <div class="qcard ${R.kind==="case"?"case":""}"><p class="q"></p><div class="timer" hidden><i></i></div></div>
+    <div class="opts"></div><p class="fb" aria-live="polite"></p>
+    <div class="qfoot"><div class="award"></div><div class="btns"><button class="btn qprev">← Previous</button><button class="btn primary qgo"></button></div></div>`;
+  const Q = {el, id, R, shownAt:0, tick:null};
+  const k = i => id+":"+i;
+  Q.cur = () => G.qi[id]||0;
+  Q.key = () => k(Q.cur());
+  Q.revealed = i => G.rev[k(i)];
+  Q.render = () => {
+    const i = Q.cur(), q = R.qs[i], key = k(i), rev = G.rev[key], pick = G.picks[key], live = G.mode==="live", L = G.live[key]||{};
+    el.querySelector(".qn").textContent = `Question ${i+1} of ${R.qs.length}`;
+    el.querySelector(".qdots").innerHTML = R.qs.map((_,j)=>{
+      const kk=k(j); let c = j===i?"cur":"";
+      if (G.rev[kk]) c += G.mode==="solo" ? (G.picks[kk]===R.qs[j].a?" good":" bad") : " done";
+      return `<button class="${c}" data-j="${j}" aria-label="Question ${j+1}">${j+1}</button>`;}).join("");
+    el.querySelector(".q").textContent = q.q;
+    el.querySelector(".opts").innerHTML = q.o.map((o,j)=>{
+      let c=""; if(rev){ c = j===q.a ? "right" : (j===pick ? "wrong" : "dim"); }
+      return `<button class="opt ${c}" data-j="${j}" ${live?"tabindex=\"-1\"":""}><span class="let">${LET[j]}</span><span>${esc(o)}</span></button>`;}).join("");
+    const fb = el.querySelector(".fb"), aw = el.querySelector(".award");
+    if (rev){
+      const head = live || pick===undefined ? `<b>Answer: ${LET[q.a]}.</b> ` : (pick===q.a ? `<b class="ok">Correct${G.awards[key]?.per?.[0]!==undefined && G.awards[key].per[0]<R.pts ? `, +${G.awards[key].per[0]}`:""}.</b> ` : `<b class="nope">Not quite. The answer is ${LET[q.a]}.</b> `);
+      fb.innerHTML = head + esc(q.w);
+    } else fb.innerHTML = G.mode==="solo" ? "Pick an answer. Your first click counts." : (live ? "Teams answer on their own computers." : "");
+    if (live){
+      const per = G.awards[key]?.per||{};
+      aw.innerHTML = `<span>${rev?"Results":"Answers in"}</span>` + G.teams.map((n,t)=>{
+        const r=L[t]; let c="lt", extra="";
+        if (rev){ if (r){ c += r.p===q.a?" ok":" no"; extra=` <b>${LET[r.p]}</b> ${r.p===q.a?"+"+(per[t]||0):"0"} · ${(r.ms/1000).toFixed(1)}s`; } else extra=" no answer"; }
+        else if (r) { c+=" in"; extra=" ✓"; }
+        return `<span class="${c}"><span class="dot" style="background:${TCOL[t]}"></span>${esc(n)}${extra}</span>`; }).join("");
+    } else aw.innerHTML = rev ? awardRow(key, R.pts) : "";
+    el.querySelector(".qprev").disabled = i===0;
+    el.querySelector(".qgo").textContent = !rev ? "Reveal answer" : (i<R.qs.length-1 ? "Next question →" : "Next slide →");
+    Q.syncTimer();
+  };
+  Q.syncTimer = () => {
+    clearInterval(Q.tick); Q.tick=null;
+    const key=Q.key(), rev=G.rev[key], on = el.closest(".slide").classList.contains("on");
+    const t = el.querySelector(".timer"), bar=t.querySelector("i"), clock=el.querySelector(".clock");
+    const timed = !rev && on && (G.mode==="live" || G.timer);
+    t.hidden = !timed; clock.hidden = !(timed && G.mode==="live");
+    if (!timed) return;
+    if (G.mode==="live" && !G.open[key]){ G.open[key]=Date.now(); save(); pushSoon(); }
+    if (G.mode!=="live" && !Q.shownAt) Q.shownAt=Date.now();
+    const start = G.mode==="live" ? G.open[key] : Q.shownAt;
+    const step = () => { const left = Math.max(0, LIMIT-(Date.now()-start)); bar.style.width=(left/LIMIT*100)+"%"; t.classList.toggle("out", left===0);
+      clock.textContent = Math.ceil(left/1000);
+      if (left===0){ clearInterval(Q.tick); Q.tick=null; if (G.mode==="live" && !G.rev[key]) Q.reveal(); } };
+    step(); Q.tick = setInterval(step, 200);
+  };
+  Q.choose = j => {
+    if (G.mode==="live") return;
+    const i=Q.cur(), key=k(i); if (G.rev[key]) return;
+    G.picks[key]=j; G.rev[key]=true;
+    if (G.mode==="solo"){ const ok = j===R.qs[i].a, ms = Q.shownAt? Date.now()-Q.shownAt : 0;
+      const pts = ok ? (G.timer ? speedPts(R.pts, ms) : R.pts) : 0; G.awards[key] = {pts:R.pts, teams: ok?[0]:[], per: ok?{0:pts}:{}}; }
+    save(); Q.render(); renderBoard();
+    if (j!==R.qs[i].a) el.querySelectorAll(".opt")[j]?.classList.add("shake");
+  };
+  Q.reveal = () => {
+    const i=Q.cur(), key=k(i); if(G.rev[key]) return false;
+    G.rev[key]=true;
+    if (G.mode==="live"){ const L=G.live[key]||{}, per={}, ok=[];
+      Object.entries(L).forEach(([t,r])=>{ if (r.p===R.qs[i].a){ per[t]=speedPts(R.pts, r.ms); ok.push(+t); } });
+      G.awards[key]={pts:R.pts, teams:ok, per}; }
+    save(); Q.render(); renderBoard(); return true;
+  };
+  Q.go = d => { const n=Q.cur()+d; if(n<0||n>=R.qs.length) return false; G.qi[id]=n; Q.shownAt=0; save(); Q.render(); pushSoon(); return true; };
+  Q.fwd = () => Q.reveal() || Q.go(1);
+  Q.back = () => Q.go(-1);
+  Q.restartTimer = () => { const key=Q.key(); if (G.rev[key]) return; if (G.mode==="live") G.open[key]=Date.now(); else Q.shownAt=Date.now(); save(); Q.syncTimer(); pushSoon(); };
+  Q.stop = () => { clearInterval(Q.tick); Q.tick=null; };
+  el.addEventListener("click", e=>{
+    const o=e.target.closest(".opt"); if(o) return Q.choose(+o.dataset.j);
+    const d=e.target.closest(".qdots button"); if(d){ G.qi[id]=+d.dataset.j; Q.shownAt=0; save(); Q.render(); pushSoon(); return; }
+    if (e.target.closest(".qprev")) return Q.go(-1);
+    if (e.target.closest(".qgo")) { if(!Q.fwd()) next(); }
+  });
+  el._ctl = Q; quizzes.push(Q); Q.render();
+}
+
+/* ===================== SORT ===================== */
+function makeSort(el, id){
+  const S = SORTS[id];
+  const done = () => Object.keys(G.sortHits[id]||{}).length===S.items.length;
+  const firstTry = () => S.items.filter((_,i)=>(G.sortHits[id]||{})[i]!==undefined && !((G.sortMiss[id]||{})[i]||[]).length).length;
+  const render = () => {
+    const hits = G.sortHits[id]||{}, miss = G.sortMiss[id]||{};
+    el.innerHTML = `<div class="sortgrid">${S.items.map((it,i)=>{
+      const solved = hits[i]!==undefined, m = miss[i]||[];
+      return `<div class="sitem ${solved?"solved":""}"><span class="lab">${esc(it.t)}</span><span class="cats">${S.cats.map((c,j)=>
+        `<button data-i="${i}" data-j="${j}" class="${solved&&j===it.c?"right":(m.includes(j)?"wrong":"")}" ${solved?"disabled":""}>${c}</button>`).join("")}</span>${solved?`<span class="why">${esc(it.w)}</span>`:""}</div>`;}).join("")}</div>
+      <div class="qfoot" style="margin-top:1rem"><div class="award">${done()?awardRow("sort:"+id, 200, "Who sorted the most?"):""}</div><div class="btns"><button class="btn sreveal">Reveal all</button></div></div>`;
+    const n = Object.keys(hits).length;
+    document.getElementById(S.tag).textContent = done() ? (G.mode==="solo" ? `${firstTry()} of ${S.items.length} on the first try` : "All sorted") : `${n} of ${S.items.length} sorted`;
+  };
+  el.addEventListener("click", e=>{
+    if (e.target.closest(".sreveal")){ G.sortHits[id]=G.sortHits[id]||{}; S.items.forEach((it,i)=>{ if(G.sortHits[id][i]===undefined){ G.sortHits[id][i]=it.c; (G.sortMiss[id]=G.sortMiss[id]||{})[i]=[-1]; }}); save(); return render(); }
+    const b = e.target.closest(".cats button"); if(!b) return;
+    const i=+b.dataset.i, j=+b.dataset.j, it=S.items[i];
+    if (j===it.c){ (G.sortHits[id]=G.sortHits[id]||{})[i]=j;
+      if (G.mode==="solo" && !((G.sortMiss[id]||{})[i]||[]).length) G.awards[`sort:${id}:${i}`]={pts:25,teams:[0]};
+    } else { const m=(G.sortMiss[id]=G.sortMiss[id]||{}); m[i]=[...(m[i]||[]), j]; }
+    save(); render(); renderBoard();
+    if (j!==it.c) el.querySelectorAll(".sitem")[i]?.classList.add("shake");
+  });
+  el._render = render; render();
+}
+
+/* ===================== ERA ORDER ===================== */
+function makeOrder(el){
+  const pts = () => Math.max(0, 200-50*G.eraMiss);
+  const render = () => {
+    const d = G.eraDone, complete = d.length===ERAS.length;
+    el.innerHTML = `<div class="col" style="gap:1.1rem"><div class="slots">${ERAS.map((e,i)=> d[i]!==undefined
+      ? `<div class="slot filled"><span class="n">${i+1}</span><b>${e.n}</b><span>${e.y}</span></div>`
+      : `<div class="slot"><span class="n">${i+1}</span></div>`).join("")}</div>
+      <div class="pool">${ERA_SHUFFLE.map(i=>`<button class="ecard ${d.includes(i)?"used":""}" data-i="${i}" ${d.includes(i)?"tabindex=\"-1\"":""}><b>${ERAS[i].n}</b><span>${ERAS[i].d}</span></button>`).join("")}</div>
+      <div class="qfoot"><p class="fb" style="min-height:0">${complete ? `<b class="ok">In order.</b> ${G.eraMiss} wrong guess${G.eraMiss===1?"":"es"}.` : (G.eraMiss? `${G.eraMiss} wrong guess${G.eraMiss===1?"":"es"} so far.` : "")}</p>
+      <div class="award">${complete?awardRow("eras", pts(), "Who placed the last era?"):""}</div></div></div>`;
+    document.getElementById("era-tag").textContent = `${pts()} points`;
+  };
+  el.addEventListener("click", e=>{
+    const c = e.target.closest(".ecard"); if(!c || c.classList.contains("used")) return;
+    const i = +c.dataset.i;
+    if (i===G.eraDone.length){ G.eraDone.push(i);
+      if (G.eraDone.length===ERAS.length && G.mode==="solo") G.awards["eras"]={pts:pts(),teams:[0]};
+      save(); render(); renderBoard();
+    } else { G.eraMiss++; save(); render(); el.querySelector(`.ecard[data-i="${i}"]`)?.classList.add("shake","miss"); }
+  });
+  el._render = render; render();
+}
+
+/* ===================== CALCULATOR ===================== */
+const CDEF = {reg:8.2,to:75,tg:52,fl:40,ce:55};
+function calc(){
+  const v = k => +document.getElementById("c-"+k).value;
+  const reg=v("reg")*1e6, to=v("to"), tg=v("tg"), fl=v("fl"), ce=Math.max(v("ce"), fl);
+  const cast = Math.round(reg*to/100), target = Math.ceil(cast*tg/100/100000)*100000, base = Math.round(cast*fl/100);
+  const need = Math.max(0,target-base), pers = Math.round(cast*(ce-fl)/100), share = pers>0 ? need/pers : Infinity;
+  const f = n => n.toLocaleString("en-US");
+  document.getElementById("o-reg").textContent = v("reg").toFixed(1)+"M";
+  document.getElementById("o-to").textContent = to+"%";
+  document.getElementById("o-tg").textContent = tg+"%";
+  document.getElementById("o-fl").textContent = fl+"%";
+  document.getElementById("o-ce").textContent = v("ce")+"%";
+  document.getElementById("r-cast").textContent = f(cast);
+  document.getElementById("r-target").textContent = f(target);
+  document.getElementById("r-base").textContent = "− "+f(base);
+  document.getElementById("r-need").textContent = f(need);
+  document.getElementById("r-pers").textContent = f(pers);
+  const pct = isFinite(share) ? Math.round(share*100) : null;
+  document.getElementById("r-share").textContent = pct===null ? "—" : pct+"%";
+  document.getElementById("r-bar").style.width = Math.min(100, pct===null?100:pct)+"%";
+  document.getElementById("r-say").innerHTML = pct===null ? "With the ceiling at the floor, nobody is persuadable."
+    : need===0 ? "The base alone clears the target."
+    : pct>100 ? `<b>Not winnable on these assumptions.</b> Even every persuadable voter leaves the campaign ${f(need-pers)} votes short.`
+    : `of the persuadable voters: <b>${f(need)}</b> out of <b>${f(pers)}</b>.`;
+}
+["reg","to","tg","fl","ce"].forEach(k=>document.getElementById("c-"+k).addEventListener("input", calc));
+document.getElementById("c-reset").onclick=()=>{ for(const k in CDEF) document.getElementById("c-"+k).value=CDEF[k]; calc(); };
+
+/* ===================== FINAL ===================== */
+function onFinal(){ return typeof slides!=="undefined" && slides[cur]?.contains(document.getElementById("final")); }
+let finTick=null;
+function finalReveal(){
+  if (G.mode==="live"){ if (G.fin.phase!=="open") return;
+    G.fin.phase="reveal"; G.teams.forEach((_,t)=>{ G.wagers[t]=G.fin.w[t]||0; G.finalRes[t] = G.fin.p[t]===FINAL.a; });
+  } else { G.rev["final"]=true; }
+  save(); renderFinal(); renderBoard();
+}
+function renderFinal(){
+  const el = document.getElementById("final"), s = scores(); clearInterval(finTick);
+  if (G.mode==="live"){
+    const F=G.fin;
+    let h = `<div class="liveline" style="margin-bottom:1rem">${G.teams.map((n,t)=>{
+      let c="lt", extra="";
+      if (F.phase==="wager"){ if (F.w[t]!==undefined){ c+=" in"; extra=" wager locked ✓"; } else extra=" choosing a wager"; }
+      else if (F.phase==="open"){ if (F.p[t]!==undefined){ c+=" in"; extra=" ✓"; } }
+      else { const ok=G.finalRes[t]; c+= ok?" ok":" no"; extra=` <b>${F.p[t]!==undefined?LET[F.p[t]]:"–"}</b> ${ok?"+":"−"}${G.wagers[t]||0}`; }
+      return `<span class="${c}"><span class="dot" style="background:${TCOL[t]}"></span>${esc(n)}${extra}</span>`; }).join("")}<span class="clock" id="fclock" hidden></span></div>`;
+    if (F.phase==="wager") h += `<div class="btns"><button class="btn primary" id="lock">Show the question</button><span class="micro">Teams that haven't locked a wager bet 0.</span></div>`;
+    else {
+      h += `<div class="quiz"><div class="qcard"><p class="q">${esc(FINAL.q)}</p><div class="timer" ${F.phase==="open"?"":"hidden"}><i id="fbar"></i></div></div>
+        <div class="opts">${FINAL.o.map((o,j)=>`<button class="opt ${F.phase==="reveal"?(j===FINAL.a?"right":"dim"):""}" tabindex="-1"><span class="let">${LET[j]}</span><span>${esc(o)}</span></button>`).join("")}</div>
+        <p class="fb">${F.phase==="reveal" ? `<b class="ok">Answer: ${LET[FINAL.a]}.</b> ${esc(FINAL.w)}` : "Teams answer on their own computers."}</p>
+        ${F.phase==="open"?`<div class="btns"><button class="btn primary" id="freveal">Reveal answer</button></div>`:""}</div>`;
+    }
+    el.innerHTML = h;
+    if (F.phase==="open"){ const bar=document.getElementById("fbar"), clock=document.getElementById("fclock"); clock.hidden=false;
+      const step=()=>{ const left=Math.max(0, FINAL_LIMIT-(Date.now()-F.at)); bar.style.width=(left/FINAL_LIMIT*100)+"%"; clock.textContent=Math.ceil(left/1000); if(!left){ clearInterval(finTick); finalReveal(); } };
+      step(); finTick=setInterval(step, 250); }
+    return;
+  }
+  const max = i => Math.max(500, s[i] - (G.finalRes[i]!==null ? (G.finalRes[i]?G.wagers[i]:-G.wagers[i]) : 0));
+  const rev = G.rev["final"], pick = G.picks["final"];
+  let h = `<div class="wagers">${G.teams.map((n,i)=>`<div class="wager"><span class="who"><span class="dot" style="background:${TCOL[i]}"></span>${esc(n)}</span>
+    <label class="micro" for="w-${i}">Wager, up to ${max(i)}</label>
+    <input id="w-${i}" type="number" min="0" max="${max(i)}" step="50" value="${G.wagers[i]||0}" ${G.locked?"disabled":""}>
+    ${G.mode==="teams" && rev ? `<span class="res"><button class="btn fr" data-i="${i}" data-r="1" aria-pressed="${G.finalRes[i]===true}">Right</button><button class="btn fr" data-i="${i}" data-r="0" aria-pressed="${G.finalRes[i]===false}">Wrong</button></span>`:""}</div>`).join("")}</div>`;
+  if (!G.locked) h += `<div class="btns" style="margin-top:1.2rem"><button class="btn primary" id="lock">Lock wagers and show the question</button></div>`;
+  else h += `<div class="quiz" style="margin-top:1.2rem"><div class="qcard"><p class="q">${esc(FINAL.q)}</p></div>
+      <div class="opts">${FINAL.o.map((o,j)=>{ let c=""; if(rev) c = j===FINAL.a?"right":(j===pick?"wrong":"dim");
+        return `<button class="opt ${c}" data-fj="${j}"><span class="let">${LET[j]}</span><span>${esc(o)}</span></button>`;}).join("")}</div>
+      <p class="fb">${rev ? `<b class="ok">Answer: ${LET[FINAL.a]}.</b> ${esc(FINAL.w)}` : ""}</p></div>`;
+  el.innerHTML = h;
+}
+document.getElementById("final").addEventListener("input", e=>{
+  if (!e.target.id.startsWith("w-")) return; const i=+e.target.id.slice(2);
+  G.wagers[i] = Math.max(0, Math.min(+e.target.max, Math.round(+e.target.value||0))); save();
+});
+document.getElementById("final").addEventListener("change", ()=>renderFinal());
+document.getElementById("final").addEventListener("click", e=>{
+  if (e.target.id==="lock"){ finalFwd(); return; }
+  if (e.target.id==="freveal"){ finalReveal(); return; }
+  const o = e.target.closest("[data-fj]");
+  if (o && !G.rev["final"] && G.mode!=="live"){ const j=+o.dataset.fj; G.picks["final"]=j; G.rev["final"]=true;
+    if (G.mode==="solo") G.finalRes[0] = j===FINAL.a;
+    save(); renderFinal(); renderBoard(); return; }
+  const r = e.target.closest(".fr");
+  if (r){ const i=+r.dataset.i, v=r.dataset.r==="1"; G.finalRes[i] = G.finalRes[i]===v ? null : v; save(); renderFinal(); renderBoard(); }
+});
+function finalFwd(){
+  if (G.mode==="live"){
+    if (G.fin.phase==="wager"){ G.fin.phase="open"; G.fin.at=Date.now(); save(); renderFinal(); pushNow(); return true; }
+    if (G.fin.phase==="open"){ finalReveal(); return true; }
+    return false;
+  }
+  if (!G.locked){ G.locked=true; save(); renderFinal(); return true; }
+  if (!G.rev["final"]){ G.rev["final"]=true; save(); renderFinal(); return true; }
+  return false;
+}
+
+/* ===================== STANDINGS ===================== */
+function renderStandings(){
+  const s = scores(), order = G.teams.map((n,i)=>({n,i,v:s[i]})).sort((a,b)=>b.v-a.v);
+  const top = Math.max(1, ...s.map(v=>Math.max(0,v)));
+  document.getElementById("winner").textContent = G.mode==="solo" ? `You finished with ${s[0]} points`
+    : (order.length>1 && order[0].v===order[1].v ? "A tie at the top" : `${order[0].n} wins`);
+  const el = document.getElementById("standings");
+  el.innerHTML = order.map((t,r)=>`<div class="srow ${r===0?"first":""}"><span class="rk">${r+1}</span><span class="nm">${esc(t.n)}</span><span class="barw"><i style="width:0;background:${TCOL[t.i]}"></i></span><span class="pt">${t.v}</span></div>`).join("");
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.querySelectorAll(".barw i").forEach((b,r)=>b.style.width=(Math.max(0,order[r].v)/top*100)+"%")));
+  confetti();
+}
+function confetti(){
+  const c = document.getElementById("confetti");
+  if (reader() || matchMedia("(prefers-reduced-motion: reduce)").matches || !slides[cur]?.contains(c)) { return; }
+  const ctx = c.getContext("2d"), w = c.width = c.offsetWidth, h = c.height = c.offsetHeight;
+  const cs = getComputedStyle(document.documentElement);
+  const cols = ["--accent","--t1","--t2","--t3","--t4"].map(v=>cs.getPropertyValue(v).trim());
+  const P = Array.from({length:140},()=>({x:Math.random()*w,y:-Math.random()*h*.6,vx:(Math.random()-.5)*2,vy:2+Math.random()*3,r:Math.random()*6.3,s:5+Math.random()*7,c:cols[Math.floor(Math.random()*cols.length)]}));
+  const t0 = performance.now();
+  const step = now => { ctx.clearRect(0,0,w,h); P.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; p.r+=.08; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle=p.c; ctx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2); ctx.restore(); });
+    if (now-t0 < 4500 && slides[cur]?.contains(c)) requestAnimationFrame(step); else ctx.clearRect(0,0,w,h); };
+  requestAnimationFrame(step);
+}
+
+/* ===================== DIRECTIONS ===================== */
+const PRESENTER = {
+  sort:"Teams take turns: name a box for the next item and the presenter clicks it. A wrong pick turns red and the next team tries. When all are sorted, the presenter taps the team that placed the most.",
+  disc:"Every group below can spend on elections. Teams take turns saying who learns its donors' names: the FEC, the IRS, or nobody. When all six are sorted, the presenter taps the team that placed the most.",
+  order:"Teams take turns naming the next era, earliest first, and the presenter clicks it. Each wrong guess passes the turn and knocks 50 points off the prize. Whoever places the last era wins what is left.",
+  calc:"No points on this slide. Predict first: if turnout falls to 65%, does the campaign's job get easier or harder? Then drag the sliders to check."
+};
+const HOW = {
+ live:{...PRESENTER,
+  quiz:"Answer on your team's computer. The first answer from your team counts. A right answer earns half the points, and the other half shrinks as the 20-second clock runs down.",
+  case:"Read the holding and pick the case on your team's computer. Up to 200 points: half for being right, half for speed.",
+  final:"On your team's computer, lock a wager of up to your score or 500, whichever is higher. Then answer within 30 seconds. Right adds the wager; wrong or no answer subtracts it."},
+ teams:{...PRESENTER,
+  quiz:"Huddle while the timer runs. When it ends, each team holds up A, B, C or D. The presenter reveals the answer and taps every team that got it right.",
+  case:"Read the holding, then name the case. Huddle, hold up A, B, C or D, and every team that gets it right earns 200.",
+  final:"Each team writes a wager of up to its score or 500, whichever is higher. Lock the wagers to show the question. Teams write their answers, then reveal and mark each team right or wrong."},
+ solo:{
+  quiz:"Click an answer. A right answer earns 50 points plus up to 50 more for speed. Your first click counts.",
+  case:"Read the holding and click the case. A right answer earns 100 plus up to 100 for speed.",
+  sort:"Click the right box for each item. Each one right on the first try is worth 25 points.",
+  disc:"Click who learns each group's donors' names: the FEC, the IRS, or nobody. 25 points for each one right on the first try.",
+  order:"Click the eras from earliest to latest. You start with 200 points, and each wrong click costs 50.",
+  calc:PRESENTER.calc,
+  final:"Type a wager of up to your score or 500, whichever is higher. Lock it to see the question, then click your answer."}
+};
+const STEPS = {
+ live:[["Join","Each team opens the link on one computer, types the four-letter code and picks its team."],["Answer","Tap A, B, C or D on your computer. The first answer from your team is the one that counts."],["Beat the clock","A right answer earns half the points. The other half shrinks as the 20 seconds run down."],["Score","Wrong answers earn nothing. The scoreboard sits along the bottom of the main screen."]],
+ teams:[["Huddle","Each question has a 20-second timer. Talk it over with your team."],["Answer","When time is up, every team holds up A, B, C or D at once. No changing it after."],["Reveal","The presenter shows the answer and a short explanation from the book."],["Score","Every team that got it right earns the points. The scoreboard is along the bottom."]],
+ solo:[["Read","Each chapter has a recap slide, then a round of questions."],["Answer","Click an answer. Your first click is the one that counts."],["Beat the clock","A right answer earns half the points; answering quickly earns the rest."],["Score","Your total is along the bottom, and your progress is saved in this browser."]]
+};
+function renderHow(){
+  const m = G.mode;
+  document.querySelectorAll(".howto").forEach(el=>el.textContent = HOW[m][el.dataset.how]);
+  document.getElementById("hp-steps").innerHTML = STEPS[m].map(([b,t])=>`<li><b>${b}</b><span>${esc(t)}</span></li>`).join("");
+}
+
+/* ===================== DECK ===================== */
+const slides = [...document.querySelectorAll(".slide")];
+let cur = Math.min(G.slide||0, slides.length-1);
+function fit(){
+  const r = reader() && !IS_PLAYER; document.body.classList.toggle("reader", r);
+  document.documentElement.style.fontSize = IS_PLAYER ? "16px" : r ? "10px" : Math.min(innerWidth/100, innerHeight/(56.25+3.6)) + "px";
+}
+function show(i){
+  cur = Math.max(0, Math.min(slides.length-1, i)); G.slide = cur; save();
+  slides.forEach((s,j)=>s.classList.toggle("on", j===cur));
+  document.getElementById("count").textContent = `${cur+1} / ${slides.length}`;
+  document.getElementById("part").textContent = slides[cur].dataset.part || "";
+  document.getElementById("progress").style.width = ((cur+1)/slides.length*100)+"%";
+  const n = slides[cur].querySelector(".notes"); document.getElementById("notes-body").textContent = n ? n.textContent : "";
+  quizzes.forEach(q=>{ q.stop(); if (slides[cur].contains(q.el)) q.render(); });
+  if (onFinal()) renderFinal(); else clearInterval(finTick);
+  if (slides[cur].contains(document.getElementById("standings"))) renderStandings();
+  pushSoon();
+}
+function next(){
+  const q = currentQuiz(); if (q && q.fwd()) return;
+  if (onFinal() && finalFwd()) return;
+  show(cur+1);
+}
+function prev(){ const q = currentQuiz(); if (q && q.back()) return; show(cur-1); }
+document.getElementById("next").onclick = () => show(cur+1);
+document.getElementById("prev").onclick = () => show(cur-1);
+document.getElementById("notesbtn").onclick = () => { const p=document.getElementById("notes-panel"); p.hidden=!p.hidden; };
+document.addEventListener("keydown", e=>{
+  if (IS_PLAYER || reader() || e.target.matches?.("input,textarea,select") || e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = e.key;
+  if (["ArrowRight","PageDown"," "].includes(k)){ e.preventDefault(); next(); }
+  else if (["ArrowLeft","PageUp"].includes(k)){ e.preventDefault(); prev(); }
+  else if (k==="n"||k==="N"){ document.getElementById("notesbtn").click(); }
+  else if (k==="t"||k==="T"){ currentQuiz()?.restartTimer(); }
+  else if (G.mode!=="live") { const x = Math.max("abcd".indexOf(k.toLowerCase()), "1234".indexOf(k));
+    if (x>=0){ const q=currentQuiz(); if(q) q.choose(x);
+      else if (onFinal() && G.locked) document.querySelector(`[data-fj="${x}"]`)?.click(); } }
+});
+function rebuildAll(){
+  renderHow(); renderSetup(); renderBoard();
+  quizzes.forEach(q=>q.render());
+  document.querySelectorAll(".sort").forEach(s=>s._render&&s._render());
+  document.getElementById("order-eras")._render?.();
+  renderFinal();
+}
+
+/* ===================== PLAYER ===================== */
+const P = {ch:null, st:null, team:null, code:(params.get("code")||"").toUpperCase(), dev:null, picks:{}, deadline:0, dlKey:"", lastSeen:0, tick:null, err:""};
+function pStore(){ try{ localStorage.setItem("c5-review-player", JSON.stringify({code:P.code, team:P.team, dev:P.dev, picks:P.picks})); }catch(e){} }
+function pLoad(){ try{ const s=JSON.parse(localStorage.getItem("c5-review-player")); if (s && s.code===P.code){ P.team=s.team; P.picks=s.picks||{}; } if (s?.dev) P.dev=s.dev; }catch(e){} if(!P.dev) P.dev=Math.random().toString(36).slice(2,10); }
+function pConnect(){
+  if (!sbOK()){ P.err="This page can't reach the game server. Check the link from your instructor."; return pRender(); }
+  if (P.ch){ try{ P.sb.removeChannel(P.ch); }catch(e){} }
+  P.sb = P.sb || window.supabase.createClient(SB_URL, SB_KEY);
+  const ch = P.sb.channel("review-"+P.code, {config:{broadcast:{self:false}, presence:{key:P.dev}}});
+  ch.on("broadcast", {event:"state"}, ({payload})=>{
+    if (!payload || payload.code!==P.code) return;
+    if (P.st && payload.seq<P.st.seq && Date.now()-P.lastSeen<5000) return;
+    const k = payload.q ? payload.q.key+payload.q.phase : (payload.fin ? "fin"+payload.fin.phase : "");
+    const ends = payload.q?.endsIn ?? payload.fin?.endsIn;
+    if (ends!==undefined && (k!==P.dlKey || Math.abs(Date.now()+ends-P.deadline)>1500)){ P.deadline=Date.now()+ends; P.dlKey=k; }
+    P.st=payload; P.lastSeen=Date.now(); pRender();
+  });
+  ch.subscribe(status=>{ if (status==="SUBSCRIBED"){ pTrack(); ch.send({type:"broadcast", event:"hello", payload:{}}); } pRender(); });
+  P.ch = ch;
+  setTimeout(()=>{ if(!P.st){ P.err="No game is running with that code yet. Check the code on the main screen."; pRender(); } }, 6000);
+}
+function pTrack(){ if (!P.ch || P.team===null) return; const pres = {t:P.team};
+  const st=P.st; if (st?.q && P.picks[st.q.key]!==undefined) pres.ans={k:st.q.key, p:P.picks[st.q.key]};
+  if (P.picks._wager!==undefined) pres.wager=P.picks._wager; if (P.picks._fin!==undefined) pres.fp=P.picks._fin;
+  P.ch.track(pres); }
+function pSend(event, payload){ P.ch?.send({type:"broadcast", event, payload}); }
+function pRender(){
+  const el = document.getElementById("player"), st = P.st;
+  clearInterval(P.tick);
+  const score = st && P.team!==null ? st.scores[P.team] : null;
+  const me = st && P.team!==null ? `<span class="me"><span class="dot" style="background:${TCOL[P.team]}"></span>${esc(st.teams[P.team]||"")} <b>${score}</b></span>` : "";
+  let h = `<div class="ptop"><span class="brand">Campaigns review${P.code?" · "+esc(P.code):""}</span>${me}</div>`;
+  if (!P.code){
+    h += `<h2>Join the game</h2><p>Type the four-letter code on the main screen.</p>
+      <form id="pjoin" class="stack"><input class="pin" id="pcode" maxlength="4" autocomplete="off" autocapitalize="characters" aria-label="Game code"><button class="btn primary" style="font-size:1.1rem;padding:.8rem">Join</button></form>`;
+    el.innerHTML = h; document.getElementById("pjoin").onsubmit = ev=>{ ev.preventDefault(); const v=document.getElementById("pcode").value.trim().toUpperCase(); if(v.length===4){ P.code=v; pLoad(); history.replaceState(null,"","?code="+v); pConnect(); pRender(); } }; return;
+  }
+  if (!st){ h += `<h2>Connecting…</h2>${P.err?`<p class="err">${esc(P.err)}</p>`:`<p class="muted">Looking for game ${esc(P.code)}.</p>`}`; el.innerHTML=h; return; }
+  if (P.team===null || P.team>=st.teams.length){
+    h += `<h2>Pick your team</h2><p>One computer per team is plenty. If teammates join too, the first answer from your team counts.</p><div class="stack">${st.teams.map((n,i)=>`<button class="big teamb" data-team="${i}" style="border-left-color:${TCOL[i]}">${esc(n)}</button>`).join("")}</div>`;
+    el.innerHTML = h; el.querySelectorAll("[data-team]").forEach(b=>b.onclick=()=>{ P.team=+b.dataset.team; pStore(); pTrack(); pRender(); }); return;
+  }
+  const mini = `<div class="mini">${st.teams.map((n,i)=>({n,i,v:st.scores[i]})).sort((a,b)=>b.v-a.v).map(t=>`<div class="${t.i===P.team?"mine":""}"><span>${esc(t.n)}</span><span>${t.v}</span></div>`).join("")}</div>`;
+  const timerBar = () => `<div class="ptimer"><i id="pbar"></i></div>`;
+  if (st.view==="q"){
+    const q=st.q, mine=P.picks[q.key], teamAns = q.answered.includes(P.team);
+    h += `<p class="muted">Question ${q.n} of ${q.of} · up to ${q.pts} points</p><p class="pq">${esc(q.text)}</p>`;
+    if (q.phase==="reveal"){
+      const r=q.res[P.team];
+      h += r ? (r.p===q.ans ? `<p class="verdict ok">Right! +${r.pts}</p><p class="muted">Answered in ${(r.ms/1000).toFixed(1)} seconds.</p>` : `<p class="verdict no">Not this time</p><p class="muted">Your team answered ${LET[r.p]}. The answer was ${LET[q.ans]}.</p>`) : `<p class="verdict no">No answer</p><p class="muted">The answer was ${LET[q.ans]}.</p>`;
+      h += `<div class="stack">${q.opts.map((o,j)=>`<button class="big ${j===q.ans?"right":(r&&j===r.p?"wrong":"")}" disabled><span class="let">${LET[j]}</span><span>${esc(o)}</span></button>`).join("")}</div><p>${esc(q.why)}</p>${mini}`;
+    } else {
+      const locked = mine!==undefined || teamAns;
+      h += (q.phase==="open"?timerBar():"") + `<div class="stack">${q.opts.map((o,j)=>`<button class="big ${mine===j?"sel":""}" data-pick="${j}" ${locked||q.phase!=="open"?"disabled":""}><span class="let">${LET[j]}</span><span>${esc(o)}</span></button>`).join("")}</div>`;
+      h += `<p class="muted">${q.phase!=="open" ? "Waiting for the presenter to open this question." : (mine!==undefined ? `Locked in: ${LET[mine]}. Waiting for the other teams.` : (teamAns ? "Your team already answered from another computer." : "Tap an answer. Faster right answers earn more."))}</p>`;
+    }
+  } else if (st.view==="final"){
+    const F=st.fin, wl=F.locked[P.team], max=F.max[P.team];
+    h += `<p class="muted">Final round</p>`;
+    if (F.phase==="wager"){
+      h += wl || P.picks._wager!==undefined ? `<h2>Wager locked: ${P.picks._wager ?? "✓"}</h2><p class="muted">Waiting for the question.</p>`
+        : `<h2>How much will you bet?</h2><p>Up to ${max}. Right adds it to your score, wrong or no answer subtracts it.</p><form id="pw" class="stack"><input class="pin" id="pwn" type="number" min="0" max="${max}" step="50" value="0" aria-label="Wager" style="letter-spacing:0"><button class="btn primary" style="font-size:1.1rem;padding:.8rem">Lock wager</button></form>`;
+    } else {
+      const mine=P.picks._fin, done = mine!==undefined || F.answered.includes(P.team);
+      h += `<p class="pq">${esc(F.q)}</p>`;
+      if (F.phase==="open") h += timerBar() + `<div class="stack">${F.opts.map((o,j)=>`<button class="big ${mine===j?"sel":""}" data-fpick="${j}" ${done?"disabled":""}><span class="let">${LET[j]}</span><span>${esc(o)}</span></button>`).join("")}</div><p class="muted">${done?"Answer locked.":"One answer per team."}</p>`;
+      else { const r=F.res[P.team]; h += `<p class="verdict ${r.ok?"ok":"no"}">${r.ok?"+":"−"}${r.w}</p><div class="stack">${F.opts.map((o,j)=>`<button class="big ${j===F.ans?"right":(j===r.p?"wrong":"")}" disabled><span class="let">${LET[j]}</span><span>${esc(o)}</span></button>`).join("")}</div><p>${esc(F.why)}</p>${mini}`; }
+    }
+  } else if (st.view==="end"){
+    const order = st.teams.map((n,i)=>({n,i,v:st.scores[i]})).sort((a,b)=>b.v-a.v); const rank = order.findIndex(t=>t.i===P.team)+1;
+    h += `<h2>${rank===1?"Your team won!":"Final standings"}</h2><p>You finished ${["","first","second","third","fourth","fifth","sixth"][rank]} with ${score} points.</p>${mini}`;
+  } else {
+    h += `<h2>${esc(st.part)}</h2><p>${st.view==="game"?"This one runs on the main screen. Call out your answers when it's your team's turn.":"Eyes on the main screen. Questions will appear here."}</p>${mini}`;
+  }
+  el.innerHTML = h;
+  el.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{ const p=+b.dataset.pick, k=st.q.key; if(P.picks[k]!==undefined) return; P.picks[k]=p; pStore(); pSend("ans",{t:P.team,k,p}); pTrack(); pRender(); });
+  el.querySelectorAll("[data-fpick]").forEach(b=>b.onclick=()=>{ if(P.picks._fin!==undefined) return; P.picks._fin=+b.dataset.fpick; pStore(); pSend("fans",{t:P.team,p:P.picks._fin}); pTrack(); pRender(); });
+  const pw=document.getElementById("pw"); if (pw) pw.onsubmit=ev=>{ ev.preventDefault(); const n=Math.max(0,Math.min(st.fin.max[P.team], Math.round(+document.getElementById("pwn").value||0))); P.picks._wager=n; pStore(); pSend("wager",{t:P.team,n}); pTrack(); pRender(); };
+  const bar=document.getElementById("pbar");
+  if (bar){ const L = st.view==="final"?FINAL_LIMIT:LIMIT; const step=()=>{ const left=Math.max(0,P.deadline-Date.now()); bar.style.width=(left/L*100)+"%"; }; step(); P.tick=setInterval(step,200); }
+}
+
+/* ===================== BOOT ===================== */
+if (IS_PLAYER){
+  document.body.classList.add("player"); fit(); pLoad();
+  if (P.code) pConnect(); pRender();
+} else {
+  fit(); addEventListener("resize", fit);
+  document.querySelectorAll(".quiz[data-round]").forEach(makeQuiz);
+  makeSort(document.getElementById("sort-fw"), "fw");
+  makeSort(document.getElementById("sort-dis"), "dis");
+  makeOrder(document.getElementById("order-eras"));
+  calc(); renderHow(); renderSetup(); renderBoard(); renderFinal(); show(cur);
+  connectHost();
+}
+</script>
