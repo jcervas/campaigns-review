@@ -333,6 +333,15 @@ body.player #player{display:flex;flex-direction:column;min-height:100%;max-width
 .rrow.first{border-color:var(--accent)}
 .rrow.first .rk{color:var(--accent-ink)}
 .solosum{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.lb{display:grid;grid-template-columns:1fr 1.15fr;gap:1.6rem;background:var(--panel);border:1px solid var(--rule);border-radius:.45rem;padding:1.1rem 1.4rem;min-height:9rem}
+.lb h4{margin:0 0 .4rem;font-family:var(--micro);font-size:.95rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.lb .big{font-family:var(--display);font-size:2.6rem;font-weight:600;line-height:1.05;color:var(--accent-ink)}
+.lb p{font-size:1.15rem}
+.lb ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:.3rem}
+.lb li{display:flex;justify-content:space-between;gap:1rem;font-size:1.15rem;color:var(--ink-2);border-bottom:1px solid var(--rule);padding-bottom:.25rem;font-variant-numeric:tabular-nums}
+.lb li.me{color:var(--ink);font-weight:700}
+#nick{border:1px solid var(--rule);border-radius:.35rem;background:var(--paper);padding:.35rem .7rem;font-size:1.1rem;width:16rem}
+body.reader .lb{grid-template-columns:1fr}
 .qdots button.sumdot{width:auto;border-radius:1rem;padding:0 .7rem}
 body.reader .rrow{grid-template-columns:2rem 1fr 5rem}
 body.reader .rrow .barw,body.reader .rrow .meta{grid-column:1 / -1}
@@ -352,6 +361,8 @@ body.reader .solosum{grid-template-columns:1fr}
     <div class="btns" id="team-row"><span class="btns" id="team-count"></span><span class="teamnames" id="team-names"></span></div>
     <label class="l" id="tm-l">Timer</label>
     <div class="btns" id="tm-row"><button class="btn" id="timer-btn">20 seconds per question</button><span class="micro" id="timer-note"></span></div>
+    <label class="l" id="nick-l">Leaderboard name</label>
+    <div class="btns" id="nick-row"><input id="nick" maxlength="24" placeholder="Anonymous" autocomplete="off"><span class="micro">Classmates see this next to your solo scores. Leave it blank to appear as Anonymous.</span></div>
     <label class="l">Scores</label>
     <div class="btns"><button class="btn" id="reset-btn">Start a new game</button><span class="confirm" id="reset-confirm" hidden>This clears every score. <button class="btn" id="reset-yes">Clear scores</button> <button class="btn" id="reset-no">Keep playing</button></span></div>
   </div>
@@ -682,6 +693,8 @@ const LET = "ABCD";
 const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const speedPts = (P, ms) => Math.round(P*(0.5 + 0.5*Math.max(0, 1 - ms/LIMIT)));
 const sbOK = () => !!(window.supabase && window.supabase.createClient);
+let SBC = null; const sbClient = () => SBC || (sbOK() ? (SBC = window.supabase.createClient(SB_URL, SB_KEY)) : null);
+const COHORT = (new URLSearchParams(location.search).get("cohort") || "fall-2026").slice(0,40);
 const params = new URLSearchParams(location.search);
 const IS_PLAYER = params.has("code") || params.has("play");
 
@@ -697,6 +710,7 @@ function fresh(mode){
 let G;
 try { G = JSON.parse(localStorage.getItem(KEY)); } catch(e) { G = null; }
 if (!G || !G.teams) G = fresh(reader() ? "solo" : "live");
+if (!G.dev) { G.dev = Math.random().toString(36).slice(2,12); }
 function save(){ try { localStorage.setItem(KEY, JSON.stringify(G)); } catch(e){} }
 
 function scores(){
@@ -739,7 +753,7 @@ function liveOn(){ return G.mode==="live" && LIVE.ready; }
 function connectHost(){
   if (LIVE.ch){ try{ LIVE.sb.removeChannel(LIVE.ch); }catch(e){} LIVE.ch=null; LIVE.ready=false; }
   if (G.mode!=="live" || !sbOK()) { renderJoin(); return; }
-  LIVE.sb = LIVE.sb || window.supabase.createClient(SB_URL, SB_KEY);
+  LIVE.sb = sbClient();
   const ch = LIVE.sb.channel("review-"+G.code, {config:{broadcast:{self:false}, presence:{key:"host"}}});
   ch.on("presence", {event:"sync"}, ()=>{ readPresence(ch.presenceState()); });
   ch.on("presence", {event:"join"}, ()=>pushNow());
@@ -828,6 +842,8 @@ function renderSetup(){
   ["live","teams","solo"].forEach(m=>document.getElementById("m-"+m).setAttribute("aria-pressed", G.mode===m));
   const solo = G.mode==="solo";
   document.getElementById("tl-l").hidden = solo; document.getElementById("team-row").hidden = solo;
+  document.getElementById("nick-l").hidden = !solo; document.getElementById("nick-row").hidden = !solo;
+  const ni=document.getElementById("nick"); if (document.activeElement!==ni) ni.value = G.nick||"";
   document.getElementById("tm-l").hidden = G.mode==="live"; document.getElementById("tm-row").hidden = G.mode==="live";
   document.getElementById("timer-btn").setAttribute("aria-pressed", !!G.timer);
   document.getElementById("timer-btn").textContent = G.timer ? "20 seconds per question" : "Timer off";
@@ -837,10 +853,12 @@ function renderSetup(){
   document.getElementById("keys-hint").textContent = G.mode==="live" ? "→ opens each question, reveals it early if you like, then moves on · N shows notes" : "→ reveals the answer, then the next question, then the next slide · A–D picks an answer · N shows notes";
   renderJoin();
 }
-function setMode(m){ if(G.mode===m) return; const code=G.code; G = fresh(m); G.code=code; save(); connectHost(); rebuildAll(); }
+function keepIdentity(old){ G.dev=old.dev; G.nick=old.nick; G.lbSent=old.lbSent; }
+function setMode(m){ if(G.mode===m) return; const code=G.code, old=G; G = fresh(m); G.code=code; keepIdentity(old); save(); connectHost(); rebuildAll(); }
 document.getElementById("m-live").onclick=()=>setMode("live");
 document.getElementById("m-teams").onclick=()=>setMode("teams");
 document.getElementById("m-solo").onclick=()=>setMode("solo");
+document.getElementById("nick").addEventListener("input", e=>{ G.nick = e.target.value.replace(/[\u0000-\u001f]/g,"").trim().slice(0,24); save(); });
 document.getElementById("timer-btn").onclick=()=>{ G.timer=!G.timer; save(); renderSetup(); };
 document.getElementById("team-count").addEventListener("click", e=>{
   const b=e.target.closest(".tc"); if(!b) return; const n=+b.dataset.n;
@@ -852,7 +870,7 @@ document.getElementById("team-names").addEventListener("input", e=>{
 });
 document.getElementById("reset-btn").onclick=()=>{ document.getElementById("reset-confirm").hidden=false; };
 document.getElementById("reset-no").onclick=()=>{ document.getElementById("reset-confirm").hidden=true; };
-document.getElementById("reset-yes").onclick=()=>{ const t=G.teams.slice(), m=G.mode, tm=G.timer; G=fresh(m); G.teams=t; G.timer=tm; save(); document.getElementById("reset-confirm").hidden=true; connectHost(); rebuildAll(); };
+document.getElementById("reset-yes").onclick=()=>{ const t=G.teams.slice(), m=G.mode, tm=G.timer, old=G; G=fresh(m); G.teams=t; G.timer=tm; keepIdentity(old); save(); document.getElementById("reset-confirm").hidden=true; connectHost(); rebuildAll(); };
 
 /* ===================== QUIZ ===================== */
 const quizzes = [];
@@ -869,6 +887,35 @@ function roundStats(id){
   order.forEach((r,i)=>{ r.rank = i && r.pts===order[i-1].pts ? order[i-1].rank : i+1; });
   return {played, of:R.qs.length, max:R.qs.length*R.pts, order};
 }
+const LB_POST = {};
+async function loadBoard(id){
+  const el = () => document.getElementById("lb-"+id), sb = sbClient(), S = roundStats(id), me = S.order[0];
+  const offline = `<div><h4>Class leaderboard</h4><p>The class leaderboard isn't reachable from this page. Open ${esc(LIVE_HOME.replace(/^https?:\/\//,""))} to compare your scores with classmates.</p></div>`;
+  if (!sb){ if (el()) el().innerHTML = offline; return; }
+  try {
+    const done = S.played===S.of;
+    if (done && G.timer && !G.lbSent?.[id]) await (LB_POST[id] = LB_POST[id] || (async()=>{
+      const {error} = await sb.from("solo_scores").insert({cohort:COHORT, round:id, device:G.dev, nick:(G.nick||"Anonymous").slice(0,24), pts:me.pts, n_right:me.right, avg_ms: me.avg!==null ? Math.min(20000, Math.round(me.avg)) : null});
+      if (!error || error.code==="23505"){ G.lbSent = G.lbSent||{}; G.lbSent[id] = {pts:me.pts, nick:G.nick||"Anonymous", first:!error}; save(); }
+      LB_POST[id] = null;
+    })());
+    const {data, error} = await sb.from("solo_scores").select("nick,pts,n_right").eq("cohort",COHORT).eq("round",id).order("pts",{ascending:false}).limit(1000);
+    if (error) throw error;
+    const box = el(); if (!box) return;
+    const n = data.length, avg = n ? Math.round(data.reduce((a,r)=>a+r.pts,0)/n) : 0, mine = G.lbSent?.[id];
+    let left;
+    if (!done) left = `<div><h4>Class leaderboard</h4><p>Finish all ${S.of} questions to post your score.</p><p class="micro">${n} classmate${n===1?" has":"s have"} finished this round${n?`, averaging ${avg} points`:""}.</p></div>`;
+    else if (!mine && !G.timer) left = `<div><h4>Class leaderboard</h4><p>Only timed games are posted, so everyone is scored the same way. Turn the timer back on to post your next round.</p><p class="micro">${n} classmate${n===1?" has":"s have"} finished this round${n?`, averaging ${avg} points`:""}.</p></div>`;
+    else if (!mine) left = `<div><h4>Class leaderboard</h4><p>Your score couldn't be posted. Reopen this slide to try again.</p></div>`;
+    else { const others = n-1, beat = data.filter(r=>r.pts<mine.pts).length, rank = 1+data.filter(r=>r.pts>mine.pts).length;
+      left = `<div><h4>Class leaderboard</h4><span class="big">#${rank} of ${n}</span><p>${others>0 ? `You beat ${Math.round(beat/others*100)}% of the ${others} classmate${others===1?"":"s"} who finished this round. The class average is ${avg}.` : "You're the first in the class to finish this round."}</p>
+        <p class="micro">${mine.first ? "Only your first finish of each round is posted." : `Your posted score is ${mine.pts}, from your first finish. Replays don't change it.`}</p></div>`; }
+    let marked = false;
+    const top = data.slice(0,5).map((r,i)=>{ const isMe = !marked && mine && r.pts===mine.pts && r.nick===mine.nick; if (isMe) marked=true;
+      return `<li class="${isMe?"me":""}"><span>${i+1}. ${esc(r.nick)}${isMe?" (you)":""}</span><span>${r.pts}</span></li>`; }).join("");
+    box.innerHTML = left + `<div><h4>Top scores, ${esc(slides.find(sl=>sl.contains(document.querySelector(`.quiz[data-round="${id}"]`)))?.querySelector("h2")?.textContent||"this round")}</h4>${n ? `<ol>${top}</ol>` : `<p class="micro">No scores yet.</p>`}</div>`;
+  } catch(e){ if (el()) el().innerHTML = offline; }
+}
 function summaryHTML(id){
   const S = roundStats(id), top = Math.max(1, S.order[0]?.pts||0), sec = ms => (ms/1000).toFixed(1)+"s";
   const title = S.played<S.of ? `${S.played} of ${S.of} questions played` : `All ${S.of} questions played`;
@@ -876,7 +923,8 @@ function summaryHTML(id){
     return `<div class="sumhead"><h3>You earned ${r.pts} of ${S.max} points</h3><span class="micro">${title}</span></div>
       <div class="solosum"><div class="card"><span class="bigstat">${r.right}/${S.of}</span><p>questions right</p></div>
       <div class="card"><span class="bigstat">${r.avg!==null?sec(r.avg):"–"}</span><p>average time on right answers</p></div>
-      <div class="card"><span class="bigstat">${Math.round(r.pts/S.max*100)}%</span><p>of the points available this round. Your total is ${r.total}.</p></div></div>`; }
+      <div class="card"><span class="bigstat">${Math.round(r.pts/S.max*100)}%</span><p>of the points available this round. Your total is ${r.total}.</p></div></div>
+      <div class="lb" id="lb-${id}"><div><h4>Class leaderboard</h4><p class="micro">Loading…</p></div></div>`; }
   const lead = S.order.filter(r=>r.rank===1);
   const head = !S.played ? "No questions played yet" : lead.length>1 ? `A tie this round: ${lead.map(r=>esc(r.n)).join(" and ")}` : `${esc(lead[0].n)} wins the round`;
   return `<div class="sumhead"><h3>${head}</h3><span class="micro">${title} · up to ${S.max} points</span></div>
@@ -906,6 +954,7 @@ function makeQuiz(el){
     if (sum){ Q.stop(); el.querySelector(".timer").hidden=true; el.querySelector(".clock").hidden=true;
       el.querySelector(".qn").textContent = "Round results"; el.querySelector(".qdots").innerHTML = dots();
       el.querySelector(".qsum").innerHTML = summaryHTML(id); el.querySelector(".award").innerHTML = "";
+      if (G.mode==="solo") loadBoard(id);
       el.querySelector(".qprev").disabled = false; el.querySelector(".qgo").textContent = "Next slide →";
       return; }
     const i = Q.cur(), q = R.qs[i], key = k(i), rev = G.rev[key], pick = G.picks[key], live = G.mode==="live", L = G.live[key]||{};
@@ -1246,7 +1295,7 @@ function pLoad(){ try{ const s=JSON.parse(localStorage.getItem("c5-review-player
 function pConnect(){
   if (!sbOK()){ P.err="This page can't reach the game server. Check the link from your instructor."; return pRender(); }
   if (P.ch){ try{ P.sb.removeChannel(P.ch); }catch(e){} }
-  P.sb = P.sb || window.supabase.createClient(SB_URL, SB_KEY);
+  P.sb = sbClient();
   const ch = P.sb.channel("review-"+P.code, {config:{broadcast:{self:false}, presence:{key:P.dev}}});
   ch.on("broadcast", {event:"state"}, ({payload})=>{
     if (!payload || payload.code!==P.code) return;
