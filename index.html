@@ -316,6 +316,27 @@ body.player #player{display:flex;flex-direction:column;min-height:100%;max-width
 #player .mini div.mine{color:var(--ink);font-weight:700}
 #player .muted{font-family:var(--micro);font-size:.95rem;color:var(--ink-3)}
 #player .err{font-family:var(--micro);font-size:1rem;color:var(--no)}
+#player .mini div.head{font-weight:700;color:var(--ink-3);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}
+/* round summary */
+.qsum{display:flex;flex-direction:column;gap:.9rem;flex:1;min-height:0}
+.qsum .sumhead{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
+.qsum .sumhead h3{font-size:2.2rem}
+.rrows{display:flex;flex-direction:column;gap:.7rem}
+.rrow{display:grid;grid-template-columns:2.4rem 13rem 1fr 6.5rem 19rem;align-items:center;gap:1.1rem;background:var(--panel);border:1px solid var(--rule);border-radius:.45rem;padding:.65rem 1.1rem}
+.rrow .rk{font-family:var(--display);font-size:2rem;color:var(--ink-3);text-align:right}
+.rrow .nm{display:flex;align-items:center;gap:.55rem;font-size:1.45rem;font-weight:600;color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rrow .nm .dot{width:.85rem;height:.85rem;border-radius:50%;flex:none}
+.rrow .barw{height:1.6rem;background:var(--well);border-radius:.3rem;overflow:hidden}
+.rrow .barw i{display:block;height:100%;border-radius:.3rem}
+.rrow .pt{font-family:var(--display);font-size:2rem;font-weight:700;text-align:right;color:var(--ink);font-variant-numeric:tabular-nums}
+.rrow .meta{font-family:var(--micro);font-size:1.05rem;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.rrow.first{border-color:var(--accent)}
+.rrow.first .rk{color:var(--accent-ink)}
+.solosum{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.qdots button.sumdot{width:auto;border-radius:1rem;padding:0 .7rem}
+body.reader .rrow{grid-template-columns:2rem 1fr 5rem}
+body.reader .rrow .barw,body.reader .rrow .meta{grid-column:1 / -1}
+body.reader .solosum{grid-template-columns:1fr}
 </style>
 
 <div id="viewport"><main id="stage">
@@ -773,7 +794,9 @@ setInterval(()=>{ if (liveOn()) pushNow(); }, 2500);
 function pubState(){
   const s = slides[cur], st = {seq:++LIVE.seq, code:G.code, teams:G.teams, scores:scores(), part:s.dataset.part||"", view:"lobby"};
   const qz = s.querySelector(".quiz[data-round]");
-  if (qz){ const Q=qz._ctl, i=Q.cur(), key=Q.key(), q=Q.R.qs[i], rev=!!G.rev[key], L=G.live[key]||{};
+  if (qz && qz._ctl.isSum()){ const S=roundStats(qz._ctl.id); st.view="sum";
+    st.sum={title:s.querySelector("h2")?.textContent||"", played:S.played, of:S.of, max:S.max, rows:S.order.map(r=>({t:r.t, pts:r.pts, right:r.right, avg:r.avg, rank:r.rank, total:r.total}))};
+  } else if (qz){ const Q=qz._ctl, i=Q.cur(), key=Q.key(), q=Q.R.qs[i], rev=!!G.rev[key], L=G.live[key]||{};
     st.view="q"; st.q={key, n:i+1, of:Q.R.qs.length, text:q.q, opts:q.o, pts:Q.R.pts, phase: rev?"reveal":(G.open[key]?"open":"wait"),
       endsIn: G.open[key]? Math.max(0, LIMIT-(Date.now()-G.open[key])) : LIMIT, answered:Object.keys(L).map(Number)};
     if (rev){ st.q.ans=q.a; st.q.why=q.w; st.q.res={}; Object.entries(L).forEach(([t,r])=>{ st.q.res[t]={p:r.p, ms:r.ms, pts:(G.awards[key]?.per||{})[t]||0}; }); }
@@ -834,24 +857,60 @@ document.getElementById("reset-yes").onclick=()=>{ const t=G.teams.slice(), m=G.
 /* ===================== QUIZ ===================== */
 const quizzes = [];
 function currentQuiz(){ return slides[cur]?.querySelector(".quiz[data-round]")?._ctl || null; }
+function roundStats(id){
+  const R = ROUNDS[id], played = R.qs.filter((_,i)=>G.rev[id+":"+i]).length, sc = scores();
+  const rows = G.teams.map((n,t)=>{ let pts=0, right=0; const ms=[];
+    R.qs.forEach((q,i)=>{ const key=id+":"+i, a=G.awards[key]; if (!G.rev[key] || !a) return;
+      const got = a.per ? a.per[t]!==undefined : a.teams.includes(t);
+      if (got){ right++; pts += a.per ? a.per[t] : a.pts; }
+      const L=(G.live[key]||{})[t]; if (got && L) ms.push(L.ms); });
+    return {t, n, pts, right, avg: ms.length ? ms.reduce((x,y)=>x+y,0)/ms.length : null, total: sc[t]}; });
+  const order = rows.slice().sort((a,b)=>b.pts-a.pts);
+  order.forEach((r,i)=>{ r.rank = i && r.pts===order[i-1].pts ? order[i-1].rank : i+1; });
+  return {played, of:R.qs.length, max:R.qs.length*R.pts, order};
+}
+function summaryHTML(id){
+  const S = roundStats(id), top = Math.max(1, S.order[0]?.pts||0), sec = ms => (ms/1000).toFixed(1)+"s";
+  const title = S.played<S.of ? `${S.played} of ${S.of} questions played` : `All ${S.of} questions played`;
+  if (G.mode==="solo"){ const r=S.order[0];
+    return `<div class="sumhead"><h3>You earned ${r.pts} of ${S.max} points</h3><span class="micro">${title}</span></div>
+      <div class="solosum"><div class="card"><span class="bigstat">${r.right}/${S.of}</span><p>questions right</p></div>
+      <div class="card"><span class="bigstat">${r.avg!==null?sec(r.avg):"–"}</span><p>average time on right answers</p></div>
+      <div class="card"><span class="bigstat">${Math.round(r.pts/S.max*100)}%</span><p>of the points available this round. Your total is ${r.total}.</p></div></div>`; }
+  const lead = S.order.filter(r=>r.rank===1);
+  const head = !S.played ? "No questions played yet" : lead.length>1 ? `A tie this round: ${lead.map(r=>esc(r.n)).join(" and ")}` : `${esc(lead[0].n)} wins the round`;
+  return `<div class="sumhead"><h3>${head}</h3><span class="micro">${title} · up to ${S.max} points</span></div>
+    <div class="rrows">${S.order.map(r=>`<div class="rrow ${r.rank===1&&S.played?"first":""}"><span class="rk">${r.rank}</span><span class="nm"><span class="dot" style="background:${TCOL[r.t]}"></span>${esc(r.n)}</span>
+      <span class="barw"><i style="width:${r.pts/top*100}%;background:${TCOL[r.t]}"></i></span><span class="pt">+${r.pts}</span>
+      <span class="meta">${r.right} of ${S.played} right${r.avg!==null?" · "+sec(r.avg)+" avg":""} · total ${r.total}</span></div>`).join("")}</div>`;
+}
 function makeQuiz(el){
   const id = el.dataset.round, R = ROUNDS[id];
   el.innerHTML = `<div class="qtop"><span class="micro qn"></span><div class="qdots"></div><span class="clock" hidden></span></div>
     <div class="qcard ${R.kind==="case"?"case":""}"><p class="q"></p><div class="timer" hidden><i></i></div></div>
-    <div class="opts"></div><p class="fb" aria-live="polite"></p>
+    <div class="opts"></div><p class="fb" aria-live="polite"></p><div class="qsum" hidden></div>
     <div class="qfoot"><div class="award"></div><div class="btns"><button class="btn qprev">← Previous</button><button class="btn primary qgo"></button></div></div>`;
   const Q = {el, id, R, shownAt:0, tick:null};
   const k = i => id+":"+i;
   Q.cur = () => G.qi[id]||0;
   Q.key = () => k(Q.cur());
   Q.revealed = i => G.rev[k(i)];
+  Q.isSum = () => Q.cur()===R.qs.length;
   Q.render = () => {
+    const sum = Q.isSum();
+    ["qcard","opts","fb"].forEach(c=>el.querySelector("."+c).hidden=sum); el.querySelector(".qsum").hidden=!sum;
+    const dots = () => R.qs.map((_,j)=>{
+      const kk=k(j); let c = j===Q.cur()?"cur":"";
+      if (G.rev[kk]) c += G.mode==="solo" ? (G.picks[kk]===R.qs[j].a?" good":" bad") : " done";
+      return `<button class="${c}" data-j="${j}" aria-label="Question ${j+1}">${j+1}</button>`;}).join("") + `<button class="sumdot ${sum?"cur":""}" data-j="${R.qs.length}" aria-label="Round results">Results</button>`;
+    if (sum){ Q.stop(); el.querySelector(".timer").hidden=true; el.querySelector(".clock").hidden=true;
+      el.querySelector(".qn").textContent = "Round results"; el.querySelector(".qdots").innerHTML = dots();
+      el.querySelector(".qsum").innerHTML = summaryHTML(id); el.querySelector(".award").innerHTML = "";
+      el.querySelector(".qprev").disabled = false; el.querySelector(".qgo").textContent = "Next slide →";
+      return; }
     const i = Q.cur(), q = R.qs[i], key = k(i), rev = G.rev[key], pick = G.picks[key], live = G.mode==="live", L = G.live[key]||{};
     el.querySelector(".qn").textContent = `Question ${i+1} of ${R.qs.length}`;
-    el.querySelector(".qdots").innerHTML = R.qs.map((_,j)=>{
-      const kk=k(j); let c = j===i?"cur":"";
-      if (G.rev[kk]) c += G.mode==="solo" ? (G.picks[kk]===R.qs[j].a?" good":" bad") : " done";
-      return `<button class="${c}" data-j="${j}" aria-label="Question ${j+1}">${j+1}</button>`;}).join("");
+    el.querySelector(".qdots").innerHTML = dots();
     el.querySelector(".q").textContent = q.q;
     el.querySelector(".opts").innerHTML = q.o.map((o,j)=>{
       let c=""; if(rev){ c = j===q.a ? "right" : (j===pick ? "wrong" : "dim"); }
@@ -870,11 +929,11 @@ function makeQuiz(el){
         return `<span class="${c}"><span class="dot" style="background:${TCOL[t]}"></span>${esc(n)}${extra}</span>`; }).join("");
     } else aw.innerHTML = rev ? awardRow(key, R.pts) : "";
     el.querySelector(".qprev").disabled = i===0;
-    el.querySelector(".qgo").textContent = !rev ? "Reveal answer" : (i<R.qs.length-1 ? "Next question →" : "Next slide →");
+    el.querySelector(".qgo").textContent = !rev ? "Reveal answer" : (i<R.qs.length-1 ? "Next question →" : "Round results →");
     Q.syncTimer();
   };
   Q.syncTimer = () => {
-    clearInterval(Q.tick); Q.tick=null;
+    clearInterval(Q.tick); Q.tick=null; if (Q.isSum()) return;
     const key=Q.key(), rev=G.rev[key], on = el.closest(".slide").classList.contains("on");
     const t = el.querySelector(".timer"), bar=t.querySelector("i"), clock=el.querySelector(".clock");
     const timed = !rev && on && (G.mode==="live" || G.timer);
@@ -889,15 +948,17 @@ function makeQuiz(el){
     step(); Q.tick = setInterval(step, 200);
   };
   Q.choose = j => {
-    if (G.mode==="live") return;
+    if (G.mode==="live" || Q.isSum()) return;
     const i=Q.cur(), key=k(i); if (G.rev[key]) return;
     G.picks[key]=j; G.rev[key]=true;
     if (G.mode==="solo"){ const ok = j===R.qs[i].a, ms = Q.shownAt? Date.now()-Q.shownAt : 0;
-      const pts = ok ? (G.timer ? speedPts(R.pts, ms) : R.pts) : 0; G.awards[key] = {pts:R.pts, teams: ok?[0]:[], per: ok?{0:pts}:{}}; }
+      const pts = ok ? (G.timer ? speedPts(R.pts, ms) : R.pts) : 0; G.awards[key] = {pts:R.pts, teams: ok?[0]:[], per: ok?{0:pts}:{}};
+      if (G.timer && ms) G.live[key] = {0:{p:j, ms}}; }
     save(); Q.render(); renderBoard();
     if (j!==R.qs[i].a) el.querySelectorAll(".opt")[j]?.classList.add("shake");
   };
   Q.reveal = () => {
+    if (Q.isSum()) return false;
     const i=Q.cur(), key=k(i); if(G.rev[key]) return false;
     G.rev[key]=true;
     if (G.mode==="live"){ const L=G.live[key]||{}, per={}, ok=[];
@@ -905,10 +966,10 @@ function makeQuiz(el){
       G.awards[key]={pts:R.pts, teams:ok, per}; }
     save(); Q.render(); renderBoard(); return true;
   };
-  Q.go = d => { const n=Q.cur()+d; if(n<0||n>=R.qs.length) return false; G.qi[id]=n; Q.shownAt=0; save(); Q.render(); pushSoon(); return true; };
+  Q.go = d => { const n=Q.cur()+d; if(n<0||n>R.qs.length) return false; G.qi[id]=n; Q.shownAt=0; save(); Q.render(); pushSoon(); return true; };
   Q.fwd = () => Q.reveal() || Q.go(1);
   Q.back = () => Q.go(-1);
-  Q.restartTimer = () => { const key=Q.key(); if (G.rev[key]) return; if (G.mode==="live") G.open[key]=Date.now(); else Q.shownAt=Date.now(); save(); Q.syncTimer(); pushSoon(); };
+  Q.restartTimer = () => { if (Q.isSum()) return; const key=Q.key(); if (G.rev[key]) return; if (G.mode==="live") G.open[key]=Date.now(); else Q.shownAt=Date.now(); save(); Q.syncTimer(); pushSoon(); };
   Q.stop = () => { clearInterval(Q.tick); Q.tick=null; };
   el.addEventListener("click", e=>{
     const o=e.target.closest(".opt"); if(o) return Q.choose(+o.dataset.j);
@@ -1234,6 +1295,12 @@ function pRender(){
       h += (q.phase==="open"?timerBar():"") + `<div class="stack">${q.opts.map((o,j)=>`<button class="big ${mine===j?"sel":""}" data-pick="${j}" ${locked||q.phase!=="open"?"disabled":""}><span class="let">${LET[j]}</span><span>${esc(o)}</span></button>`).join("")}</div>`;
       h += `<p class="muted">${q.phase!=="open" ? "Waiting for the presenter to open this question." : (mine!==undefined ? `Locked in: ${LET[mine]}. Waiting for the other teams.` : (teamAns ? "Your team already answered from another computer." : "Tap an answer. Faster right answers earn more."))}</p>`;
     }
+  } else if (st.view==="sum"){
+    const S=st.sum, mineR=S.rows.find(r=>r.t===P.team), ord=["","1st","2nd","3rd","4th","5th","6th"];
+    h += `<p class="muted">Round complete · ${esc(S.title)}</p><p class="verdict ok">+${mineR.pts}</p>
+      <p>${mineR.right} of ${S.played} right${mineR.avg!==null?`, ${(mineR.avg/1000).toFixed(1)} seconds on average`:""}. ${mineR.rank===1?"Your team won this round!":`${ord[mineR.rank]} of ${S.rows.length} teams this round.`}</p>
+      <div class="mini"><div class="head"><span>This round</span><span>Points</span></div>${S.rows.map(r=>`<div class="${r.t===P.team?"mine":""}"><span>${r.rank}. ${esc(st.teams[r.t])}</span><span>+${r.pts}</span></div>`).join("")}</div>
+      <div class="mini"><div class="head"><span>Game total</span><span></span></div>${st.teams.map((n,i)=>({n,i,v:st.scores[i]})).sort((a,b)=>b.v-a.v).map(t=>`<div class="${t.i===P.team?"mine":""}"><span>${esc(t.n)}</span><span>${t.v}</span></div>`).join("")}</div>`;
   } else if (st.view==="final"){
     const F=st.fin, wl=F.locked[P.team], max=F.max[P.team];
     h += `<p class="muted">Final round</p>`;
