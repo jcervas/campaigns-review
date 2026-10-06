@@ -9,7 +9,7 @@
   --paper:#F4F5F2; --panel:#FCFCFA; --well:#E9ECE8; --ink:#12181D; --ink-2:#46525B; --ink-3:#5F6B74; --rule:#D3D8D7;
   --accent:#C41230; --accent-ink:#A30F28; --accent-soft:#F7E4E7; --on-accent:#FFFFFF;
   --slab:#12181D; --slab-ink:#F4F5F2; --slab-2:#AEB9C0;
-  --t1:#00857C; --t2:#A4590F; --t3:#8856A7; --t4:#2C7FB8; --t5:#5E7A1F; --t6:#B23A7E;
+  --t1:#00857C; --t2:#A4590F; --t3:#8856A7; --t4:#2C7FB8; --t5:#5E7A1F; --t6:#B23A7E; --t7:#957514; --t8:#4B4FA8; --t9:#8E3B2E; --t10:#5F6B74;
   --ok:#2F7A3B; --no:#A4290F;
   --display:"Source Serif 4", Georgia, "Times New Roman", serif;
   --text:"Barlow", "Helvetica Neue", Arial, sans-serif;
@@ -21,7 +21,7 @@
     --paper:#12181D; --panel:#1A2229; --well:#222C34; --ink:#EDF0F1; --ink-2:#BAC4CA; --ink-3:#98A4AC; --rule:#33404A;
     --accent:#F4677F; --accent-ink:#F4677F; --accent-soft:#3B1D25; --on-accent:#12181D;
     --slab:#0A0E11; --slab-ink:#EDF0F1; --slab-2:#98A4AC;
-    --t1:#4DB8A8; --t2:#E08214; --t3:#B48CD9; --t4:#6FA8DC; --t5:#A3C460; --t6:#E584BA;
+    --t1:#4DB8A8; --t2:#E08214; --t3:#B48CD9; --t4:#6FA8DC; --t5:#A3C460; --t6:#E584BA; --t7:#D9B847; --t8:#9EA2F0; --t9:#E08A7A; --t10:#AEB9C0;
     --ok:#7FBF4D; --no:#F08A6C;
   }
 }
@@ -30,7 +30,7 @@
   --paper:#12181D; --panel:#1A2229; --well:#222C34; --ink:#EDF0F1; --ink-2:#BAC4CA; --ink-3:#98A4AC; --rule:#33404A;
   --accent:#F4677F; --accent-ink:#F4677F; --accent-soft:#3B1D25; --on-accent:#12181D;
   --slab:#0A0E11; --slab-ink:#EDF0F1; --slab-2:#98A4AC;
-  --t1:#4DB8A8; --t2:#E08214; --t3:#B48CD9; --t4:#6FA8DC; --t5:#A3C460; --t6:#E584BA;
+  --t1:#4DB8A8; --t2:#E08214; --t3:#B48CD9; --t4:#6FA8DC; --t5:#A3C460; --t6:#E584BA; --t7:#D9B847; --t8:#9EA2F0; --t9:#E08A7A; --t10:#AEB9C0;
   --ok:#7FBF4D; --no:#F08A6C;
 }
 html,body{height:100%}
@@ -55,6 +55,28 @@ button,input,select{font:inherit;color:inherit}
 #bar .navb:hover{border-color:var(--ink-3)}
 #count{font-variant-numeric:tabular-nums;min-width:4rem;text-align:center}
 #board{flex:1;display:flex;gap:.6rem;justify-content:flex-end;min-width:0}
+body.many #board{gap:.35rem}
+body.many .chip{padding:.15rem .3rem .15rem .55rem;gap:.35rem}
+body.many .chip .nm{max-width:5.2rem;font-size:.85rem}
+body.many .chip .sc{font-size:1.05rem;min-width:2.2rem}
+body.many .chip .adj{display:none}
+body.many .chip:hover .adj,body.many .chip:focus-within .adj{display:inline-block}
+body.many #bar .part{flex-basis:9rem}
+body.many .rrows{gap:.35rem}
+body.many .rrow{padding:.2rem 1rem;grid-template-columns:2rem 12rem 1fr 5rem 19rem}
+body.many .rrow .rk{font-size:1.35rem}
+body.many .rrow .nm{font-size:1.15rem}
+body.many .rrow .pt{font-size:1.35rem}
+body.many .rrow .barw{height:1rem}
+body.many .rrow .meta{font-size:.95rem}
+body.many .standings{gap:.4rem}
+body.many .srow{grid-template-columns:2.4rem 14rem 1fr 6rem}
+body.many .srow .rk{font-size:1.6rem}
+body.many .srow .nm{font-size:1.25rem}
+body.many .srow .barw{height:1.4rem}
+body.many .srow .pt{font-size:1.6rem}
+body.many .award .tb,body.many .lt{padding:.2rem .6rem;font-size:.9rem}
+body.many .teamnames input{width:7.5rem}
 .chip{display:flex;align-items:center;gap:.5rem;border:1px solid var(--rule);border-radius:2rem;padding:.2rem .35rem .2rem .8rem;background:var(--paper)}
 .chip .dot{width:.75rem;height:.75rem;border-radius:50%;flex:none}
 .chip .nm{font-weight:600;color:var(--ink);max-width:9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -362,7 +384,7 @@ body.reader .solosum{grid-template-columns:1fr}
     <label class="l" id="tl-l">Teams</label>
     <div class="btns" id="team-row"><span class="btns" id="team-count"></span><span class="teamnames" id="team-names"></span></div>
     <label class="l" id="tm-l">Timer</label>
-    <div class="btns" id="tm-row"><button class="btn" id="timer-btn">20 seconds per question</button><span class="micro" id="timer-note"></span></div>
+    <div class="btns" id="tm-row"><button class="btn" id="timer-btn">24 seconds per question</button><span class="micro" id="timer-note"></span></div>
     <label class="l" id="nick-l">Leaderboard name</label>
     <div class="btns" id="nick-row"><input id="nick" maxlength="24" placeholder="Anonymous" autocomplete="off"><span class="micro">Classmates see this next to your solo scores. Leave it blank to appear as Anonymous.</span></div>
     <label class="l">Scores</label>
@@ -698,8 +720,8 @@ function sortOrder(id){ return perm(SORTS[id].items.length, "sort-"+id); }
 const SB_URL = "https://renowzxywrnuomxzsydn.supabase.co";
 const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlbm93enh5d3JudW9teHpzeWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwODc1NDgsImV4cCI6MjA3MTY2MzU0OH0.8AvSHDFDPD9b-hHOTN1DPLwrtjdWnXjmjXNpumh0YL0";
 const LIVE_HOME = "https://jonathancervas.com/campaigns-review/";
-const LIMIT = 20000, FINAL_LIMIT = 30000;
-const TCOL = ["var(--t1)","var(--t2)","var(--t3)","var(--t4)","var(--t5)","var(--t6)"];
+const LIMIT = 24000, FINAL_LIMIT = 36000;
+const TCOL = Array.from({length:10},(_,i)=>`var(--t${i+1})`);
 const LET = "ABC";
 const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const speedPts = (P, ms) => Math.round(P*(0.5 + 0.5*Math.max(0, 1 - ms/LIMIT)));
@@ -715,14 +737,15 @@ const reader = () => window.innerWidth < 760;
 const newCode = () => Array.from({length:4},()=>"ABCDEFGHJKMNPQRSTUVWXYZ"[Math.floor(Math.random()*23)]).join("");
 function fresh(mode){
   return {seed:Math.random().toString(36).slice(2,10), reseed:{}, mode, teams: mode==="solo" ? ["You"] : ["Team 1","Team 2","Team 3","Team 4"], timer:true, code:newCode(),
-    awards:{}, picks:{}, rev:{}, open:{}, live:{}, sortHits:{}, sortMiss:{}, eraDone:[], eraMiss:0, adj:[0,0,0,0,0,0],
-    wagers:[0,0,0,0,0,0], locked:false, finalRes:[null,null,null,null,null,null], fin:{phase:"wager", at:0, w:{}, p:{}}, qi:{}, slide:0};
+    awards:{}, picks:{}, rev:{}, open:{}, live:{}, sortHits:{}, sortMiss:{}, eraDone:[], eraMiss:0, adj:Array(10).fill(0),
+    wagers:Array(10).fill(0), locked:false, finalRes:Array(10).fill(null), fin:{phase:"wager", at:0, w:{}, p:{}}, qi:{}, slide:0};
 }
 let G;
 try { G = JSON.parse(localStorage.getItem(KEY)); } catch(e) { G = null; }
 if (!G || !G.teams) G = fresh(reader() ? "solo" : "live");
 if (!G.dev) { G.dev = Math.random().toString(36).slice(2,12); }
 if (!G.seed) { G.seed = Math.random().toString(36).slice(2,10); }
+["adj","wagers"].forEach(f=>{ while((G[f]=G[f]||[]).length<10) G[f].push(0); }); while((G.finalRes=G.finalRes||[]).length<10) G.finalRes.push(null);
 function save(){ try { localStorage.setItem(KEY, JSON.stringify(G)); } catch(e){} }
 
 function scores(){
@@ -735,7 +758,7 @@ function scores(){
 }
 let lastScores = null;
 function renderBoard(){
-  const s = scores(), b = document.getElementById("board");
+  const s = scores(), b = document.getElementById("board"); document.body.classList.toggle("many", G.teams.length>6);
   b.innerHTML = G.teams.map((n,i)=>`<div class="chip" data-i="${i}"><span class="dot" style="background:${TCOL[i]}"></span><span class="nm">${esc(n)}</span><span class="sc">${s[i]}</span>${G.mode!=="solo"?`<button class="adj" data-d="-100" aria-label="Take 100 from ${esc(n)}">−</button><button class="adj" data-d="100" aria-label="Give 100 to ${esc(n)}">+</button>`:""}</div>`).join("");
   if (lastScores) s.forEach((v,i)=>{ if(v!==lastScores[i]) b.children[i]?.classList.add("bump"); });
   lastScores = s;
@@ -858,9 +881,9 @@ function renderSetup(){
   const ni=document.getElementById("nick"); if (document.activeElement!==ni) ni.value = G.nick||"";
   document.getElementById("tm-l").hidden = G.mode==="live"; document.getElementById("tm-row").hidden = G.mode==="live";
   document.getElementById("timer-btn").setAttribute("aria-pressed", !!G.timer);
-  document.getElementById("timer-btn").textContent = G.timer ? "20 seconds per question" : "Timer off";
+  document.getElementById("timer-btn").textContent = G.timer ? "24 seconds per question" : "Timer off";
   document.getElementById("timer-note").textContent = solo ? (G.timer ? "Faster right answers earn more points" : "Every right answer earns full points") : "T restarts it";
-  document.getElementById("team-count").innerHTML = [2,3,4,5,6].map(n=>`<button class="btn tc" data-n="${n}" aria-pressed="${G.teams.length===n}">${n}</button>`).join("");
+  document.getElementById("team-count").innerHTML = [2,3,4,5,6,7,8,9,10].map(n=>`<button class="btn tc" data-n="${n}" aria-pressed="${G.teams.length===n}">${n}</button>`).join("");
   document.getElementById("team-names").innerHTML = solo ? "" : G.teams.map((n,i)=>`<span class="tn"><span class="dot" style="background:${TCOL[i]}"></span><input id="team-${i}" value="${esc(n)}" maxlength="18" aria-label="Team ${i+1} name"></span>`).join("");
   document.getElementById("keys-hint").textContent = G.mode==="live" ? "→ opens each question, reveals it early if you like, then moves on · N shows notes" : "→ reveals the answer, then the next question, then the next slide · A, B or C picks an answer · N shows notes";
   renderJoin();
@@ -1230,9 +1253,9 @@ const PRESENTER = {
 };
 const HOW = {
  live:{...PRESENTER,
-  quiz:"Answer on your team's computer. The first answer from your team counts. A right answer earns half the points, and the other half shrinks as the 20-second clock runs down.",
+  quiz:"Answer on your team's computer. The first answer from your team counts. A right answer earns half the points, and the other half shrinks as the 24-second clock runs down.",
   case:"Read the holding and pick the case on your team's computer. Up to 200 points: half for being right, half for speed.",
-  final:"On your team's computer, lock a wager of up to your score or 500, whichever is higher. Then answer within 30 seconds. Right adds the wager; wrong or no answer subtracts it."},
+  final:"On your team's computer, lock a wager of up to your score or 500, whichever is higher. Then answer within 36 seconds. Right adds the wager; wrong or no answer subtracts it."},
  teams:{...PRESENTER,
   quiz:"Huddle while the timer runs. When it ends, each team holds up A, B or C. The presenter reveals the answer and taps every team that got it right.",
   case:"Read the holding, then name the case. Huddle, hold up A, B or C, and every team that gets it right earns 200.",
@@ -1247,8 +1270,8 @@ const HOW = {
   final:"Type a wager of up to your score or 500, whichever is higher. Lock it to see the question, then click your answer."}
 };
 const STEPS = {
- live:[["Join","Form your teams. Each team then opens the link on one computer, types the four-letter code, and taps its team name."],["Answer","Tap A, B or C on your computer. The first answer from your team is the one that counts."],["Beat the clock","A right answer earns half the points. The other half shrinks as the 20 seconds run down."],["Score","Wrong answers earn nothing. The scoreboard sits along the bottom of the main screen."]],
- teams:[["Huddle","Each question has a 20-second timer. Talk it over with your team."],["Answer","When time is up, every team holds up A, B or C at once. No changing it after."],["Reveal","The presenter shows the answer and a short explanation from the book."],["Score","Every team that got it right earns the points. The scoreboard is along the bottom."]],
+ live:[["Join","Form your teams. Each team then opens the link on one computer, types the four-letter code, and taps its team name."],["Answer","Tap A, B or C on your computer. The first answer from your team is the one that counts."],["Beat the clock","A right answer earns half the points. The other half shrinks as the 24 seconds run down."],["Score","Wrong answers earn nothing. The scoreboard sits along the bottom of the main screen."]],
+ teams:[["Huddle","Each question has a 24-second timer. Talk it over with your team."],["Answer","When time is up, every team holds up A, B or C at once. No changing it after."],["Reveal","The presenter shows the answer and a short explanation from the book."],["Score","Every team that got it right earns the points. The scoreboard is along the bottom."]],
  solo:[["Read","Each chapter has a recap slide, then a round of questions."],["Answer","Click an answer. Your first click is the one that counts."],["Beat the clock","A right answer earns half the points; answering quickly earns the rest."],["Score","Your total is along the bottom, and your progress is saved in this browser."]]
 };
 function renderHow(){
