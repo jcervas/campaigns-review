@@ -289,7 +289,9 @@ body.reader #bar .part,body.reader #progress,body.reader #notesbtn{display:none}
 /* phones: one slide at a time, moved with the arrow buttons in the bottom bar */
 body.reader .slide:not(.on){display:none}
 body.reader #keys-hint{display:none}
-body.reader #bar .navb{padding:.5rem 1rem;font-size:1.3rem}
+body.reader #bar{min-height:6.4rem}
+body.reader #bar .navb{min-width:5.6rem;min-height:4.6rem;padding:.6rem 1.4rem;font-size:2.4rem;line-height:1}
+body.reader #count{font-size:1.5rem}
 body.reader #board{justify-content:center;flex-wrap:wrap}
 body.reader .ecard.used{display:none}
 body.reader .slot{min-height:0}
@@ -1263,7 +1265,25 @@ function perm(n, key){ const r=rngFor((G.seed||"")+"|"+key), a=[...Array(n).keys
 const PER_GAME = 8;
 const nQ = R => Math.min(PER_GAME, R.qs.length);
 const slots = R => Array.from({length:nQ(R)});
-function QV(id, i){ const R=ROUNDS[id], rs=(G.reseed||{})[id]||0, order=perm(R.qs.length, id+"#"+rs), src=R.qs[order[i]], op=perm(src.o.length, id+"#"+rs+"#"+order[i]);
+/* Each device remembers which questions it has already revealed. A round's draw puts unseen questions first,
+   then seen ones oldest first, so a chapter's whole pool comes up before anything repeats. The draw is frozen
+   per game (and per replay) so questions never shift mid-round. */
+const SEEN_KEY = "c5-review-seen-v1";
+let SEEN = {}; try { SEEN = JSON.parse(localStorage.getItem(SEEN_KEY)) || {}; } catch(e) {}
+function drawOrder(id){
+  const n = ROUNDS[id].qs.length, k = id+"#"+((G.reseed||{})[id]||0);
+  G.draw = G.draw || {};
+  if (!Array.isArray(G.draw[k]) || G.draw[k].length!==n){
+    const seen = (SEEN[id]||[]).filter(x=>x<n), p = perm(n, k), unseen = p.filter(x=>!seen.includes(x));
+    const pick = new Set(seen.slice(0, Math.max(0, nQ(ROUNDS[id]) - unseen.length)));
+    G.draw[k] = unseen.concat(p.filter(x=>pick.has(x)), seen.filter(x=>!pick.has(x))); save(); }
+  return G.draw[k];
+}
+function markSeen(id, i){
+  const x = drawOrder(id)[i], s = (SEEN[id]||[]).filter(v=>v!==x); s.push(x); SEEN[id] = s;
+  try { localStorage.setItem(SEEN_KEY, JSON.stringify(SEEN)); } catch(e) {}
+}
+function QV(id, i){ const R=ROUNDS[id], rs=(G.reseed||{})[id]||0, order=drawOrder(id), src=R.qs[order[i]], op=perm(src.o.length, id+"#"+rs+"#"+order[i]);
   return {q:src.q, o:op.map(x=>src.o[x]), a:op.indexOf(src.a), w:src.w}; }
 function FV(){ const FN=curFinal(), op=perm(FN.o.length, "final"+finalExam()); return {q:FN.q, o:op.map(x=>FN.o[x]), a:op.indexOf(FN.a), w:FN.w}; }
 function orderPerm(id){ const n=ORDERS[id].items.length, p=perm(n, "order-"+id); return p.every((v,i)=>v===i) ? p.slice(1).concat(p[0]) : p; }
@@ -1607,7 +1627,7 @@ function makeQuiz(el){
   Q.choose = j => {
     if (G.mode==="live" || Q.isSum()) return;
     const i=Q.cur(), key=k(i); if (G.rev[key]) return;
-    G.picks[key]=j; G.rev[key]=true;
+    G.picks[key]=j; G.rev[key]=true; markSeen(id, i);
     if (G.mode==="solo"){ const ok = j===QV(id,i).a, ms = Q.shownAt? Date.now()-Q.shownAt : 0;
       const pts = ok ? (G.timer ? speedPts(R.pts, ms) : R.pts) : 0; G.awards[key] = {pts:R.pts, teams: ok?[0]:[], per: ok?{0:pts}:{}};
       if (G.timer && ms) G.live[key] = {0:{p:j, ms}}; }
@@ -1617,7 +1637,7 @@ function makeQuiz(el){
   Q.reveal = () => {
     if (Q.isSum()) return false;
     const i=Q.cur(), key=k(i); if(G.rev[key]) return false;
-    G.rev[key]=true;
+    G.rev[key]=true; markSeen(id, i);
     if (G.mode==="live"){ const L=G.live[key]||{}, per={}, ok=[];
       Object.entries(L).forEach(([t,r])=>{ if (r.p===QV(id,i).a){ per[t]=speedPts(R.pts, r.ms); ok.push(+t); } });
       G.awards[key]={pts:R.pts, teams:ok, per}; }
