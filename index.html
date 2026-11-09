@@ -286,6 +286,7 @@ body.reader .srow .barw{grid-column:1 / -1;order:4}
 body.reader h1{font-size:3.6rem}
 body.reader #bar{gap:.5rem;padding-inline:.6rem}
 body.reader #bar .part,body.reader #progress,body.reader #notesbtn{display:none}
+body.reader #restartbtn{margin-left:auto;font-size:1.4rem;padding:.6rem .9rem}
 /* phones: one slide at a time, moved with the arrow buttons in the bottom bar */
 body.reader .slide:not(.on){display:none}
 body.reader #keys-hint{display:none}
@@ -644,7 +645,7 @@ body.reader #ch-row{flex-wrap:wrap}
   <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 6</p><h2>Political parties</h2></div><span class="roundtag">Up to 100 each</span></div>
   <div class="howto" data-how="quiz"></div>
   <div class="quiz" data-round="ch6"></div>
-  <aside class="notes">Eight questions drawn from a pool of 16.</aside>
+  <aside class="notes">Eight questions drawn from a pool of 30.</aside>
 </section>
 
 <!-- ============ CH 7 ============ -->
@@ -665,7 +666,7 @@ body.reader #ch-row{flex-wrap:wrap}
   <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 7</p><h2>Interest groups</h2></div><span class="roundtag">Up to 100 each</span></div>
   <div class="howto" data-how="quiz"></div>
   <div class="quiz" data-round="ch7"></div>
-  <aside class="notes">Eight questions drawn from a pool of 16.</aside>
+  <aside class="notes">Eight questions drawn from a pool of 30.</aside>
 </section>
 
 <!-- ============ CH 8 ============ -->
@@ -692,7 +693,7 @@ body.reader #ch-row{flex-wrap:wrap}
   <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 8</p><h2>Media</h2></div><span class="roundtag">Up to 100 each</span></div>
   <div class="howto" data-how="quiz"></div>
   <div class="quiz" data-round="ch8"></div>
-  <aside class="notes">Eight questions drawn from a pool of 16.</aside>
+  <aside class="notes">Eight questions drawn from a pool of 30.</aside>
 </section>
 
 <!-- ============ CH 9 ============ -->
@@ -738,7 +739,7 @@ body.reader #ch-row{flex-wrap:wrap}
   <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 9</p><h2>Presidential campaigns</h2></div><span class="roundtag">Up to 100 each</span></div>
   <div class="howto" data-how="quiz"></div>
   <div class="quiz" data-round="ch9"></div>
-  <aside class="notes">Eight questions drawn from a pool of 16.</aside>
+  <aside class="notes">Eight questions drawn from a pool of 30.</aside>
 </section>
 <section class="slide" data-ch="6,7,8,9" data-part="Name the term · Chapters 6–9">
   <div class="headrow"><div class="head"><p class="kicker">Bonus round · Chapters 6–9</p><h2>Name the term from its definition</h2></div><span class="roundtag">Up to 200 each</span></div>
@@ -765,7 +766,7 @@ body.reader #ch-row{flex-wrap:wrap}
   <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 10</p><h2>Congressional campaigns</h2></div><span class="roundtag">Up to 100 each</span></div>
   <div class="howto" data-how="quiz"></div>
   <div class="quiz" data-round="ch10"></div>
-  <aside class="notes">Eight questions drawn from a pool of 16.</aside>
+  <aside class="notes">Eight questions drawn from a pool of 30.</aside>
 </section>
 
 <!-- ============ CH 11 ============ -->
@@ -786,7 +787,7 @@ body.reader #ch-row{flex-wrap:wrap}
   <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 11</p><h2>State and local campaigns</h2></div><span class="roundtag">Up to 100 each</span></div>
   <div class="howto" data-how="quiz"></div>
   <div class="quiz" data-round="ch11"></div>
-  <aside class="notes">Eight questions drawn from a pool of 16.</aside>
+  <aside class="notes">Eight questions drawn from a pool of 30.</aside>
 </section>
 
 <!-- ============ CH 12 ============ -->
@@ -819,7 +820,7 @@ body.reader #ch-row{flex-wrap:wrap}
   <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 12</p><h2>Participation and turnout</h2></div><span class="roundtag">Up to 100 each</span></div>
   <div class="howto" data-how="quiz"></div>
   <div class="quiz" data-round="ch12"></div>
-  <aside class="notes">Eight questions drawn from a pool of 16.</aside>
+  <aside class="notes">Eight questions drawn from a pool of 30.</aside>
 </section>
 
 <!-- ============ CH 13 ============ -->
@@ -840,7 +841,7 @@ body.reader #ch-row{flex-wrap:wrap}
   <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 13</p><h2>Voters and campaign effects</h2></div><span class="roundtag">Up to 100 each</span></div>
   <div class="howto" data-how="quiz"></div>
   <div class="quiz" data-round="ch13"></div>
-  <aside class="notes">Eight questions drawn from a pool of 16.</aside>
+  <aside class="notes">Eight questions drawn from a pool of 30.</aside>
 </section>
 <section class="slide" data-ch="10,11,12,13" data-part="Name the term · Chapters 10–13">
   <div class="headrow"><div class="head"><p class="kicker">Bonus round · Chapters 10–13</p><h2>Name the term from its definition</h2></div><span class="roundtag">Up to 200 each</span></div>
@@ -872,6 +873,7 @@ body.reader #ch-row{flex-wrap:wrap}
   <button class="navb" id="next" aria-label="Next slide">→</button>
   <span class="part" id="part"></span>
   <div id="board" aria-label="Scoreboard"></div>
+  <button class="navb" id="restartbtn" title="Clear every score and go back to the first slide">Start over</button>
   <button class="navb" id="notesbtn">Notes</button>
 </div>
 <div id="notes-panel" hidden><h4>Notes</h4><div id="notes-body"></div></div>
@@ -1246,6 +1248,1856 @@ const ERAS3 = [
 ];
 
 const ROUNDS = {...ROUNDS1, ...ROUNDS2, ...ROUNDS3};
+/* More questions per chapter, appended after the original 16 so each device's seen-history keeps its indexes. */
+const EXTRA_QS = {
+"ch1": [
+{
+"q": "Which of these is one of the three central questions the book keeps returning to?",
+"o": [
+"How much does the campaign itself matter?",
+"Which party is better for the economy?",
+"Should the electoral college be abolished?"
+],
+"a": 0,
+"w": "The other two ask what explains election outcomes and how we should evaluate the American electoral process."
+},
+{
+"q": "Why do rules constrain campaign strategy so strongly?",
+"o": [
+"Candidates write them during the campaign",
+"They are hard to change and largely fixed once the campaign starts",
+"Voters rarely know what they are"
+],
+"a": 1,
+"w": "Candidates must work within rules they cannot easily alter, so the rules shape what strategies are possible."
+},
+{
+"q": "Why do wealthy candidates often finance their own campaigns?",
+"o": [
+"Contribution limits do not cap a candidate's spending of their own money",
+"Federal law requires candidates to match their donors' gifts",
+"Self-funded ads are exempt from the First Amendment"
+],
+"a": 0,
+"w": "Contribution limits cap donations but not self-funding, so candidates fundraise constantly and wealthy ones self-finance. About 20% of Trump's 2016 money was his own."
+},
+{
+"q": "According to Lawless and Fox, the heavy demands of fundraising do what?",
+"o": [
+"Deter women from running",
+"Raise turnout among donors",
+"Make incumbents easier to beat"
+],
+"a": 0,
+"w": "This is one way a rule about money shapes who becomes a candidate at all."
+},
+{
+"q": "Issue ownership, party coalitions and polarization belong to which part of the book's framework?",
+"o": [
+"Rules",
+"Strategy",
+"Reality"
+],
+"a": 2,
+"w": "Reality is the economic, political and historical context, defined by not being under the candidates' control."
+},
+{
+"q": "According to Fowler, Franz and Ridout, how does interest groups' negativity compare with candidates'?",
+"o": [
+"Groups go negative less often",
+"Groups go negative more often",
+"They go negative about equally often"
+],
+"a": 1,
+"w": "Interest groups pursue their own agendas, which do not always match the candidates' strategy."
+},
+{
+"q": "Why do candidates so often complain about news coverage?",
+"o": [
+"The media's agenda differs from the candidates' agenda",
+"Reporters are legally barred from covering policy",
+"News outlets refuse to cover campaigns"
+],
+"a": 0,
+"w": "Hayes finds the media agenda diverges from what candidates want to talk about. Media are strategic actors too."
+},
+{
+"q": "Which requirement is part of the political equality standard?",
+"o": [
+"At least two candidates on the ballot",
+"Candidates give reasons for their positions",
+"Equal burdens of voting for all citizens"
+],
+"a": 2,
+"w": "Political equality also asks for equal impact per vote and rules that apply equally. Reasons belong to deliberation."
+},
+{
+"q": "Same-day registration raises turnout by about how much, according to Burden et al.?",
+"o": [
+"About 3 points",
+"About 10 points",
+"About 20 points"
+],
+"a": 0,
+"w": "Since fraud is exceedingly rare, the book finds the equality case against requiring registration in advance strong."
+},
+{
+"q": "Dennis Thompson's objection to early voting is that early and late voters:",
+"o": [
+"Are mostly from one party",
+"Vote on different information",
+"Are easier to intimidate"
+],
+"a": 1,
+"w": "The book's example is a 2020 California voter who voted early for Buttigieg, then regretted it when he dropped out."
+},
+{
+"q": "Horse-race coverage outnumbered policy coverage in 2020. What did Iyengar, Norpoth and Hahn find about readers?",
+"o": [
+"They avoid horse-race stories",
+"They read only policy stories",
+"They prefer horse-race stories when free to choose"
+],
+"a": 2,
+"w": "So the shortfall in deliberation cannot be blamed on the media alone."
+},
+{
+"q": "What did Buckley v. Valeo (1976) strike down?",
+"o": [
+"Limits on individual contributions",
+"FECA's spending limits and limits on self-funding",
+"Disclosure of campaign donors"
+],
+"a": 1,
+"w": "Treating spending as speech left the U.S. with one of the least regulated campaign systems in the world."
+},
+{
+"q": "Restricting ad content, as Japan does, or banning late polls would likely be what in the U.S.?",
+"o": [
+"Unconstitutional",
+"Required by federal law",
+"Already common in the states"
+],
+"a": 0,
+"w": "The First Amendment blocks many fixes other democracies use to promote equality and deliberation."
+},
+{
+"q": "Why was Trump's removal from social media platforms after January 6 not a First Amendment violation?",
+"o": [
+"He was no longer president",
+"The courts had approved it in advance",
+"The First Amendment does not bind private platforms"
+],
+"a": 2,
+"w": "Many still argued it offended the principle of free speech, even if not the law."
+}
+],
+"ch2": [
+{
+"q": "In 2001, how was the tie broken on the Illinois commission that let Obama draw his own state senate district?",
+"o": [
+"A coin toss on the Senate floor",
+"A name drawn from a replica of Lincoln's stovepipe hat",
+"A ruling by the state supreme court"
+],
+"a": 1,
+"w": "The Democrat's name came out. Rules are neither neutral nor abstract, and politicians work them."
+},
+{
+"q": "The 1975 expansion of the Voting Rights Act protected language minorities. What was its effect in covered areas?",
+"o": [
+"Turnout rose 4 to 8 points, almost all from voters of color",
+"Turnout did not change",
+"Turnout rose among White voters only"
+],
+"a": 0,
+"w": "Ang finds the gains in covered areas from 1980 to 2016. The 1982 expansion added an effects, not just intent, standard."
+},
+{
+"q": "Which places allow people to vote while incarcerated?",
+"o": [
+"Florida, Texas and California",
+"Every state with automatic registration",
+"DC, Maine and Vermont"
+],
+"a": 2,
+"w": "Felony disenfranchisement varies widely by state."
+},
+{
+"q": "Florida's 2019 law made restoring felons' voting rights depend on paying fines and fees. Critics likened it to:",
+"o": [
+"A poll tax",
+"A literacy test",
+"A White primary"
+],
+"a": 0,
+"w": "In an Alabama study, people owed about $4,000 on average."
+},
+{
+"q": "Voter ID laws reduce turnout among people who lack ID. What is their detectable effect on overall turnout?",
+"o": [
+"A drop of about 10 points",
+"None, because the affected group is small",
+"A rise of about 3 points"
+],
+"a": 1,
+"w": "In North Carolina the effect on those lacking ID persisted even after the law was suspended, suggesting a perception effect."
+},
+{
+"q": "Both parties assume easier voting helps Democrats. What does the evidence mostly show?",
+"o": [
+"It helps Democrats by large margins",
+"It always helps Republicans",
+"It mostly doesn't support that assumption"
+],
+"a": 2,
+"w": "Election Day registration in Wisconsin appeared to help Republicans."
+},
+{
+"q": "What does the book conclude about gerrymandering and polarization?",
+"o": [
+"Gerrymandering does not appear to increase polarization",
+"Gerrymandering is the main cause of polarization",
+"Commission maps have ended polarization"
+],
+"a": 0,
+"w": "Residential segregation also limits how competitive any map can be made."
+},
+{
+"q": "After Shelby County, previously covered counties purged more registrations. What happened to Black turnout relative to White turnout?",
+"o": [
+"It fell sharply",
+"It has not fallen",
+"It was not measured"
+],
+"a": 1,
+"w": "The book holds both findings at once rather than resolving them."
+},
+{
+"q": "Convenience voting replaces Election Day with an election period. About how much can that add to a campaign's cost?",
+"o": [
+"5%",
+"25%",
+"75%"
+],
+"a": 1,
+"w": "Campaigns must advertise longer, chase mailed ballots and help voters cure flawed ones."
+},
+{
+"q": "Why does convenience voting barely change the partisan makeup of the electorate?",
+"o": [
+"Early voters are mostly people who would vote anyway",
+"Only Republicans may vote early",
+"Mailed ballots are counted last"
+],
+"a": 0,
+"w": "Early voters are stronger partisans and more interested in politics. It also does not correct the electorate's education and income skew."
+},
+{
+"q": "Term-limited legislators, compared with others, tend to:",
+"o": [
+"Sponsor more bills",
+"Miss fewer votes",
+"Develop less expertise"
+],
+"a": 2,
+"w": "They also sponsor fewer bills and miss more votes, undercutting the competence that age and residency rules aim to build."
+},
+{
+"q": "After the 2020 census, which state gained two House seats?",
+"o": [
+"Florida",
+"Texas",
+"California"
+],
+"a": 1,
+"w": "Five states gained one seat each. California, Illinois, Michigan, New York, Ohio, Pennsylvania and West Virginia each lost one."
+},
+{
+"q": "Which is one of the three Thornburg v. Gingles preconditions for a vote-dilution claim?",
+"o": [
+"The minority group is politically cohesive",
+"The district is perfectly compact",
+"The state was covered by preclearance"
+],
+"a": 0,
+"w": "The group must also be large and concentrated enough to be a district majority, and the majority must vote as a racial bloc."
+},
+{
+"q": "Which is a caveat the book raises about ranked-choice voting?",
+"o": [
+"It usually produces a different winner than plurality",
+"It is used in every state",
+"Incompletely ranked ballots may not count"
+],
+"a": 2,
+"w": "RCV also usually produces the same winner as plurality, and voters find it harder to understand."
+}
+],
+"ch3": [
+{
+"q": "Why does the book divide campaign history into distinct eras?",
+"o": [
+"Each era begins with a new president",
+"Rules and reality change abruptly, so campaigns innovate in bursts",
+"Every era lasts about forty years"
+],
+"a": 1,
+"w": "The five eras run from the pre-democratic era (1788-1824) to the contemporary era (2016-present)."
+},
+{
+"q": "In 1800, Aaron Burr's New York network is credited as the first recognizable what?",
+"o": [
+"Polling firm",
+"Party newspaper",
+"Get-out-the-vote operation"
+],
+"a": 2,
+"w": "Candidates themselves barely campaigned in this era. Surrogates did the work."
+},
+{
+"q": "Jackson's 1828 operation recruited county operatives who expected what in return?",
+"o": [
+"Patronage jobs",
+"Cash salaries from the party",
+"Seats in Congress"
+],
+"a": 0,
+"w": "The other lasting elements were organizing newly eligible voters and entertainment such as rallies, parades and songs."
+},
+{
+"q": "In the 1858 Douglas-Lincoln race and after, when did candidates campaign personally?",
+"o": [
+"Only after the Civil War",
+"When they expected the race to be close",
+"Only when they were incumbents"
+],
+"a": 1,
+"w": "The book highlights this conditional as a pattern that recurs across eras."
+},
+{
+"q": "What did the Australian ballot make possible?",
+"o": [
+"Ticket-splitting, with no party monitoring of votes",
+"Voting by mail",
+"Straight-ticket voting only"
+],
+"a": 0,
+"w": "It was standardized, printed by the state and secret."
+},
+{
+"q": "Presidential turnout in 1932-48 averaged 58%. What did it average in the mass mobilization era?",
+"o": [
+"About 50%",
+"About 62%",
+"About 74%"
+],
+"a": 2,
+"w": "Reforms meant to democratize demobilized voters. Turnout in 1912 ran 20 points below 1896."
+},
+{
+"q": "In the South, the secret ballot functioned as:",
+"o": [
+"A boost to Black turnout",
+"A de facto literacy test",
+"A replacement for the poll tax"
+],
+"a": 1,
+"w": "It was enforced selectively, another way a reform sold as democratizing demobilized voters."
+},
+{
+"q": "In 1896, about how much more did McKinley's campaign spend than Bryan's?",
+"o": [
+"About the same amount",
+"About twice as much",
+"More than ten times as much"
+],
+"a": 2,
+"w": "McKinley spent $3.35 million and used 14,000 surrogate speakers. Bryan spent $300,000."
+},
+{
+"q": "After women won the vote in 1920, how did they initially vote?",
+"o": [
+"Less often than men, and similarly to their husbands",
+"More often than men",
+"Overwhelmingly for third parties"
+],
+"a": 0,
+"w": "Republicans courted women through domestic roles, Democrats as workers."
+},
+{
+"q": "Once primaries dominated, candidates had to stand out within their own party. Which two routes did that push toward?",
+"o": [
+"Self-funding or party endorsements",
+"Ideological extremity or biography",
+"Negative ads or debates"
+],
+"a": 1,
+"w": "In 2008, Clinton ran on experience and Obama on change."
+},
+{
+"q": "Which group stands out in Figure 3.2 for flipping from strongly Democratic to strongly Republican?",
+"o": [
+"College-educated suburbanites",
+"Young voters",
+"Lower-SES Whites"
+],
+"a": 2,
+"w": "White southerners flipped the same way. The Democratic edge in party identification shrank from 59-36 in 1952 to about 6 points by 2024."
+},
+{
+"q": "What does the book say about whether big-data analytics improved campaigns' vote estimates?",
+"o": [
+"It is unclear",
+"They clearly did",
+"They made estimates worse"
+],
+"a": 0,
+"w": "Clinton's 2016 campaign used analytics instead of traditional polling."
+},
+{
+"q": "What does the book mean by sorting?",
+"o": [
+"Voters splitting their tickets between parties",
+"Partisanship aligning with ideology",
+"Campaigns ranking voters by turnout"
+],
+"a": 1,
+"w": "Sorting is distinct from polarization, and it pushes strategy toward mobilizing the base."
+},
+{
+"q": "A well-known study of 1960 to 2004 found what predicts campaign negativity better than era does?",
+"o": [
+"Competitiveness of the race",
+"The candidate's party",
+"Total campaign spending"
+],
+"a": 0,
+"w": "It found little systematic change in negativity over time, part of the book's case for continuity."
+}
+],
+"ch4": [
+{
+"q": "In 2024, Harris raised $1.15 billion and Trump $464 million. What does the book take from that?",
+"o": [
+"Money decided the race for Harris",
+"Money matters but does not determine who wins",
+"Trump's total was understated by the FEC"
+],
+"a": 1,
+"w": "Harris outraised Trump about 2.5 to 1 and lost. The chapter's theme is that money is neither trivial nor decisive."
+},
+{
+"q": "Jon Tester raised $96 million for his 2024 Montana Senate race. What stands out?",
+"o": [
+"About 90% came from out of state, and he lost",
+"Almost all of it came from his own pocket",
+"He spent less than his opponent and won"
+],
+"a": 0,
+"w": "He lost 53 to 46. The case shows how fundraising has become nationalized."
+},
+{
+"q": "What is the largest category of spending by candidate campaigns?",
+"o": [
+"Staff salaries",
+"Fundraising costs",
+"Media"
+],
+"a": 2,
+"w": "Media takes 52%, far ahead of fundraising (11%), administration (8%) and salaries (7%)."
+},
+{
+"q": "Outside groups' share of TV ads grew from 7% in 2008 to about what in 2024?",
+"o": [
+"15%",
+"35%",
+"75%"
+],
+"a": 1,
+"w": "Outside-group spending also rose from $490 million in 2008 to $4.2 billion in 2024."
+},
+{
+"q": "Who gives more money to House candidates, according to the book?",
+"o": [
+"Individual donors",
+"PACs",
+"Corporate treasuries"
+],
+"a": 0,
+"w": "Contrary to the media impression, individuals give more than PACs: PACs supplied only 21% of Democratic and 33% of Republican House candidates' money in 2024. Corporations have been banned from giving directly since the Tillman Act (1907)."
+},
+{
+"q": "McCutcheon (2014) struck down which rule?",
+"o": [
+"The ban on corporate gifts to candidates",
+"The $200 disclosure threshold",
+"The overall limit on an individual's total giving"
+],
+"a": 2,
+"w": "Individuals still face per-candidate and per-committee limits, but there is no longer a cap on their combined giving."
+},
+{
+"q": "Magleby showed viewers the 1998 DCCC ad against Mark Green. What did about 80% say?",
+"o": [
+"It was meant to inform them about an issue",
+"It was meant to persuade them to vote against him",
+"They could not tell who paid for it"
+],
+"a": 1,
+"w": "It was legally an issue ad, yet viewers saw it as campaigning. That gap is why BCRA targeted such ads."
+},
+{
+"q": "Why can 501(c) groups keep their donors secret, creating \"dark money\"?",
+"o": [
+"NAACP v. Alabama (1958) protected freedom of association",
+"Buckley v. Valeo exempted all nonprofits",
+"The FEC has never been given authority over ads"
+],
+"a": 0,
+"w": "Super PACs disclose to the FEC and 527s to the IRS. Only 501(c) groups disclose to no one."
+},
+{
+"q": "Citizens United (2010) allowed corporations and unions to do what?",
+"o": [
+"Give unlimited sums directly to candidates",
+"Coordinate ads with candidate campaigns",
+"Pay for electioneering communications from their treasuries"
+],
+"a": 2,
+"w": "BCRA had barred that funding for candidate-naming ads close to an election. The 5-4 ruling also put similar laws in 24 states in doubt."
+},
+{
+"q": "In 2012, counting interest-group ads raised Romney from 53 to 82 ads per 100 Obama ads. The book concludes outside money:",
+"o": [
+"Won Romney the election",
+"Kept Romney in the race",
+"Made no measurable difference"
+],
+"a": 1,
+"w": "Outside money did not decide the race, but it closed much of Romney's ad gap."
+},
+{
+"q": "Why does a donor-raised dollar produce more votes than a self-funded dollar?",
+"o": [
+"Self-funded money cannot be spent on ads",
+"Self-funders must accept spending limits",
+"Raising money signals viability and builds a network"
+],
+"a": 2,
+"w": "Three thousand people giving $1,000 each says more than one $3 million check. Self-funders are also often weak candidates already."
+},
+{
+"q": "What does campaign money most plausibly buy, according to the evidence?",
+"o": [
+"Legislators' votes on bills",
+"Access and involvement, like meetings",
+"Guaranteed reelection for incumbents"
+],
+"a": 1,
+"w": "Kalla and Broockman's field experiment found donors get meetings. The effect is mostly among legislators who already agree with them."
+},
+{
+"q": "Incumbents outspent challengers about 1.5 to 1 in the early 1980s and 2.5-3 to 1 in the 2000s. Reelection rates:",
+"o": [
+"Were slightly lower in the 2000s",
+"Rose sharply in the 2000s",
+"Fell below 50% in both periods"
+],
+"a": 0,
+"w": "Rates topped 90% in the early 1980s. A bigger money edge did not bring more wins, so money cannot explain all of incumbents' success."
+},
+{
+"q": "Which change does the book suggest might reduce polarization?",
+"o": [
+"Matching small donations with public funds",
+"Expanding clean-elections programs",
+"Relaxing limits on PAC and party giving"
+],
+"a": 2,
+"w": "Small donors are more ideologically extreme, while PACs and parties tend to prefer moderates. Clean elections in Arizona and Maine seem to produce more extreme candidates."
+}
+],
+"ch5": [
+{
+"q": "How long was Kamala Harris's 2024 presidential campaign?",
+"o": [
+"107 days",
+"about 7 months",
+"about 2 years"
+],
+"a": 0,
+"w": "Her advisers called it unprecedented. Only 1 in 4 voters rated the economy positively and 4 in 10 approved of Biden."
+},
+{
+"q": "Why does the book's NC example aim for 52% of the vote rather than 50%?",
+"o": [
+"State law requires a majority plus 2%",
+"Third-party candidates always take 2%",
+"Rounding up guards against unexpected turnout"
+],
+"a": 2,
+"w": "A campaign that hits its number exactly can still lose if turnout surprises it."
+},
+{
+"q": "The book's North Carolina arithmetic finds about 922,500 persuadable voters. What limit does the book flag right away?",
+"o": [
+"It assumes the campaign needs only 50% of the vote",
+"It gives a count of persuadables, not which individuals they are",
+"It ignores turnout"
+],
+"a": 1,
+"w": "The worked estimate assumes 75% turnout and a 52% target. It yields a count of persuadable voters but cannot say who they are."
+},
+{
+"q": "Microtargeting from voter-file scores replaced which older campaign practice?",
+"o": [
+"Focus groups",
+"Blanket voter ID calls",
+"Benchmark polls of 400 people"
+],
+"a": 1,
+"w": "Scoring every voter is expensive but cheaper than contacting the whole state to identify supporters. It needs a very large poll, about 6,000, because a 500-person poll has too few people in any subgroup."
+},
+{
+"q": "Since 2016, falling Republican response rates have caused polls to:",
+"o": [
+"Overstate Republican vote share",
+"Overstate Democratic vote share",
+"Stop weighting by education"
+],
+"a": 1,
+"w": "Pollsters weight by gender, race, age and education to correct for declining response, but the Democratic overstatement has persisted."
+},
+{
+"q": "Which is one of the three voter-file scores campaigns build?",
+"o": [
+"Media-market score",
+"Persuadability score",
+"Donation history score"
+],
+"a": 1,
+"w": "The three models are turnout propensity, candidate support and persuadability. Together they drive microtargeting."
+},
+{
+"q": "Which type of race is the easiest for crafting a persuasion strategy?",
+"o": [
+"Open-seat races",
+"Races against a long-serving incumbent",
+"Uncontested races"
+],
+"a": 0,
+"w": "Incumbents run a referendum on conditions, and voters' opinions of them are already formed, so they are harder to persuade. Open-seat races are the easiest to craft persuasion strategies for."
+},
+{
+"q": "Lawless and Fox find that women are underrepresented in office mainly because women:",
+"o": [
+"Lose more often than men",
+"Run for office less often than men",
+"Are blocked by party primaries"
+],
+"a": 1,
+"w": "Women win at the same rate as men. A study of Latino statehouse candidates likewise traced underrepresentation mainly to not running."
+},
+{
+"q": "Bill Clinton pushing a crime bill in 1996 is an example of:",
+"o": [
+"Issue trespassing",
+"The median voter theorem",
+"Retrospective voting"
+],
+"a": 0,
+"w": "Crime is a Republican-owned issue. Candidates sometimes trespass deliberately, as Bush did on education in 2000."
+},
+{
+"q": "Why might a candidate say \"I want to save Social Security\" and stop there?",
+"o": [
+"Specific promises are banned in ads",
+"Vague statements poll worse but cost less",
+"Ambiguity lets many groups read themselves in"
+],
+"a": 2,
+"w": "It also gives opponents less to attack. Ambiguity is one reason candidates do not simply converge on the median."
+},
+{
+"q": "LBJ led throughout 1964 yet attacked Goldwater relentlessly. What does this illustrate?",
+"o": [
+"Front-runners never go negative",
+"Candidates often don't follow the attack-timing advice",
+"Attacks only work for incumbents"
+],
+"a": 1,
+"w": "Theory says front-runners attack less, but large-scale studies find front-runners and underdogs often ignore that advice."
+},
+{
+"q": "How do presidential campaigns decide where to spend on advertising?",
+"o": [
+"They split it evenly across all states",
+"They price out the cost per persuadable voter",
+"They follow the previous campaign's map"
+],
+"a": 1,
+"w": "Research on 1992-2008 advertising confirms spending tracked that price. Campaigns below the presidential level are far less exacting."
+},
+{
+"q": "What does research find about TV ads' effect on vote choice?",
+"o": [
+"Noticeable but short-lived",
+"No effect at all",
+"Large and long-lasting"
+],
+"a": 0,
+"w": "Face-to-face contact has minimal persuasive effect and digital ads minimal effect on vote choice."
+},
+{
+"q": "On which democratic standard does the book judge campaign strategy most harshly?",
+"o": [
+"Free speech",
+"Free choice",
+"Equality"
+],
+"a": 2,
+"w": "The book says campaign strategy rests on the idea that some citizens are more valuable than others. Targeted voters get more information than everyone else."
+}
+],
+"ch6": [
+{
+"q": "After Biden withdrew in July 2024, how long did it take Kamala Harris to secure the delegates?",
+"o": [
+"One day",
+"About two weeks",
+"Until the convention vote"
+],
+"a": 0,
+"w": "Nearly every alternative endorsed her immediately, though Pelosi and others had wanted an open competition among delegates. It was the first candidate switch without elections since the post-1968 reforms."
+},
+{
+"q": "What lesson does Chapter 6 draw from the 2024 Biden-to-Harris switch?",
+"o": [
+"Primary voters now formally pick the nominee",
+"Nominees are still formally chosen by delegates",
+"Party chairs can remove a nominee at will"
+],
+"a": 1,
+"w": "Delegates are usually responsive to voters but not always. The book calls the switch not a coup, but genuinely unorthodox."
+},
+{
+"q": "Candidates, allied groups and ideological media sharing mailing lists form what the book calls:",
+"o": [
+"A party-in-government",
+"A third-party coalition",
+"An extended party network"
+],
+"a": 2,
+"w": "The modern extension of Key's three parts treats parties as multilayered coalitions and extended party networks."
+},
+{
+"q": "Because their ideological base is smaller, Democrats usually need to win over more:",
+"o": [
+"Moderates",
+"Independents",
+"Conservatives"
+],
+"a": 0,
+"w": "Republicans, with a larger conservative base, usually need more independents. Republicans frame politics as left versus right; Democrats as group competition."
+},
+{
+"q": "How do Americans misjudge the makeup of the two parties?",
+"o": [
+"They underestimate how stereotypical each party is",
+"They overestimate how stereotypical each party is",
+"They judge their own party worse than the other"
+],
+"a": 1,
+"w": "Ahler and Sood find the error is largest for the party a person dislikes."
+},
+{
+"q": "What happened to racial divides between the parties in 2024?",
+"o": [
+"They widened sharply",
+"They stayed exactly the same",
+"They narrowed"
+],
+"a": 2,
+"w": "Republicans gained Hispanic, Asian, Arab and Native American voters. The book calls the diploma divide the biggest recent change."
+},
+{
+"q": "Frances Lee's \"insecure majorities\" give parties an incentive to:",
+"o": [
+"Campaign rather than make laws",
+"Compromise with the other party",
+"Avoid primary challenges"
+],
+"a": 0,
+"w": "Since the 1990s House margins have averaged 8 points and Senate margins 7, so control is always in play."
+},
+{
+"q": "What was the most recent presidential \"landslide,\" by the book's measure?",
+"o": [
+"Reagan by 18 in 1984",
+"Obama by 7",
+"Nixon by 23 in 1972"
+],
+"a": 1,
+"w": "Compare LBJ's 23 points in 1964 and Reagan's 18 in 1984. The book says the parties have fought \"between the 45-yard-lines for four decades.\""
+},
+{
+"q": "Why do successful third parties tend to die out?",
+"o": [
+"Courts remove them from the ballot",
+"Their voters stop turning out",
+"A major party absorbs their issue"
+],
+"a": 2,
+"w": "Clinton absorbed Perot's deficit issue, and Perot's 1996 run collapsed. Third parties do move agendas."
+},
+{
+"q": "What share of 2024 state legislative districts had no major-party competition?",
+"o": [
+"31%",
+"8%",
+"55%"
+],
+"a": 0,
+"w": "Recruiting candidates is harder than it looks. This is part of the party-as-organization's job."
+},
+{
+"q": "Since 2004, party spending has shifted from coordinated expenditures toward:",
+"o": [
+"Direct candidate contributions",
+"Independent expenditures",
+"Soft-money issue ads"
+],
+"a": 1,
+"w": "Figure 6.2 shows the shift. Parties also signal their priorities through target lists that steer leadership PACs, allied groups and super PACs."
+},
+{
+"q": "What do county party chairs tend to believe about candidates of color?",
+"o": [
+"They raise more money",
+"They win primaries more easily",
+"They are less likely to win general elections"
+],
+"a": 2,
+"w": "Doherty, Dowling and Miller find chairs therefore recruit them less often."
+},
+{
+"q": "In which of Key's three parts does the book find a real case for party decline?",
+"o": [
+"In government",
+"In the electorate",
+"As organization"
+],
+"a": 2,
+"w": "Machines died after the secret ballot, and parties now serve rather than control candidates. Parties in government are more unified than ever."
+},
+{
+"q": "Right before the 2024 election Democrats rated the economy well. One week after Trump won:",
+"o": [
+"Ratings by party reversed",
+"Both parties' ratings rose",
+"Nothing changed in either party"
+],
+"a": 0,
+"w": "There was no underlying economic change. The book uses it to illustrate negative partisanship and motivated reasoning."
+}
+],
+"ch7": [
+{
+"q": "Which of these is one of the book's four causes of interest group growth?",
+"o": [
+"Declining party identification",
+"Government expansion creating lobbying incentives",
+"The decline of direct mail"
+],
+"a": 1,
+"w": "The four causes are government expansion, better organizational maintenance (direct mail, then email and the web), professionalized social movements, and tax and campaign finance rules that reward affiliated entities."
+},
+{
+"q": "Theda Skocpol describes advocacy groups shifting:",
+"o": [
+"From management to membership",
+"From lobbying to campaigning",
+"From membership to management"
+],
+"a": 2,
+"w": "Direct mail, online tools and wealthy patrons mean groups no longer need members to survive."
+},
+{
+"q": "Why does the NRA run a 501(c)4, a PAC and an aligned super PAC?",
+"o": [
+"Tax and campaign finance rules reward separate entities",
+"Federal law requires each group to split three ways",
+"Each serves a different set of members"
+],
+"a": 0,
+"w": "EMILY's List (PAC plus 527s) and the Center for American Progress (501(c)3 plus (c)4) follow the same pattern."
+},
+{
+"q": "An insurer-funded initiative group called itself \"Californians for Fair Auto Insurance Rates.\" This shows:",
+"o": [
+"Consumer groups funding insurance measures",
+"Disclosure rules encouraging flattering names",
+"Ballot rules banning industry sponsors"
+],
+"a": 1,
+"w": "The same campaign invented a \"California Senior Advocates League.\""
+},
+{
+"q": "In 2024, what share of large federal contributions came from business?",
+"o": [
+"24.6%",
+"10.5%",
+"62.6%"
+],
+"a": 2,
+"w": "Ideological groups gave 24.6% and labor 10.5%."
+},
+{
+"q": "The 2014 \"six Californias\" proposal showed that:",
+"o": [
+"Money alone can nearly put anything on a ballot",
+"Voters reliably reject breakup measures",
+"Signature rules keep out wealthy sponsors"
+],
+"a": 0,
+"w": "It had negligible public support and was kept off only because too many signatures were invalid."
+},
+{
+"q": "Broockman, Kaufman and Lenz add which caveat to group endorsements as shortcuts?",
+"o": [
+"Endorsements make voters less informed",
+"Voters often don't know the groups well enough",
+"Only party endorsements carry information"
+],
+"a": 1,
+"w": "Lupia's study showed cues can let voters act as if fully informed, but only if they know who the groups are."
+},
+{
+"q": "Compared with interest groups overall, the groups most visible in elections are:",
+"o": [
+"More partisan and more ideological",
+"More representative of members",
+"Mostly business trade associations"
+],
+"a": 0,
+"w": "Most groups want policy, not power, and stay out of campaigns, so the visible ones are the least representative."
+},
+{
+"q": "What edge do interest groups have over candidates when advertising?",
+"o": [
+"They can coordinate with parties",
+"Their ads are exempt from disclosure",
+"Voters cannot vote against them"
+],
+"a": 2,
+"w": "So they need not protect a reputation for accuracy. In 2020 groups aired one in four ads."
+},
+{
+"q": "Hybrid PACs, also called Carey Committees, can:",
+"o": [
+"Only give limited contributions",
+"Spend unlimited sums and give limited contributions",
+"Coordinate spending with candidates"
+],
+"a": 1,
+"w": "They and dark money both spiked in 2024."
+},
+{
+"q": "How did super PACs affect the 2012 Republican primary?",
+"o": [
+"They extended Santorum's viability",
+"They ended Romney's campaign early",
+"They had no measurable effect"
+],
+"a": 0,
+"w": "Christenson and Smidt also find they weakened the influence of early-state wins."
+},
+{
+"q": "Why do groups routinely overstate the votes they can deliver?",
+"o": [
+"Members are more partisan than leaders",
+"Leaders are more ideological than members",
+"Most members do not vote at all"
+],
+"a": 1,
+"w": "Unions are the example: industrial union members often agree with Republicans on cultural issues."
+},
+{
+"q": "What made the 2017 Los Angeles school board race notable?",
+"o": [
+"It was decided by a ballot initiative",
+"Teachers' unions won without spending",
+"It drew more than $15 million"
+],
+"a": 2,
+"w": "Most pro-reform funders did not live in Los Angeles. Groups parachute into whatever level of government offers an opening."
+},
+{
+"q": "Where does the chapter suggest group influence may do its real damage?",
+"o": [
+"In policy shaped to court donors",
+"In turnout among group members",
+"In the tone of campaign ads"
+],
+"a": 0,
+"w": "At Sheldon Adelson's 2014 Las Vegas gathering, 2016 hopefuls carefully emphasized military support for Israel and trade with China."
+}
+],
+"ch8": [
+{
+"q": "Which outlets did Harris choose instead of Joe Rogan's podcast in 2024?",
+"o": [
+"Ones reaching mostly young male listeners",
+"Ones overlapping her existing supporters",
+"Ones reaching undecided rural voters"
+],
+"a": 1,
+"w": "She did Call Her Daddy, Club Shay Shay and Pod Save America. Rogan's audience is about 75% male."
+},
+{
+"q": "Daily print newspaper circulation was 63.3 million in 1984. What was it in 2022?",
+"o": [
+"20.9 million",
+"45.0 million",
+"11.0 million"
+],
+"a": 0,
+"w": "Audiences are concentrating in a few national papers; the NYT alone has more than 11 million digital subscribers."
+},
+{
+"q": "What did Hayes and Lawless find happens when newspapers have fewer reporters?",
+"o": [
+"Coverage shifts to national stories only",
+"Readers turn to local TV instead",
+"Political knowledge and participation fall"
+],
+"a": 2,
+"w": "Fewer reporters means less political news, which measurably reduces knowledge and participation."
+},
+{
+"q": "Which news source do Americans trust most?",
+"o": [
+"Cable news",
+"Local TV news",
+"National newspapers"
+],
+"a": 1,
+"w": "Local news is light on campaigns, since sports and weather dominate, but it remains the most trusted."
+},
+{
+"q": "Compared with network news, cable news reaches:",
+"o": [
+"Fewer people but more total minutes",
+"More people but fewer total minutes",
+"More people and more total minutes"
+],
+"a": 0,
+"w": "Cable prime time drew about 4.35 million in 2024, against 19.3 million for network evening news in 2025."
+},
+{
+"q": "What share of Americans listened to a podcast weekly in 2024?",
+"o": [
+"12%",
+"25%",
+"40%"
+],
+"a": 2,
+"w": "That is double the 2019 share. The top political talk radio hosts in 2024 were all conservative."
+},
+{
+"q": "Most political news circulating on social media originally comes from:",
+"o": [
+"Influencers",
+"Newspapers",
+"Campaigns"
+],
+"a": 1,
+"w": "Facebook (33%) and YouTube (32%) lead as social news sources, but users often can't recall where a story started."
+},
+{
+"q": "How long does the average visit to a large news website last?",
+"o": [
+"Two minutes",
+"Ten minutes",
+"Twenty minutes"
+],
+"a": 0,
+"w": "The largest news sites average 27 million unique monthly visitors, but TV news holds people far longer."
+},
+{
+"q": "Why can the FCC regulate broadcast TV but not cable?",
+"o": [
+"Cable has no news programs",
+"Congress exempted cable in 1922",
+"Broadcast uses scarce spectrum"
+],
+"a": 2,
+"w": "Spectrum scarcity is the rationale. Other democracies, with well-funded public media, give candidates more free time to speak directly to voters."
+},
+{
+"q": "In 2016, coverage of Clinton's emails and foundation:",
+"o": [
+"Exceeded coverage of any Trump scandal",
+"Was mostly ignored by the networks",
+"Ended after the first debate"
+],
+"a": 0,
+"w": "Voters reported hearing more about her emails than anything else (Patterson). Reporters avoid arbitrating, which rewards candidates who misrepresent."
+},
+{
+"q": "Which kind of poll gets disproportionate news coverage?",
+"o": [
+"Polls with large samples",
+"Polls showing a closer race",
+"Polls by nonpartisan pollsters"
+],
+"a": 1,
+"w": "Searles and colleagues find drama sells. Subgroup results are the worst offender, since their margins of error are much larger."
+},
+{
+"q": "In 2016, what share of Trump's coverage was negative?",
+"o": [
+"About 40%",
+"64%",
+"77%"
+],
+"a": 2,
+"w": "Clinton's was 64% negative. Trump's eased in the final two weeks as he gained, consistent with horse-race bias."
+},
+{
+"q": "Gentzkow and Shapiro compared ideological segregation online and face-to-face. Online segregation is:",
+"o": [
+"Greater",
+"Less",
+"About the same"
+],
+"a": 1,
+"w": "Conservatives talk mostly to conservatives in person but browse a mix online. Most Americans have moderate or mixed media diets."
+},
+{
+"q": "The 61-million-person Facebook experiment found that seeing friends' \"I voted\" posts:",
+"o": [
+"Slightly raised turnout",
+"Sharply raised turnout",
+"Lowered offline involvement"
+],
+"a": 0,
+"w": "Bond and colleagues found a small effect. The flip side is slacktivism: token online support may reduce offline involvement."
+}
+],
+"ch9": [
+{
+"q": "Why did Iowa Democrats switch to weeks of mail balloting for 2024?",
+"o": [
+"To raise turnout among rural voters",
+"So the result would land late and not sway other early states",
+"To comply with a new federal law"
+],
+"a": 1,
+"w": "Balloting ran January 12 to March 5, 2024, after the 2020 caucus app debacle led Democrats to diminish Iowa's role."
+},
+{
+"q": "What does recent research find about open versus closed primaries?",
+"o": [
+"Open primaries elect far more moderates",
+"Closed primaries draw the most extreme voters",
+"Primary electorates vary little across primary types"
+],
+"a": 2,
+"w": "The research (Sides et al.) also finds primary electorates are not more ideologically extreme than the party overall."
+},
+{
+"q": "About what share of convention delegates are unpledged, free to be persuaded individually?",
+"o": [
+"One-fifth",
+"One-half",
+"Two-thirds"
+],
+"a": 0,
+"w": "Sanders courted them in 2016 and lost them to Clinton; the Unity Reform Commission then weakened their number and power."
+},
+{
+"q": "Biden won the 2020 nomination after downplaying early states and going all-in on which state?",
+"o": [
+"Iowa",
+"Nevada",
+"South Carolina"
+],
+"a": 2,
+"w": "Three different winners in Iowa, New Hampshire and Nevada helped him, and nearly all his opposition quit after South Carolina."
+},
+{
+"q": "Trump's choice of Vance in 2024 fits which running-mate strategy?",
+"o": [
+"Compensating for a weakness",
+"Reinforcing the nominee's image",
+"Carrying a home state"
+],
+"a": 1,
+"w": "Vance was picked to appeal to the MAGA base, as Gore reinforced Clinton's image in 1992."
+},
+{
+"q": "Why was Clinton's 1992 convention bump of about 16 points so large?",
+"o": [
+"Perot dropped out on the convention's last day",
+"Clinton's acceptance speech set a ratings record",
+"Bush skipped his own convention"
+],
+"a": 0,
+"w": "Perot's exit freed about a third of likely voters, so the outlier is largely an artifact."
+},
+{
+"q": "Lauderdale and Rivers argue convention bumps are largely the product of:",
+"o": [
+"Real persuasion of swing voters",
+"Heavy convention-week ad spending",
+"Poll response bias"
+],
+"a": 2,
+"w": "The other side's supporters decline to answer polls during the opponent's convention week, and the effect fades in about 10 days."
+},
+{
+"q": "Wyoming has one elector per about 149,000 adults. About how many adults per elector does California have?",
+"o": [
+"566,000",
+"250,000",
+"1.2 million"
+],
+"a": 0,
+"w": "Small states are overrepresented, but winner-take-all also gives large states windfalls."
+},
+{
+"q": "The Republican electoral college edge of 2016 and 2020 nearly vanished in 2024 because:",
+"o": [
+"Democrats won Florida and Ohio back",
+"Republican gains in Democratic places made the Republican vote less efficient",
+"Maine and Nebraska stopped splitting their votes"
+],
+"a": 1,
+"w": "In 2016 and 2020 Democratic votes had been inefficiently piled up in California, New York and Illinois."
+},
+{
+"q": "In Pew's 2024 survey, what share of Americans favored electing the president by direct popular vote?",
+"o": [
+"35%",
+"50%",
+"64%"
+],
+"a": 2,
+"w": "35% wanted to keep the current system. The National Popular Vote compact would take effect only once its states hold 270 electoral votes."
+},
+{
+"q": "From 2000 to 2024, 15 states did not always vote the same way. How many electoral votes did they hold in 2024?",
+"o": [
+"189",
+"93",
+"270"
+],
+"a": 0,
+"w": "The seven true battlegrounds held 93; the other 35 states plus D.C. voted the same way every time."
+},
+{
+"q": "Figure 9.3 predicts the incumbent party's vote from the change in what?",
+"o": [
+"The unemployment rate",
+"Real disposable income per capita",
+"The stock market"
+],
+"a": 1,
+"w": "The 1.1% change in 2024 predicted just over 50% for the incumbent party; Harris got 49.2%."
+},
+{
+"q": "How did voters assign economic blame in 2024, per the book?",
+"o": [
+"They blamed Biden for inflation but not Trump for the 2020 collapse",
+"They blamed Trump for the pandemic economy",
+"They blamed neither president"
+],
+"a": 0,
+"w": "Voters attributed 2020 to the pandemic and shutdowns, while transportation costs rose 34% and food 24% from 2020 to 2024."
+},
+{
+"q": "What does narrow-casting let a presidential campaign do?",
+"o": [
+"Limit its ads to the seven battlegrounds",
+"Avoid debates with its opponent",
+"Run broad appeals on TV and base appeals by mail, phone and email"
+],
+"a": 2,
+"w": "Harris's Puerto Rican-targeted \"Somos Más\" ad and texts after the \"island of garbage\" remark are the book's example."
+}
+],
+"ch10": [
+{
+"q": "Tammy Baldwin won Wisconsin's 2024 Senate race while Trump carried the state. The book calls her win:",
+"o": [
+"Proof that nationalization has ended",
+"The exception that proves the rule",
+"A result of record outside spending"
+],
+"a": 1,
+"w": "She ran on deep state roots and attacked her opponent's Laguna Beach house, winning by about a point."
+},
+{
+"q": "From 1946 to 2024, what was the average reelection rate for Senate incumbents seeking reelection?",
+"o": [
+"81%",
+"93%",
+"97%"
+],
+"a": 0,
+"w": "House incumbents averaged 93% over the same period (Figure 10.1)."
+},
+{
+"q": "After Tennessee split Nashville into three districts in 2021, what happened in 2022?",
+"o": [
+"Democrats won all three",
+"Each seat elected a moderate independent",
+"All three elected Republicans"
+],
+"a": 2,
+"w": "Democrat Jim Cooper saw the new map and retired, an example of redistricting triggering retirement."
+},
+{
+"q": "Why does the Club for Growth focus on primaries in safe districts?",
+"o": [
+"Money spent there need not be spent again in the general",
+"Federal law bars it from general elections",
+"Safe-seat primaries have the highest turnout"
+],
+"a": 0,
+"w": "Interest groups like it and Justice Democrats now partly substitute for party backing of candidates."
+},
+{
+"q": "Why are congressional candidates wealthier and more often lawyers or business people, per the book?",
+"o": [
+"Voters prefer those careers",
+"Those careers supply fundraising networks",
+"Ballot access rules require it"
+],
+"a": 1,
+"w": "The book treats it as a candidate-supply problem; women and people of color are underrepresented in those network-rich professions."
+},
+{
+"q": "In 2024, which candidates relied most heavily on PAC contributions?",
+"o": [
+"House Republicans",
+"Harris and Trump",
+"House Democrats"
+],
+"a": 0,
+"w": "PACs gave House Republicans 33% of their money and House Democrats 21%; the presidential nominees were almost entirely individual-funded."
+},
+{
+"q": "In Wisconsin's 2024 Senate race, outside groups spent almost $120 million. How much did the candidates spend combined?",
+"o": [
+"About $20 million",
+"About $250 million",
+"About $90 million"
+],
+"a": 2,
+"w": "Outside money can dwarf the candidates' own; Baldwin alone spent $52 million."
+},
+{
+"q": "Andy Ogles (TN-7) made no move to the center. How did he do in 2024?",
+"o": [
+"He lost his primary",
+"He won the general by more than in 2022",
+"He narrowly lost the general"
+],
+"a": 1,
+"w": "He also won his primary by 13 points, in contrast to Maggie Hassan's strategy of balance in New Hampshire."
+},
+{
+"q": "Highton and Stone find that when their own party nominates a more extreme candidate, voters:",
+"o": [
+"Mostly refuse to punish that candidate",
+"Switch to the other party",
+"Stay home on Election Day"
+],
+"a": 0,
+"w": "That, plus safe districts and primary donors, is why non-moderation persists."
+},
+{
+"q": "What is a party campaign committee's first priority in a House cycle?",
+"o": [
+"Flipping the other party's seats",
+"Recruiting primary challengers",
+"Protecting its vulnerable incumbents"
+],
+"a": 2,
+"w": "The DCCC's \"Frontline\" program covered 29 incumbents in 2023-24; open seats come next, then flips."
+},
+{
+"q": "Why do party committees rely on independent expenditures?",
+"o": [
+"Coordinated expenditures are capped like contributions",
+"Independent spending is publicly financed",
+"Candidates may not accept party money"
+],
+"a": 0,
+"w": "In NM-2 in 2022, the DCCC spent $2 million attacking Herrell and the NRCC $2.3 million attacking Vasquez."
+},
+{
+"q": "Which of these helped incumbents build a personal vote?",
+"o": [
+"Running in open-seat primaries",
+"Casework and the franking privilege",
+"Matching funds for incumbents"
+],
+"a": 1,
+"w": "Visibility from these, plus scaring off quality challengers with money, drove the incumbency advantage up to its 1986 peak."
+},
+{
+"q": "In 2024, what share of Democratic and Republican House primaries were contested?",
+"o": [
+"21%",
+"74%",
+"48%"
+],
+"a": 2,
+"w": "Primaries are meant to be a substitute accountability mechanism where general elections are uncompetitive."
+},
+{
+"q": "According to Lee, why does a permanent campaign produce gridlock?",
+"o": [
+"Members spend too little time in Washington",
+"The minority won't hand the majority legislative wins while control is in play",
+"Primaries replace general elections"
+],
+"a": 1,
+"w": "The book's closing trade-off is that the permanent campaign may improve representation even as it degrades governance."
+}
+],
+"ch11": [
+{
+"q": "In Oklahoma's 2024 retention election, what happened to Justice Yvonne Kauger?",
+"o": [
+"She won by a record margin",
+"She became the first Oklahoma justice to lose a retention election",
+"She withdrew before Election Day"
+],
+"a": 1,
+"w": "About $3.5 million in dark money poured in; judges may not campaign, but PACs face no such limit. She lost by 7,047 votes out of 1.4 million."
+},
+{
+"q": "What is roll-off (undervoting)?",
+"o": [
+"Voters skipping races as they move down the ballot",
+"Voters being removed from the rolls",
+"Ballots arriving after Election Day"
+],
+"a": 0,
+"w": "Part of the reason: civics classes teach the presidency and Congress, not offices like secretary of state or coroner."
+},
+{
+"q": "How do off-cycle elections affect the incumbency advantage in mayoral races?",
+"o": [
+"They increase it sharply",
+"They have no effect",
+"They reduce it"
+],
+"a": 2,
+"w": "The small off-cycle electorate is more engaged and leans less on the incumbency cue, a counterintuitive result."
+},
+{
+"q": "What share of campaign-related TV news stories cover local races, even in midterm years?",
+"o": [
+"Less than 5%",
+"About 20%",
+"About 40%"
+],
+"a": 0,
+"w": "The vacuum is growing: 1 in 5 U.S. newspapers closed between 2004 and 2018, and 5% of counties are news deserts."
+},
+{
+"q": "In mayoral elections from 1988 to 2016, how did incumbents fare compared with nonincumbents?",
+"o": [
+"About equally likely to win",
+"33% more likely to win",
+"Less likely to win"
+],
+"a": 1,
+"w": "That local incumbency advantage exceeds the one in the U.S. House."
+},
+{
+"q": "Which state pays its legislators no salary at all?",
+"o": [
+"New York",
+"Texas",
+"New Mexico"
+],
+"a": 2,
+"w": "New Mexico legislators get only expense reimbursement. Staff sizes range from New York's 2,850 to Vermont's 72."
+},
+{
+"q": "Montana, North Dakota, South Dakota and Wyoming are examples of what?",
+"o": [
+"Citizen legislatures",
+"Highly professionalized legislatures",
+"States with no term limits"
+],
+"a": 0,
+"w": "About 25% of legislatures are highly professionalized; these four sit at the other end."
+},
+{
+"q": "From 2010 to 2024, what share of state legislative primaries were contested?",
+"o": [
+"Fewer than 18%",
+"About 50%",
+"Over 80%"
+],
+"a": 0,
+"w": "Contestation is thin in general elections too: 38% of major-party candidates had no major-party opponent in 2024."
+},
+{
+"q": "What happened to Democrats in state elections in 2010, under an unpopular Democratic president?",
+"o": [
+"They gained six governorships",
+"They lost six governorships and nearly 700 legislative seats",
+"They lost seats only in the South"
+],
+"a": 1,
+"w": "They also lost control of 21 chambers, a sign that national forces reach state races."
+},
+{
+"q": "People in an in-state media market, compared with similar people in an out-of-state market, are:",
+"o": [
+"4 to 5 points less likely to split presidential and governor votes",
+"Equally likely to split tickets",
+"4 to 5 points more likely to split presidential and governor votes"
+],
+"a": 2,
+"w": "They see more coverage of their governor; southern New Jersey inside the Philadelphia market is the example."
+},
+{
+"q": "Why can't states limit spending on ballot initiative campaigns?",
+"o": [
+"The Court holds that initiatives, unlike candidates, cannot be corrupted",
+"Initiatives are funded by the state",
+"Spending on initiatives is too small to matter"
+],
+"a": 0,
+"w": "The 2022 California sports-betting fight cost over $400 million, the most expensive ever, and still failed."
+},
+{
+"q": "Why do ballot initiatives often underperform their polling?",
+"o": [
+"Pollsters favor the yes side",
+"Status quo bias and negativity bias favor the no side",
+"Turnout is higher among supporters"
+],
+"a": 1,
+"w": "The no arguments are the status-quo arguments, so they carry a built-in edge."
+},
+{
+"q": "What happened to three Iowa supreme court justices in 2010?",
+"o": [
+"They were removed in retention elections after ruling for same-sex marriage",
+"They were impeached by the legislature",
+"They switched to partisan elections"
+],
+"a": 0,
+"w": "Only three other Iowa judges had lost in 48 years. Judges in retention systems are sensitive to public opinion."
+},
+{
+"q": "Compared with nonvoters, local voters tend to be:",
+"o": [
+"Younger and more diverse",
+"Identical in demographics",
+"Whiter, wealthier and more conservative"
+],
+"a": 2,
+"w": "In low-turnout elections, candidates of color are more likely to lose and spending diverges from what constituents of color want."
+}
+],
+"ch12": [
+{
+"q": "Texas turnout rose 18 points from 2014 to 2018. Why, according to the book?",
+"o": [
+"Voting became much easier",
+"Texans thought the 2018 election mattered more",
+"The state adopted automatic registration"
+],
+"a": 1,
+"w": "It's one reason the book says lowering the cost of voting rarely produces big turnout gains."
+},
+{
+"q": "Since 2016, which kinds of participation have declined while voting and donating held up?",
+"o": [
+"Attending meetings and persuading others",
+"Registering and voting early",
+"Giving money online"
+],
+"a": 0,
+"w": "Advocacy fell from 50% in 2016 to about 36% in 2024; the book suspects high partisan hostility makes people stop wanting to interact."
+},
+{
+"q": "Among 64 countries holding presidential elections from 2010 to 2020, where did U.S. turnout rank?",
+"o": [
+"1st",
+"22nd",
+"60th"
+],
+"a": 1,
+"w": "The 2022 midterm would rank 68th of 100 parliamentary elections."
+},
+{
+"q": "Putnam's estimate: each additional hour of daily TV watching is associated with:",
+"o": [
+"A 10% reduction in civic activism",
+"A 10% increase in political knowledge",
+"No change in civic activism"
+],
+"a": 0,
+"w": "The book adds that most young people now spend 3 or more hours a day on screens (CDC), part of its account of generational decline in participation."
+},
+{
+"q": "Political knowledge predicts voting and discussion. What is its effect on donating?",
+"o": [
+"No effect",
+"A strong positive effect",
+"A negative effect"
+],
+"a": 0,
+"w": "Income is the strongest predictor of donating."
+},
+{
+"q": "How does negative partisanship compare with positive partisanship as a motivator of turnout?",
+"o": [
+"It motivates more",
+"It motivates turnout, but less",
+"It does not motivate turnout"
+],
+"a": 1,
+"w": "The finding is Bankert's; the book calls it a useful corrective to the usual story about partisan hostility and turnout."
+},
+{
+"q": "Household members of someone contacted by a GOTV campaign are more likely to vote. What is this called?",
+"o": [
+"Social desirability",
+"Priming",
+"The spillover effect"
+],
+"a": 2,
+"w": "Voting is contagious, especially among the young."
+},
+{
+"q": "Which high school activity predicts adult political participation?",
+"o": [
+"Debate",
+"Sports",
+"None, once family income is accounted for"
+],
+"a": 0,
+"w": "Student government, community service, debate and drama predict it, regardless of family income or parents' education; sports do not."
+},
+{
+"q": "What did the Motor Voter Act (NVRA, 1993) do to turnout?",
+"o": [
+"No significant increase",
+"Raised it about 10 points",
+"Lowered it"
+],
+"a": 0,
+"w": "Same-day and automatic registration do raise turnout, modestly."
+},
+{
+"q": "What does early voting do to turnout?",
+"o": [
+"Raises it about 5 points",
+"No clear gain",
+"Lowers it by 10 points"
+],
+"a": 1,
+"w": "It may make systematic mobilization harder. Absentee and vote-by-mail add 2 to 3 points."
+},
+{
+"q": "In 2018, how did turnout change in the first five counties under California's Voter's Choice Act?",
+"o": [
+"Fell about 2 points",
+"No change",
+"Rose about 5 points, against about 2 elsewhere"
+],
+"a": 2,
+"w": "The act sent mail ballots to all voters and added drop boxes and vote centers."
+},
+{
+"q": "In 2024, how did reported turnout compare for incomes above $75,000 and below $20,000?",
+"o": [
+"71% vs. 46%",
+"60% vs. 55%",
+"90% vs. 30%"
+],
+"a": 0,
+"w": "The roughly 25-point gap is self-reported, and over-reporting likely exaggerates it."
+},
+{
+"q": "In 2020, Black women voted at a higher rate than Black men. How does the book explain it?",
+"o": [
+"Higher income and education",
+"Linked fate and mobilization where Black residents are concentrated",
+"Stricter registration laws"
+],
+"a": 1,
+"w": "The gap of 8 points is not explained by the resource model."
+},
+{
+"q": "Where do voters and nonvoters differ most on policy?",
+"o": [
+"Guns and abortion",
+"Immigration and policing",
+"Health care and military use"
+],
+"a": 2,
+"w": "73% of nonvoters vs. 58% of voters support expanding Medicare to cover everyone."
+}
+],
+"ch13": [
+{
+"q": "What was the Harris campaign's strategy for framing the 2024 race?",
+"o": [
+"Make it a choice, not a referendum",
+"Make it a referendum on Biden",
+"Avoid discussing Trump"
+],
+"a": 0,
+"w": "Among the 39% who named the economy as most important, 61% voted Trump."
+},
+{
+"q": "In 2024, what share of Americans said they were \"very interested\" in the campaign?",
+"o": [
+"26%",
+"48%",
+"75%"
+],
+"a": 1,
+"w": "That was a series high; in every election from 1952 to 2024 fewer than half said so. The low was 26% in 1996."
+},
+{
+"q": "What is party identification, according to the Michigan school?",
+"o": [
+"A voter's registration status",
+"A psychological attachment to a party",
+"A set of issue positions"
+],
+"a": 1,
+"w": "It is learned early, mostly from parents, and stays durable. It correlates with ideology and registration but is distinct from them."
+},
+{
+"q": "Why do partisans almost always think their candidate won the debate?",
+"o": [
+"Party identification acts as a filter on information",
+"Debates are scored by the parties",
+"Each side watches different debates"
+],
+"a": 0,
+"w": "Party ID also motivates turnout and predicts the vote."
+},
+{
+"q": "Which kind of voting judges the incumbent by the national economy rather than one's own finances?",
+"o": [
+"Pocketbook voting",
+"Proximity voting",
+"Sociotropic voting"
+],
+"a": 2,
+"w": "Retrospective voting also weights the election year itself, so three bad years and one good one can still be rewarded."
+},
+{
+"q": "In 2016, 57% of Democrats called the economy bad. What share of them voted for Clinton?",
+"o": [
+"72%",
+"35%",
+"15%"
+],
+"a": 0,
+"w": "Partisanship contaminates economic judgments; independents' votes are the ones that respond to performance."
+},
+{
+"q": "Seniors voting on Medicare are the model case of what?",
+"o": [
+"A wedge issue",
+"An issue public",
+"Pocketbook voting"
+],
+"a": 1,
+"w": "Issue voting is mostly confined to issue publics, groups who care intensely about one issue."
+},
+{
+"q": "Why might better-looking candidates get more votes without looks causing it?",
+"o": [
+"Attractive candidates choose winnable races",
+"Ballots show photos",
+"Voters can't see candidates"
+],
+"a": 0,
+"w": "That is a selection problem. Traits matter most where information is scarce."
+},
+{
+"q": "According to trait ownership, which candidates do better with independents?",
+"o": [
+"Those who stress their party's owned trait",
+"Those who avoid talking about traits",
+"Those who counter-signal, like a Democrat projecting strength"
+],
+"a": 2,
+"w": "Democrats own empathy and Republicans own leadership; showing the other party's trait helps with crossover voters."
+},
+{
+"q": "Why is party ID useless in presidential primaries?",
+"o": [
+"Primary voters are independents",
+"Everyone in the primary shares it",
+"Primary ballots omit party"
+],
+"a": 1,
+"w": "Candidates are also unknown and resources unequal, so primaries are where campaigns matter most."
+},
+{
+"q": "In congressional elections from 2000 to 2024, how many challengers who raised under $100,000 won?",
+"o": [
+"About one-third",
+"About 10%",
+"None"
+],
+"a": 2,
+"w": "Roughly one-third of challengers who raised at least $1 million won."
+},
+{
+"q": "What happened to the poll effect of Rick Perry's 2006 Texas ads?",
+"o": [
+"It faded within a week",
+"It lasted until Election Day",
+"It grew over time"
+],
+"a": 0,
+"w": "Ad effects decay fast, but early campaigning still sets images and issue priorities."
+},
+{
+"q": "Why is reinforcement an underappreciated campaign effect?",
+"o": [
+"It only happens in primaries",
+"Horse-race polls capture direction but not certainty",
+"It works only on independents"
+],
+"a": 1,
+"w": "Turning soft leaners into committed voters doesn't show up in the toplines."
+},
+{
+"q": "What does the book say about fears that campaign ads manipulate voters?",
+"o": [
+"They are well founded",
+"They apply mainly to TV",
+"They are by and large unfounded"
+],
+"a": 2,
+"w": "Reality constrains campaigns and each side offsets the other, so they stop well short of manipulation."
+}
+]
+};
+for (const k in EXTRA_QS) ROUNDS[k].qs.push(...EXTRA_QS[k]);
 const SORTS = {...SORTS1, ...SORTS2, ...SORTS3};
 const ORDERS = {eras:{items:ERAS1, unit:"era"}, cal:{items:ERAS2, unit:"stage"}, gotv:{items:ERAS3, unit:"tactic"}};
 const EXAMS = {1:[1,2,3,4,5], 2:[6,7,8,9], 3:[10,11,12,13]};
@@ -1497,7 +3349,10 @@ document.getElementById("team-names").addEventListener("input", e=>{
 document.getElementById("reset-btn").onclick=()=>{ document.getElementById("reset-confirm").hidden=false; };
 document.getElementById("reset-no").onclick=()=>{ document.getElementById("reset-confirm").hidden=true; show(1); };
 document.getElementById("start-btn").onclick=()=>show(1);
-document.getElementById("reset-yes").onclick=()=>{ const t=G.teams.slice(), m=G.mode, tm=G.timer, old=G; G=fresh(m); G.teams=t; G.timer=tm; keepIdentity(old); save(); document.getElementById("reset-confirm").hidden=true; connectHost(); rebuildAll(); show(1); };
+function newGame(){ const t=G.teams.slice(), m=G.mode, tm=G.timer, old=G; G=fresh(m); G.teams=t; G.timer=tm; keepIdentity(old); save(); document.getElementById("reset-confirm").hidden=true; connectHost(); rebuildAll(); }
+document.getElementById("reset-yes").onclick=()=>{ newGame(); show(1); };
+/* Start over from any slide: clears scores, keeps teams, mode and chapters, and returns to the first slide. */
+document.getElementById("restartbtn").onclick=()=>{ if (confirm("Start over? This clears every score and goes back to the first slide.")){ newGame(); show(0); } };
 
 /* ===================== QUIZ ===================== */
 const quizzes = [];
