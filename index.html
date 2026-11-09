@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<title>Campaigns Review: Chapters 1–5</title>
+<title>Campaigns Review Game</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap">
@@ -371,16 +371,48 @@ body.reader .rrow{grid-template-columns:2rem 1fr 5rem}
 body.reader .rrow .barw,body.reader .rrow .meta{grid-column:1 / -1}
 body.reader .solosum{grid-template-columns:1fr}
 </style>
+<style>
+:root{--dem:#2C6FB0;--rep:#B8323A}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--dem:#6FA8DC;--rep:#F08A7E}}
+:root[data-theme="dark"]{--dem:#6FA8DC;--rep:#F08A7E}
+.ecgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
+.ecbtn{display:flex;justify-content:space-between;gap:.5rem;align-items:center;border:1px solid var(--rule);border-radius:.4rem;background:var(--panel);padding:.55rem .7rem;cursor:pointer;font-size:1.05rem;color:var(--ink);text-align:left}
+.ecbtn:hover{border-color:var(--ink-3)}
+.ecbtn .ev{font-family:var(--micro);font-weight:700;font-variant-numeric:tabular-nums}
+.ecbtn.d{background:var(--dem);border-color:var(--dem);color:var(--paper)}
+.ecbtn.r{background:var(--rep);border-color:var(--rep);color:var(--paper)}
+.ecrow{display:grid;grid-template-columns:9rem 1fr 4rem;gap:1rem;align-items:center;font-size:1.3rem}
+.ecrow b{font-family:var(--display);font-size:2rem;text-align:right;font-variant-numeric:tabular-nums}
+.ecbar{height:2.2rem;background:var(--well);border-radius:.3rem;position:relative;overflow:hidden}
+.ecbar i{position:absolute;inset:0 auto 0 0;transition:width .25s}
+.ecbar i.d{background:var(--dem)} .ecbar i.r{background:var(--rep)}
+.ecbar .mk{position:absolute;top:0;bottom:0;width:.2rem;background:var(--ink);left:calc(270 / 538 * 100%)}
+/* longer category names: put each item's buttons on their own line */
+.sitem{grid-template-columns:1fr}
+.sitem .cats{flex-wrap:wrap}
+body.reader .ecgrid{grid-template-columns:1fr 1fr}
+body.reader .ecrow{grid-template-columns:7rem 1fr 3rem}
+@media (prefers-reduced-motion: reduce){.ecbar i{transition:none}}
+.slide.off{display:none!important}
+.chpick{flex-direction:column;align-items:flex-start;gap:.5rem}
+#ch-row{flex-wrap:nowrap;gap:.35rem}
+.chb{min-width:2.5rem;padding:.3rem .45rem;font-variant-numeric:tabular-nums}
+body.reader #ch-row{flex-wrap:wrap}
+.exb .micro{margin-left:.3rem}
+</style>
+
 
 <div id="viewport"><main id="stage">
 
 <!-- ============ TITLE + SETUP ============ -->
 <section class="slide" data-part="Setup" style="justify-content:center;gap:1.5rem">
-  <p class="kicker">Campaigns and Elections · Review · Chapters 1–5</p>
-  <h1 style="max-width:80rem;font-size:4.6rem">Rules, Reality, Strategy, Choice: the review game</h1>
+  <p class="kicker">Campaigns and Elections · The review game · Chapters 1–13</p>
+  <h1 style="max-width:80rem;font-size:4.2rem">Pick your chapters, then play</h1>
   <div class="setup" id="setup">
     <label class="l">Play as</label>
     <div class="btns"><button class="btn" id="m-live">Teams on their own computers</button><button class="btn" id="m-teams">Teams on one shared screen</button><button class="btn" id="m-solo">Solo study</button></div>
+    <label class="l">Chapters</label>
+    <div class="btns chpick"><span class="btns" id="ex-row"></span><span class="btns" id="ch-row"></span></div>
     <label class="l" id="tl-l">Teams</label>
     <div class="btns" id="team-row"><span class="btns" id="team-count"></span><span class="teamnames" id="team-names"></span></div>
     <label class="l" id="tm-l">Timer</label>
@@ -403,23 +435,17 @@ body.reader .solosum{grid-template-columns:1fr}
   <div class="head"><p class="kicker">Before we start</p><h2>How the game works</h2></div>
   <ol class="steps" id="hp-steps"></ol>
   <div class="card" style="gap:.8rem">
-    <h3>Today's rounds</h3>
-    <table class="rounds"><tbody>
-      <tr><td>Warm-up</td><td>Sort eight items into rules, reality, strategy or choice</td><td>200</td></tr>
-      <tr><td>Rounds 1–5</td><td>A recap slide, then eight questions per chapter. Half the points for a right answer, half for speed.</td><td>Up to 100 each</td></tr>
-      <tr><td>Case files</td><td>Name the Supreme Court case from its holding</td><td>Up to 200 each</td></tr>
-      <tr><td>Mini-games</td><td>Order the five campaign eras (Ch. 3) · sort who discloses donors (Ch. 4)</td><td>200</td></tr>
-      <tr><td>Calculator</td><td>Build the book's 2028 North Carolina vote target (Ch. 5)</td><td>No points</td></tr>
-      <tr><td>Final</td><td>Wager any part of your score on one last question</td><td>Your bet</td></tr>
-    </tbody></table>
+    <h3>Today's rounds</h3><p class="micro" id="rounds-note"></p>
+    <table class="rounds"><tbody id="rounds-body"></tbody></table>
   </div>
-  <aside class="notes">Read the steps aloud once. Every game slide repeats its own directions in the box under the title. Every question comes from Chapters 1–5 of the book.</aside>
+  <aside class="notes">Read the steps aloud once. Every game slide repeats its own directions in the box under the title. The table lists only the chapters picked on the first slide.</aside>
 </section>
 
 <!-- ============ WARM-UP ============ -->
-<section class="slide" data-part="Warm-up">
+<!-- ============ WARM-UP ============ -->
+<section class="slide" data-ch="1" data-part="Warm-up · Chapter 1">
   <div class="headrow">
-    <div class="head"><p class="kicker">Warm-up · the book's framework</p><h2>Rules, reality, strategy, or choice?</h2></div>
+    <div class="head"><p class="kicker">Warm-up · Chapter 1</p><h2>Rules, reality, strategy, or choice?</h2></div>
     <span class="roundtag" id="fw-tag">Sort all eight</span>
   </div>
   <div class="howto" data-how="sort"></div>
@@ -428,7 +454,7 @@ body.reader .solosum{grid-template-columns:1fr}
 </section>
 
 <!-- ============ CH 1 ============ -->
-<section class="slide recap" data-part="Chapter 1 · Analyzing campaigns">
+<section class="slide recap" data-ch="1" data-part="Chapter 1 · Analyzing campaigns">
   <div class="head"><p class="kicker">Chapter 1 in one slide</p><h2>The top line is not the election</h2></div>
   <div class="row grow" style="min-height:0">
     <div class="grid2 grow">
@@ -441,15 +467,15 @@ body.reader .solosum{grid-template-columns:1fr}
   </div>
   <aside class="notes">Ninety seconds, then play. The framework is the one idea that recurs in every chapter.</aside>
 </section>
-<section class="slide" data-part="Chapter 1 · Analyzing campaigns">
-  <div class="headrow"><div class="head"><p class="kicker">Round 1 · Chapter 1</p><h2>Analyzing campaigns and elections</h2></div><span class="roundtag">Up to 100 each</span></div>
+<section class="slide" data-ch="1" data-part="Chapter 1 · Analyzing campaigns">
+  <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 1</p><h2>Analyzing campaigns and elections</h2></div><span class="roundtag">Up to 100 each</span></div>
   <div class="howto" data-how="quiz"></div>
   <div class="quiz" data-round="ch1"></div>
   <aside class="notes">Eight questions.</aside>
 </section>
 
 <!-- ============ CH 2 ============ -->
-<section class="slide recap" data-part="Chapter 2 · The electoral process">
+<section class="slide recap" data-ch="2" data-part="Chapter 2 · The electoral process">
   <div class="head"><p class="kicker">Chapter 2 in one slide</p><h2>Six questions the rules answer</h2></div>
   <div class="row grow" style="min-height:0">
     <div class="grid2 grow">
@@ -462,21 +488,15 @@ body.reader .solosum{grid-template-columns:1fr}
   </div>
   <aside class="notes">Chapter 2 gets two rounds: the regular round and the court-case round.</aside>
 </section>
-<section class="slide" data-part="Chapter 2 · The electoral process">
-  <div class="headrow"><div class="head"><p class="kicker">Round 2 · Chapter 2</p><h2>The American electoral process</h2></div><span class="roundtag">Up to 100 each</span></div>
+<section class="slide" data-ch="2" data-part="Chapter 2 · The electoral process">
+  <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 2</p><h2>The American electoral process</h2></div><span class="roundtag">Up to 100 each</span></div>
   <div class="howto" data-how="quiz"></div>
   <div class="quiz" data-round="ch2"></div>
   <aside class="notes">Eight questions.</aside>
 </section>
-<section class="slide" data-part="Case files · Chapters 2 & 4">
-  <div class="headrow"><div class="head"><p class="kicker">Bonus round · Chapters 2 and 4</p><h2>Case files: name the case from the holding</h2></div><span class="roundtag">Up to 200 each</span></div>
-  <div class="howto" data-how="case"></div>
-  <div class="quiz" data-round="cases"></div>
-  <aside class="notes">Double points. Every case here is discussed in Chapter 2 or Chapter 4.</aside>
-</section>
 
 <!-- ============ CH 3 ============ -->
-<section class="slide recap" data-part="Chapter 3 · Five eras">
+<section class="slide recap" data-ch="3" data-part="Chapter 3 · Five eras">
   <div class="head"><p class="kicker">Chapter 3 in one slide</p><h2>Five eras, and less change than you think</h2></div>
   <div class="eras">
     <div><span class="yr">1788–1824</span><b>Pre-democratic</b><span>State legislatures pick electors. Candidates barely campaign; other party members do it for them.</span></div>
@@ -491,21 +511,21 @@ body.reader .solosum{grid-template-columns:1fr}
   </div>
   <aside class="notes">The eras are separated by abrupt changes in rules and reality. The next slide asks teams to rebuild the order.</aside>
 </section>
-<section class="slide" data-part="Chapter 3 · Five eras">
-  <div class="headrow"><div class="head"><p class="kicker">Mini-game · Chapter 3</p><h2>Put the five eras in order</h2></div><span class="roundtag" id="era-tag">200 points</span></div>
+<section class="slide" data-ch="3" data-part="Chapter 3 · Five eras">
+  <div class="headrow"><div class="head"><p class="kicker">Mini-game · Chapter 3</p><h2>Put the five eras in order</h2></div><span class="roundtag" id="eras-tag">200 points</span></div>
   <div class="howto" data-how="order"></div>
   <div class="order" id="order-eras"></div>
   <aside class="notes">The descriptions are the clues; the dates appear once each era lands in its slot.</aside>
 </section>
-<section class="slide" data-part="Chapter 3 · Five eras">
-  <div class="headrow"><div class="head"><p class="kicker">Round 3 · Chapter 3</p><h2>The transformation of American campaigns</h2></div><span class="roundtag">Up to 100 each</span></div>
+<section class="slide" data-ch="3" data-part="Chapter 3 · Five eras">
+  <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 3</p><h2>The transformation of American campaigns</h2></div><span class="roundtag">Up to 100 each</span></div>
   <div class="howto" data-how="quiz"></div>
   <div class="quiz" data-round="ch3"></div>
   <aside class="notes">Eight questions.</aside>
 </section>
 
 <!-- ============ CH 4 ============ -->
-<section class="slide recap" data-part="Chapter 4 · Financing campaigns">
+<section class="slide recap" data-ch="4" data-part="Chapter 4 · Financing campaigns">
   <div class="head"><p class="kicker">Chapter 4 in one slide</p><h2>Contributions are limited. Spending is not.</h2></div>
   <div class="row grow" style="min-height:0">
     <div class="grid2 grow">
@@ -518,21 +538,28 @@ body.reader .solosum{grid-template-columns:1fr}
   </div>
   <aside class="notes">The one sentence to leave with: contributions are limited, spending is not.</aside>
 </section>
-<section class="slide" data-part="Chapter 4 · Financing campaigns">
+<section class="slide" data-ch="4" data-part="Chapter 4 · Financing campaigns">
   <div class="headrow"><div class="head"><p class="kicker">Mini-game · Chapter 4</p><h2>Who learns the donor's name?</h2></div><span class="roundtag" id="dis-tag">Sort all six</span></div>
   <div class="howto" data-how="disc"></div>
   <div class="sort" id="sort-dis"></div>
   <aside class="notes">Super PACs disclose to the FEC, 527s to the IRS, and 501(c) groups to nobody.</aside>
 </section>
-<section class="slide" data-part="Chapter 4 · Financing campaigns">
-  <div class="headrow"><div class="head"><p class="kicker">Round 4 · Chapter 4</p><h2>Financing campaigns</h2></div><span class="roundtag">Up to 100 each</span></div>
+<section class="slide" data-ch="4" data-part="Chapter 4 · Financing campaigns">
+  <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 4</p><h2>Financing campaigns</h2></div><span class="roundtag">Up to 100 each</span></div>
   <div class="howto" data-how="quiz"></div>
   <div class="quiz" data-round="ch4"></div>
   <aside class="notes">Eight questions.</aside>
 </section>
 
+<section class="slide" data-ch="2,4" data-part="Case files · Chapters 2 & 4">
+  <div class="headrow"><div class="head"><p class="kicker">Bonus round · Chapters 2 and 4</p><h2>Case files: name the case from the holding</h2></div><span class="roundtag">Up to 200 each</span></div>
+  <div class="howto" data-how="case"></div>
+  <div class="quiz" data-round="cases"></div>
+  <aside class="notes">Double points. Every case here is discussed in Chapter 2 or Chapter 4.</aside>
+</section>
+
 <!-- ============ CH 5 ============ -->
-<section class="slide recap" data-part="Chapter 5 · Campaign strategy">
+<section class="slide recap" data-ch="5" data-part="Chapter 5 · Campaign strategy">
   <div class="head"><p class="kicker">Chapter 5 in one slide</p><h2>Who a campaign talks to, and who it ignores</h2></div>
   <div class="row grow" style="min-height:0">
     <div class="grid2 grow">
@@ -545,7 +572,7 @@ body.reader .solosum{grid-template-columns:1fr}
   </div>
   <aside class="notes">The next slide is the book's North Carolina arithmetic as a calculator.</aside>
 </section>
-<section class="slide" data-part="Chapter 5 · Campaign strategy">
+<section class="slide" data-ch="5" data-part="Chapter 5 · Campaign strategy">
   <div class="headrow"><div class="head"><p class="kicker">Interactive · Chapter 5</p><h2>Build the vote target for a 2028 Republican</h2></div><span class="roundtag">Predict, then drag</span></div>
   <div class="howto" data-how="calc"></div>
   <div class="calc">
@@ -573,16 +600,250 @@ body.reader .solosum{grid-template-columns:1fr}
   </div>
   <aside class="notes">Ask first: if turnout drops, does the job get easier or harder? Then drag.</aside>
 </section>
-<section class="slide" data-part="Chapter 5 · Campaign strategy">
-  <div class="headrow"><div class="head"><p class="kicker">Round 5 · Chapter 5</p><h2>Modern campaign strategies</h2></div><span class="roundtag">Up to 100 each</span></div>
+<section class="slide" data-ch="5" data-part="Chapter 5 · Campaign strategy">
+  <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 5</p><h2>Modern campaign strategies</h2></div><span class="roundtag">Up to 100 each</span></div>
   <div class="howto" data-how="quiz"></div>
   <div class="quiz" data-round="ch5"></div>
   <aside class="notes">The Wake County question is arithmetic: 8.36 percent of 3.2 million.</aside>
 </section>
 
+
+<section class="slide" data-ch="6" data-part="Warm-up · Chapter 6">
+  <div class="headrow">
+    <div class="head"><p class="kicker">Warm-up · Chapter 6</p><h2>Which part of the party is it?</h2></div>
+    <span class="roundtag" id="parts-tag">Sort all eight</span>
+  </div>
+  <div class="howto" data-how="sort"></div>
+  <div class="sort" id="sort-parts"></div>
+  <aside class="notes">V. O. Key's three parts: the party-in-the-electorate is the voters who identify with it; the party-as-organization is the committees, chairs and staff; the party-in-government is the people holding office under its label. Each is partly independent of the others.</aside>
+</section>
+
+<!-- ============ CH 6 ============ -->
+<section class="slide recap" data-ch="6" data-part="Chapter 6 · Political parties">
+  <div class="head"><p class="kicker">Chapter 6 in one slide</p><h2>Fighting between the 45-yard lines</h2></div>
+  <div class="row grow" style="min-height:0">
+    <div class="grid2 grow">
+      <div class="card"><span class="num">THREE PARTS</span><h3>Electorate, organization, government</h3><p>V. O. Key's three parts of a party. Politicians organized parties before voters called themselves partisans, to win lasting majorities.</p></div>
+      <div class="card"><span class="num">WHY ONLY TWO</span><h3>The rules, again</h3><p>Single-member districts, plurality rule and winner-take-all electors. Perot won 19% in 1992 and no electoral votes.</p></div>
+      <div class="card"><span class="num">IN CAMPAIGNS</span><h3>Recruit, fund, mobilize, signal</h3><p>Parties may coordinate with their candidates; super PACs may not. Party contact fell to 21% of citizens in 2024.</p></div>
+      <div class="card"><span class="num">IN DECLINE?</span><h3>Mostly no</h3><p>Parties are stronger in government and among voters, where most independents are closet partisans. The organization is weaker. Negative partisanship is rising.</p></div>
+    </div>
+    <div class="statcard" style="width:24rem"><span class="bigstat">95%</span><p>of House and Senate seats have gone to the two major parties <b>since the 1920s</b>.</p><span class="bigstat" style="font-size:3rem">&lt;10%</span><p>of contests have <b>split their results</b> between the parties since 2016.</p></div>
+  </div>
+  <aside class="notes">The book's line: Democrats and Republicans have been fighting between the 45-yard lines for four decades. No party has won the presidential popular vote by more than 10 points since 1984.</aside>
+</section>
+<section class="slide" data-ch="6" data-part="Chapter 6 · Political parties">
+  <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 6</p><h2>Political parties</h2></div><span class="roundtag">Up to 100 each</span></div>
+  <div class="howto" data-how="quiz"></div>
+  <div class="quiz" data-round="ch6"></div>
+  <aside class="notes">Eight questions drawn from a pool of 16.</aside>
+</section>
+
+<!-- ============ CH 7 ============ -->
+<section class="slide recap" data-ch="7" data-part="Chapter 7 · Interest groups">
+  <div class="head"><p class="kicker">Chapter 7 in one slide</p><h2>Groups want policy, not power</h2></div>
+  <div class="row grow" style="min-height:0">
+    <div class="grid2 grow">
+      <div class="card"><span class="num">WHAT THEY ARE</span><h3>Shared goals, no candidates</h3><p>Business is the largest sector. Public-interest and single-issue groups are likelier to take part in elections, but fewer and poorer.</p></div>
+      <div class="card"><span class="num">THE MONEY</span><h3>Giving flat, spending soaring</h3><p>Contributions barely moved after 1998 while direct spending reached $3.8 billion in 2024. PAC money goes mostly to incumbents.</p></div>
+      <div class="card"><span class="num">BALLOT INITIATIVES</span><h3>Groups replace candidates</h3><p>Endorsements work as shortcuts for low-information voters. Group money is better at defeating measures than passing them.</p></div>
+      <div class="card"><span class="num">INFLUENCE</span><h3>Real, but smaller than claimed</h3><p>Group ads are more negative and more issue-focused. Candidates rarely follow groups' agendas, and leaders overstate the votes they can deliver.</p></div>
+    </div>
+    <div class="statcard" style="width:24rem"><span class="bigstat">50</span><p>congressional races in 2024 where <b>outside groups outspent the candidates</b>.</p><span class="bigstat" style="font-size:3rem">$15M+</span><p>spent on the <b>2017 Los Angeles school board</b> race.</p></div>
+  </div>
+  <aside class="notes">The chapter's opening puzzle: why would the ACLU, which spent almost nothing, matter, while Future Forward, which represents nobody, matters too? The answer is that "the groups" make a convenient target after a loss.</aside>
+</section>
+<section class="slide" data-ch="7" data-part="Chapter 7 · Interest groups">
+  <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 7</p><h2>Interest groups</h2></div><span class="roundtag">Up to 100 each</span></div>
+  <div class="howto" data-how="quiz"></div>
+  <div class="quiz" data-round="ch7"></div>
+  <aside class="notes">Eight questions drawn from a pool of 16.</aside>
+</section>
+
+<!-- ============ CH 8 ============ -->
+<section class="slide recap" data-ch="8" data-part="Chapter 8 · Media">
+  <div class="head"><p class="kicker">Chapter 8 in one slide</p><h2>The media and candidates want different things</h2></div>
+  <div class="row grow" style="min-height:0">
+    <div class="grid2 grow">
+      <div class="card"><span class="num">WHO THEY ARE</span><h3>TV still leads</h3><p>Print and network audiences shrank; podcasts doubled since 2019. Local news is collapsing, so voters judge everyone by views of the president.</p></div>
+      <div class="card"><span class="num">WHAT GETS COVERED</span><h3>Novelty, conflict, the horse race</h3><p>In 2016, 42% of coverage was horse race and 10% policy. The average presidential sound bite runs nine seconds.</p></div>
+      <div class="card"><span class="num">IS IT BIASED?</span><h3>Toward whoever is ahead</h3><p>Content studies find no consistent partisan tilt. Algorithms mostly don't radicalize; users choose. Fox News is the exception that moved votes.</p></div>
+      <div class="card"><span class="num">EFFECTS</span><h3>Agenda setting, priming, informing</h3><p>Persuasion is hard because most people tune out and partisans reason motivatedly. Effects are strongest in primaries.</p></div>
+    </div>
+    <div class="statcard" style="width:24rem"><span class="bigstat">9 sec</span><p>the average <b>presidential sound bite</b> on TV news.</p><span class="bigstat" style="font-size:3rem">40%</span><p>of Americans listen to a <b>podcast weekly</b>, double 2019.</p></div>
+  </div>
+  <aside class="notes">Three themes from the Joe Rogan opener: new formats reach people who catch news only incidentally; traditional outlets still frame the story; media and candidates have incompatible incentives.</aside>
+</section>
+<section class="slide" data-ch="8" data-part="Chapter 8 · Media">
+  <div class="headrow"><div class="head"><p class="kicker">Mini-game · Chapter 8</p><h2>Agenda setting, priming, or informing?</h2></div><span class="roundtag" id="fx-tag">Sort all six</span></div>
+  <div class="howto" data-how="fx"></div>
+  <div class="sort" id="sort-fx"></div>
+  <aside class="notes">Agenda setting changes what people think about. Priming changes the criteria they use to judge candidates. Informing teaches them facts. The three aren't mutually exclusive.</aside>
+</section>
+<section class="slide" data-ch="8" data-part="Chapter 8 · Media">
+  <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 8</p><h2>Media</h2></div><span class="roundtag">Up to 100 each</span></div>
+  <div class="howto" data-how="quiz"></div>
+  <div class="quiz" data-round="ch8"></div>
+  <aside class="notes">Eight questions drawn from a pool of 16.</aside>
+</section>
+
+<!-- ============ CH 9 ============ -->
+<section class="slide recap" data-ch="9" data-part="Chapter 9 · Presidential campaigns">
+  <div class="head"><p class="kicker">Chapter 9 in one slide</p><h2>Two tasks, in tension</h2></div>
+  <div class="row grow" style="min-height:0">
+    <div class="grid2 grow">
+      <div class="card"><span class="num">THE NOMINATION</span><h3>Rules are strategy</h3><p>The invisible primary, delegate rules (a 15% threshold for Democrats) and the calendar. Early states signal viability far beyond their delegates.</p></div>
+      <div class="card"><span class="num">CONVENTIONS · RUNNING MATES</span><h3>Small effects</h3><p>Bumps averaged about 2 points from 2008 to 2024, and none in 2024. A running mate moves a point or two in a few states at most.</p></div>
+      <div class="card"><span class="num">THE ELECTORAL COLLEGE</span><h3>270 of 538</h3><p>Winner-take-all is state law. Trump won 58.0% of electoral votes on 49.8% of the popular vote in 2024.</p></div>
+      <div class="card"><span class="num">THE FALL</span><h3>Fundamentals first</h3><p>The economy matters most; two-thirds of incumbents win. Debates rarely move votes, and coverage of them matters more than the debates.</p></div>
+    </div>
+    <div class="statcard" style="width:24rem"><span class="bigstat">98%</span><p>of 2024 presidential broadcast ad money went to the <b>seven battleground states</b>.</p><span class="bigstat" style="font-size:3rem">43 + D.C.</span><p>states were targeted only <b>indirectly</b>.</p></div>
+  </div>
+  <aside class="notes">The chapter's skepticism: campaigns mostly reinforce partisan loyalties and raise the salience of the fundamentals. Correlated with victory is not the same as causing it.</aside>
+</section>
+<section class="slide" data-ch="9" data-part="Chapter 9 · Presidential campaigns">
+  <div class="headrow"><div class="head"><p class="kicker">Mini-game · Chapter 9</p><h2>Put the campaign calendar in order</h2></div><span class="roundtag" id="cal-tag">200 points</span></div>
+  <div class="howto" data-how="ordercal"></div>
+  <div class="order" id="order-cal"></div>
+  <aside class="notes">This is the typical sequence. 2024 broke it: Biden's June debate, the earliest ever, came before the conventions and ended his candidacy.</aside>
+</section>
+<section class="slide" data-ch="9" data-part="Chapter 9 · Presidential campaigns">
+  <div class="headrow"><div class="head"><p class="kicker">Interactive · Chapter 9</p><h2>Path to 270</h2></div><span class="roundtag">Predict, then click</span></div>
+  <div class="howto" data-how="calc270"></div>
+  <div class="calc">
+    <div class="col" style="gap:.8rem">
+      <div class="ecgrid" id="ec-grid"></div>
+      <div class="btns"><button class="btn" id="ec-clear">Start over</button><button class="btn" id="ec-2024">Show 2024</button></div>
+      <p class="micro">The 15 states that didn't vote the same way in every election from 2000 to 2024 (Figure 9.2), with 2024 electoral votes. ★ marks the seven battlegrounds.</p>
+    </div>
+    <div class="col" style="gap:1.1rem;min-width:0">
+      <div class="ecrow"><span class="ecname">Democrats</span><div class="ecbar"><i id="ec-dbar" class="d"></i><span class="mk"></span></div><b id="ec-d"></b></div>
+      <div class="ecrow"><span class="ecname">Republicans</span><div class="ecbar"><i id="ec-rbar" class="r"></i><span class="mk"></span></div><b id="ec-r"></b></div>
+      <p class="micro">The black mark is 270. Democrats start with 194 electoral votes from states they won every time, and Republicans with 155.</p>
+      <p class="verdict" id="ec-say" style="font-size:2.2rem;line-height:1.2"></p>
+      <p id="ec-left" style="font-size:1.3rem"></p>
+    </div>
+  </div>
+  <aside class="notes">Ask first: can Republicans win without Pennsylvania? Can Democrats? Then click. "Show 2024" gives 312 to 226, which is the book's 58.0% of electoral votes for Trump.</aside>
+</section>
+<section class="slide" data-ch="9" data-part="Chapter 9 · Presidential campaigns">
+  <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 9</p><h2>Presidential campaigns</h2></div><span class="roundtag">Up to 100 each</span></div>
+  <div class="howto" data-how="quiz"></div>
+  <div class="quiz" data-round="ch9"></div>
+  <aside class="notes">Eight questions drawn from a pool of 16.</aside>
+</section>
+<section class="slide" data-ch="6,7,8,9" data-part="Name the term · Chapters 6–9">
+  <div class="headrow"><div class="head"><p class="kicker">Bonus round · Chapters 6–9</p><h2>Name the term from its definition</h2></div><span class="roundtag">Up to 200 each</span></div>
+  <div class="howto" data-how="terms"></div>
+  <div class="quiz" data-round="terms"></div>
+  <aside class="notes">Double points. Every term is a key term in Chapter 6, 8 or 9.</aside>
+</section>
+
+<!-- ============ CH 10 ============ -->
+<section class="slide recap" data-ch="10" data-part="Chapter 10 · Congressional campaigns">
+  <div class="head"><p class="kicker">Chapter 10 in one slide</p><h2>Incumbents win, but not for being incumbents</h2></div>
+  <div class="row grow" style="min-height:0">
+    <div class="grid2 grow">
+      <div class="card"><span class="num">THE ADVANTAGE</span><h3>Shrinking</h3><p>The House incumbency advantage peaked just under 10 points in 1986 and fell to 1.2 in 2024. Party loyalty now decides most districts.</p></div>
+      <div class="card"><span class="num">CHALLENGERS</span><h3>Quality and money</h3><p>Quality challengers have held office before, and they wait for open seats. The average House challenger raised about $467,000 to the incumbent's $3 million.</p></div>
+      <div class="card"><span class="num">RUNNING SCARED</span><h3>Rare losses, constant fundraising</h3><p>Losing is unlikely but ends a career, so safe incumbents keep raising money. Much of it comes from outside the district.</p></div>
+      <div class="card"><span class="num">NATIONALIZED</span><h3>Not all politics is local</h3><p>Congressional races now turn on the national parties. Bob Casey's moderate record could not save him in 2024.</p></div>
+    </div>
+    <div class="statcard" style="width:24rem"><span class="bigstat">97%</span><p>of House incumbents <b>won reelection</b> in 2024, and 88% of senators.</p><span class="bigstat" style="font-size:3rem">67</span><p>of 435 House races were decided by <b>fewer than 10 points</b>.</p></div>
+  </div>
+  <aside class="notes">The puzzle to leave with: incumbents almost always win, yet the incumbency advantage is close to zero. They win because their districts already lean their way.</aside>
+</section>
+<section class="slide" data-ch="10" data-part="Chapter 10 · Congressional campaigns">
+  <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 10</p><h2>Congressional campaigns</h2></div><span class="roundtag">Up to 100 each</span></div>
+  <div class="howto" data-how="quiz"></div>
+  <div class="quiz" data-round="ch10"></div>
+  <aside class="notes">Eight questions drawn from a pool of 16.</aside>
+</section>
+
+<!-- ============ CH 11 ============ -->
+<section class="slide recap" data-ch="11" data-part="Chapter 11 · State and local campaigns">
+  <div class="head"><p class="kicker">Chapter 11 in one slide</p><h2>The races that matter most get the least attention</h2></div>
+  <div class="row grow" style="min-height:0">
+    <div class="grid2 grow">
+      <div class="card"><span class="num">NONPARTISAN BALLOTS</span><h3>No party cue</h3><p>Over 75% of city elections are nonpartisan. Without a party label, turnout falls and voters lean on incumbency.</p></div>
+      <div class="card"><span class="num">OFF-CYCLE ELECTIONS</span><h3>Small, organized electorates</h3><p>Turnout runs more than 20 points below presidential years. Organized groups such as teachers' unions gain. The book favors moving local elections on-cycle.</p></div>
+      <div class="card"><span class="num">LEGISLATURES AND GOVERNORS</span><h3>Few contests</h3><p>38% of state legislative candidates had no major-party opponent in 2024. Term limits do not reliably add competition.</p></div>
+      <div class="card"><span class="num">JUDGES AND MEASURES</span><h3>Money flows downballot</h3><p>Only 8 states elect none of their judges. State supreme court fundraising reached $100 million in 2021–22. Most school bonds pass.</p></div>
+    </div>
+    <div class="statcard" style="width:24rem"><span class="bigstat">38%</span><p>of major-party state legislative candidates were <b>unopposed</b> in 2024, against 4% for Congress.</p><span class="bigstat" style="font-size:3rem">95%+</span><p>of governors seeking reelection <b>have won</b> since 2020.</p></div>
+  </div>
+  <aside class="notes">The theme: state and local elections arguably affect daily life the most, and they live up to the ideals of campaigns the least.</aside>
+</section>
+<section class="slide" data-ch="11" data-part="Chapter 11 · State and local campaigns">
+  <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 11</p><h2>State and local campaigns</h2></div><span class="roundtag">Up to 100 each</span></div>
+  <div class="howto" data-how="quiz"></div>
+  <div class="quiz" data-round="ch11"></div>
+  <aside class="notes">Eight questions drawn from a pool of 16.</aside>
+</section>
+
+<!-- ============ CH 12 ============ -->
+<section class="slide recap" data-ch="12" data-part="Chapter 12 · Participation">
+  <div class="head"><p class="kicker">Chapter 12 in one slide</p><h2>People vote when someone asks them</h2></div>
+  <div class="row grow" style="min-height:0">
+    <div class="grid2 grow">
+      <div class="card"><span class="num">HOW MANY</span><h3>64% in 2024</h3><p>Midterm turnout usually runs 10 to 20 points lower. Low U.S. turnout comes from the rules: no compulsory voting, frequent elections, a separate registration step.</p></div>
+      <div class="card"><span class="num">WHO</span><h3>Ability, motivation, opportunity</h3><p>Political interest is the strongest individual factor. Education builds ability; registration rules shape opportunity.</p></div>
+      <div class="card"><span class="num">WHAT WORKS</span><h3>Face to face</h3><p>Canvassing gains the most votes per contact. Campaign mail, email and TV ads do little. Social pressure works.</p></div>
+      <div class="card"><span class="num">THE CATCH</span><h3>Mobilization can widen gaps</h3><p>Likely voters are the easiest to mobilize, so get-out-the-vote drives can widen participation gaps rather than close them.</p></div>
+    </div>
+    <div class="statcard" style="width:24rem"><span class="bigstat">48%</span><p>of 18- to 24-year-olds voted in 2024, against <b>75%</b> of those 65 and older.</p><span class="bigstat" style="font-size:3rem">15–19 pts</span><p>of turnout from enforced <b>compulsory voting</b>.</p></div>
+  </div>
+  <aside class="notes">Competitive races raise turnout because more people are asked to vote, not because voters think their ballot will decide the race.</aside>
+</section>
+<section class="slide" data-ch="12" data-part="Chapter 12 · Participation">
+  <div class="headrow"><div class="head"><p class="kicker">Mini-game · Chapter 12</p><h2>Ability, motivation, or opportunity?</h2></div><span class="roundtag" id="amo-tag">Sort all six</span></div>
+  <div class="howto" data-how="amo"></div>
+  <div class="sort" id="sort-amo"></div>
+  <aside class="notes">Ability is resources and skills, motivation is wanting to take part, and opportunity is the rules and chances to do it.</aside>
+</section>
+<section class="slide" data-ch="12" data-part="Chapter 12 · Participation">
+  <div class="headrow"><div class="head"><p class="kicker">Mini-game · Chapter 12</p><h2>Rank the turnout tactics</h2></div><span class="roundtag" id="gotv-tag">200 points</span></div>
+  <div class="howto" data-how="ordergotv"></div>
+  <div class="order" id="order-gotv"></div>
+  <aside class="notes">From the book's table of field experiments: one extra vote for every 17 people canvassed, 36 called by volunteers, 106 called by telemarketers, 260 mailed by a nonpartisan source, and 425 robocalled.</aside>
+</section>
+<section class="slide" data-ch="12" data-part="Chapter 12 · Participation">
+  <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 12</p><h2>Participation and turnout</h2></div><span class="roundtag">Up to 100 each</span></div>
+  <div class="howto" data-how="quiz"></div>
+  <div class="quiz" data-round="ch12"></div>
+  <aside class="notes">Eight questions drawn from a pool of 16.</aside>
+</section>
+
+<!-- ============ CH 13 ============ -->
+<section class="slide recap" data-ch="13" data-part="Chapter 13 · Voters">
+  <div class="head"><p class="kicker">Chapter 13 in one slide</p><h2>Do campaigns matter?</h2></div>
+  <div class="row grow" style="min-height:0">
+    <div class="grid2 grow">
+      <div class="card"><span class="num">PARTY</span><h3>The strongest predictor</h3><p>Over 90% of partisans vote for their party's nominee. Only about 7% are pure independents. Dislike of the other party has grown.</p></div>
+      <div class="card"><span class="num">FUNDAMENTALS</span><h3>The economy and the incumbent</h3><p>Models in August 2024 forecast 50.2% for Trump; he got 50.8%. Independents' votes respond most to the economy.</p></div>
+      <div class="card"><span class="num">ISSUES AND GROUPS</span><h3>Fewer issue voters than you think</h3><p>Voters often adopt their candidate's positions. Groups shape votes through contact with other members.</p></div>
+      <div class="card"><span class="num">WHEN CAMPAIGNS MATTER</span><h3>Primaries and mismatches</h3><p>Campaigns matter most with unfamiliar candidates or lopsided resources. General elections usually fight to a draw.</p></div>
+    </div>
+    <div class="statcard" style="width:24rem"><span class="bigstat">5 of 14</span><p>presidential elections from 1948 to 2000 appear to have been <b>decided by the campaign</b>.</p><span class="bigstat" style="font-size:3rem">&lt;230,000</span><p>votes across Michigan, Pennsylvania and Wisconsin decided <b>2024</b>.</p></div>
+  </div>
+  <aside class="notes">The answer to the chapter's question is "sometimes." Campaigns usually reinforce and prime the fundamentals, but close races can turn on them.</aside>
+</section>
+<section class="slide" data-ch="13" data-part="Chapter 13 · Voters">
+  <div class="headrow"><div class="head"><p class="kicker">Question round · Chapter 13</p><h2>Voters and campaign effects</h2></div><span class="roundtag">Up to 100 each</span></div>
+  <div class="howto" data-how="quiz"></div>
+  <div class="quiz" data-round="ch13"></div>
+  <aside class="notes">Eight questions drawn from a pool of 16.</aside>
+</section>
+<section class="slide" data-ch="10,11,12,13" data-part="Name the term · Chapters 10–13">
+  <div class="headrow"><div class="head"><p class="kicker">Bonus round · Chapters 10–13</p><h2>Name the term from its definition</h2></div><span class="roundtag">Up to 200 each</span></div>
+  <div class="howto" data-how="terms"></div>
+  <div class="quiz" data-round="terms3"></div>
+  <aside class="notes">Double points. Every term is a key term in Chapters 10–13.</aside>
+</section>
+
 <!-- ============ FINAL ============ -->
 <section class="slide" data-part="Final wager">
-  <div class="headrow"><div class="head"><p class="kicker">Final round · Chapters 1 and 4</p><h2>Bet any part of your score</h2></div><span class="roundtag">Wager</span></div>
+  <div class="headrow"><div class="head"><p class="kicker" id="final-kicker">Final round</p><h2>Bet any part of your score</h2></div><span class="roundtag">Wager</span></div>
   <div class="howto" data-how="final"></div>
   <div id="final"></div>
   <aside class="notes">Wagers first, then the question. Every team may bet up to its score or 500, whichever is higher.</aside>
@@ -591,7 +852,6 @@ body.reader .solosum{grid-template-columns:1fr}
   <canvas id="confetti" aria-hidden="true"></canvas>
   <div class="head"><p class="kicker">Final standings</p><h2 id="winner">And the winner is…</h2></div>
   <div class="standings" id="standings"></div>
-  <p class="small" style="max-width:66rem">Next up: Chapters 6–8. Parties, interest groups and the media, the other actors in the strategy box.</p>
   <aside class="notes">Read the standings from last place up.</aside>
 </section>
 
@@ -612,8 +872,8 @@ body.reader .solosum{grid-template-columns:1fr}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
 <script>
-/* ===================== CONTENT (Sides, Shaw, Grossmann and Lipsitz, 5e, Chapters 1–5) ===================== */
-const ROUNDS = {
+/* ===================== CONTENT (Sides, Shaw, Grossmann and Lipsitz, 5e, Chapters 6–9) ===================== */
+const ROUNDS1 = {
 ch1:{pts:100, qs:[
  {q:"Which 2024 result undercuts the claim that the election was a broad conservative mandate?",o:["Republicans lost two seats in the U.S. House","Democrats flipped six governorships","Trump lost the national popular vote"],a:0,w:"Republicans won the presidency and a Senate majority but lost two House seats. No governorship changed hands, and only one legislative chamber, the Michigan House, flipped."},
  {q:"In 2024, abortion-rights ballot measures passed even in two strongly Republican states. Which two?",o:["Texas and Florida","Ohio and Indiana","Missouri and Montana"],a:2,w:"Missouri and Montana. The same electorates that backed Trump voted for these measures."},
@@ -718,10 +978,10 @@ ch5:{pts:100, qs:[
  {q:"A candidate who abandons a past position risks being called:",o:["A strategic politician","A flip-flopper","An issue owner"],a:1,w:"Changing positions can cost credibility, which limits how far candidates can move."}
 ]}
 };
-const FINAL = {q:"Trump was outspent in 2016, 2020 and 2024 and won two of the three. What does Chapter 4 say about whether money buys elections?",
+const FINAL1 = {q:"Trump was outspent in 2016, 2020 and 2024 and won two of the three. What does Chapter 4 say about whether money buys elections?",
   o:["The bigger spender nearly always wins","Donors favor likely winners, so money and winning are hard to separate","Spending has no effect at all"],a:1,
   w:"Popular candidates attract the most money, so a fundraising edge may reflect support rather than cause it. Spending still helps, but it does not guarantee a win."};
-const SORTS = {
+const SORTS1 = {
  fw:{cats:["Rules","Reality","Strategy","Choice"], tag:"fw-tag", items:[
   {t:"A $3,500 limit on gifts to one candidate",c:0,w:"Set before the race, and it binds everyone."},
   {t:"Inflation in 2024",c:1,w:"The economy is context candidates cannot control."},
@@ -741,13 +1001,253 @@ const SORTS = {
   {t:"A 501(c)(6) trade association",c:2,w:"Also a 501(c), so donors stay private."}
  ]}
 };
-const ERAS = [
+const ERAS1 = [
  {n:"Pre-democratic",y:"1788–1824",d:"State legislators, not voters, choose the electors."},
  {n:"Mass mobilization",y:"1828–92",d:"Parades, songs and party jobs. Turnout peaks."},
  {n:"Progressive",y:"1896–1948",d:"Reforms weaken the parties. Turnout falls."},
  {n:"Candidate",y:"1952–2012",d:"Television makes candidates the stars. Polling arrives."},
  {n:"Contemporary",y:"2016–now",d:"Sorting, big data and digital outreach."}
 ];
+
+const ROUNDS2 = {
+ch6:{pts:100, qs:[
+ {q:"A party's members of Congress voting together on a bill are the party:",o:["In government","As organization","In the electorate"],a:0,w:"V. O. Key's three parts: the party-in-the-electorate (voters), the party-as-organization (committees and staff), and the party-in-government (officeholders)."},
+ {q:"The Democratic National Committee, which raises money and writes party rules, is the party:",o:["As organization","In government","In the electorate"],a:0,w:"Official committees at the national, state and county level make up the party-as-organization."},
+ {q:"Which founder warned against “the baneful effects of the spirit of party”?",o:["George Washington","Thomas Jefferson","Abraham Lincoln"],a:0,w:"Parties formed anyway, and politicians organized before voters called themselves partisans."},
+ {q:"Why do parties exist, in John Aldrich's account?",o:["Politicians need lasting majorities, a brand and help mobilizing voters","Voters demanded them before politicians organized","The Constitution requires them"],a:0,w:"Parties serve politicians first: durable legislative majorities, a recognizable label, and campaign infrastructure."},
+ {q:"Since the 1920s, the two major parties have held at least what share of House and Senate seats?",o:["About 75%","About 85%","At least 95%"],a:2,w:"They have also won at least 90% of electoral votes. Single-member districts and plurality rule keep it that way."},
+ {q:"74% of Republicans call themselves conservative. What share of Democrats call themselves liberal?",o:["About 61%","About 74%","About 88%"],a:0,w:"The asymmetry means Democrats need more moderates, since their ideological base is smaller."},
+ {q:"What does Chapter 6 call the biggest recent change in the parties' coalitions?",o:["A widening racial divide","The diploma divide between college graduates and everyone else","Young voters moving left"],a:1,w:"In 2024 the racial divide between the parties actually narrowed, as Republicans gained Hispanic, Asian and Arab voters."},
+ {q:"Most Americans who call themselves independents are:",o:["Closet partisans who vote reliably for one party","Undecided swing voters","People who rarely vote"],a:0,w:"Only about 1 in 10 Americans is a pure independent."},
+ {q:"Disliking the other party more, without liking your own party more, is called:",o:["Sorting","Negative partisanship","Polarization"],a:1,w:"The book's example: partisans' ratings of the economy flipped within a week of the 2024 result, with no real economic change."},
+ {q:"What share of citizens said a party contacted them in 2024?",o:["21%","40%","63%"],a:0,w:"Party contact was at least 40% from 2002 to 2012, then fell sharply."},
+ {q:"Ross Perot won 19% of the popular vote in 1992. How many electoral votes did he win?",o:["Zero","19","About 100"],a:0,w:"Winner-take-all electoral votes shut out third parties even with large popular support."},
+ {q:"What may a political party do that a super PAC may not?",o:["Raise unlimited sums","Coordinate its spending with its own candidates","Run attack ads"],a:1,w:"That is the one real privilege parties kept. Super PACs must stay independent of candidates."},
+ {q:"California's top-two primary, adopted in 2010, helps the party that:",o:["Has more registered voters","Fields fewer candidates","Holds the governorship"],a:1,w:"It turns primaries into the first step of a two-step general election, so a party that splits its vote among many candidates can be shut out."},
+ {q:"Since 2016, what share of contests have split their results between the parties, for example voting one way for president and another for Congress?",o:["Below 10%","About 30%","About 50%"],a:0,w:"Split results ran 30–50% in the 1960s through the 1980s. Their decline is a sign of nationalization."},
+ {q:"No party has won the presidential popular vote by more than 10 points since:",o:["1964","1984","2008"],a:1,w:"The book says the parties have been fighting “between the 45-yard lines” for four decades."},
+ {q:"Nebraska's 2nd District, where the party's preferred moderate lost the primary and the nominee lost the seat, illustrates which party conflict?",o:["Money versus volunteers","Purity versus electability","National versus state parties"],a:1,w:"Across four cycles, nominees who were truer to the base kept losing a district the Democratic presidential candidate carried."}
+]},
+ch7:{pts:100, qs:[
+ {q:"What separates an interest group from a political party?",o:["It does not run its own candidates","It never spends money on elections","It works only in state politics"],a:0,w:"Interest groups pursue shared policy goals, narrower than a party's, and aren't necessarily tied to one party."},
+ {q:"Which type of organized interest is the largest?",o:["Business","Labor unions","Public interest groups"],a:0,w:"More than 3,000 corporations and trade associations keep offices in Washington."},
+ {q:"Compared with business groups, single-issue and public interest groups are:",o:["More numerous and better funded","More likely to take part in elections, but fewer and less funded","Barred from elections"],a:1,w:"The groups most visible in campaigns are not typical of interest groups overall."},
+ {q:"Which change helped groups survive without many members?",o:["Direct mail, online fundraising and wealthy patrons","Term limits","The decline of television"],a:0,w:"Theda Skocpol calls it a shift from membership to management."},
+ {q:"Group contributions stayed roughly flat after 1998. What happened to groups' direct spending?",o:["It fell","It stayed flat","It grew from almost nothing to $3.8 billion in 2024"],a:2,w:"The money did not so much grow as change legal form, which is a story about rules."},
+ {q:"In 2012, for the first time, groups' independent expenditures exceeded:",o:["Total PAC contributions","Candidates' own spending","Party spending"],a:0,w:"Spending directly, rather than giving to candidates, became groups' main way to take part."},
+ {q:"Which sector gives the most to federal campaigns?",o:["Oil and gas","Finance, insurance and real estate","Entertainment"],a:1,w:"Business accounted for 62.6% of large federal contributions in 2024, ideological groups 24.6% and labor 10.5%."},
+ {q:"Corporate and labor PACs give most of their money to:",o:["Challengers","Incumbents","Open-seat candidates"],a:1,w:"That is why groups' direct spending matters more in close races."},
+ {q:"Compared with candidates' ads, interest group ads are:",o:["More negative and more focused on issues","More positive and more biographical","About the same"],a:0,w:"Groups have less of a reputation to protect, so they go negative far more often."},
+ {q:"In how many 2024 congressional races did outside groups outspend the candidates themselves?",o:["5","50","500"],a:1,w:"Candidates now have less control over their messages in the most competitive races."},
+ {q:"In ballot initiative campaigns, who are the main actors?",o:["Candidates","Interest groups","Party committees"],a:1,w:"Gathering signatures is itself a paid industry, so money can put nearly anything on a ballot."},
+ {q:"Arthur Lupia found that knowing which groups backed an insurance measure let low-information voters:",o:["Vote as if they were fully informed","Skip voting on it","Vote against every measure"],a:0,w:"Endorsements work as shortcuts, but only when voters know the groups well."},
+ {q:"Group spending on ballot initiatives works better at:",o:["Passing them","Defeating them","Qualifying them for the ballot"],a:1,w:"Voters lean toward the status quo, so a no campaign has the easier job."},
+ {q:"Why do companies like Apple have no PAC?",o:["Groups want policy, not power, and can lobby whoever wins","Federal law forbids it","They are too small"],a:0,w:"Every major industry spends more on lobbying and charity than on campaigns."},
+ {q:"When can a group deliver its members' votes?",o:["Whenever its leaders endorse","When members feel a common fate, trust the group, and vote together","Only in presidential races"],a:1,w:"Leaders are more partisan than members, so groups often overstate what they can deliver."},
+ {q:"Do candidates usually follow interest groups' lead on the campaign agenda?",o:["Yes, groups set most agendas","Rarely; candidates respond to their opponents","Only in primaries"],a:1,w:"The book finds little evidence that candidates follow groups, which makes “the groups” a convenient scapegoat after a loss."}
+]},
+ch8:{pts:100, qs:[
+ {q:"How long is the average presidential candidate sound bite on TV news?",o:["9 seconds","30 seconds","60 seconds"],a:0,w:"Reporters' voices fill most of the airtime, not the candidates'."},
+ {q:"Which is still Americans' most popular source of news?",o:["Print newspapers","Television","Podcasts"],a:1,w:"Local TV news is light on campaigns but remains the most trusted source."},
+ {q:"The FCC's right to equal time does not cover:",o:["Debates and news interviews","Broadcast stations","Candidate appearances in paid programming"],a:0,w:"That exemption is how debate organizers can exclude third-party candidates."},
+ {q:"With local news shrinking, voters increasingly:",o:["Know their governor better","Judge their own representatives by their views of the president","Split their tickets"],a:1,w:"Nationalized coverage pushes people to vote on national figures."},
+ {q:"People who live inside a neighboring state's media market are more likely to:",o:["Vote straight-ticket","Know their own governor","Watch cable news"],a:0,w:"Daniel Moskowitz's natural experiment: they know less about their own state's races and fall back on party."},
+ {q:"In 2016 general-election coverage, how did horse race compare with policy?",o:["42% horse race, 10% policy","10% horse race, 42% policy","About equal"],a:0,w:"Coverage of who is ahead crowds out coverage of what candidates would do."},
+ {q:"Which bias in campaign coverage does the book find real?",o:["A consistent liberal tilt","A consistent conservative tilt","Favoring whoever is ahead in the race"],a:2,w:"In 2016, 77% of Trump's coverage and 64% of Clinton's was negative, shifting as their standing changed."},
+ {q:"What did studies of Facebook's and YouTube's algorithms find?",o:["Algorithms pushed users toward extremes","Algorithms did little to change attitudes; users chose biased content themselves","Turning off resharing transformed views"],a:1,w:"YouTube's algorithm mostly pointed users toward mainstream sources."},
+ {q:"Studies using cable channel position found easier access to Fox News:",o:["Had no effect","Increased Republican voting","Increased Democratic voting"],a:1,w:"MS NOW had no comparable effect for Democrats, partly because far fewer people watch it."},
+ {q:"Where are media effects on voters strongest?",o:["Primaries","General elections","Midterms"],a:0,w:"Primaries have no party cue and unfamiliar candidates, so coverage can lift a candidate and then scrutiny can sink them."},
+ {q:"Coverage of inflation in 2024 led voters to judge Biden and Harris on prices. This is:",o:["Agenda setting","Priming","Pack journalism"],a:1,w:"Priming shapes the standards voters use to judge candidates. Agenda setting shapes which issues people think about."},
+ {q:"In 2015, Donald Trump received:",o:["Less coverage than most rivals","More coverage than all other candidates combined","About as much as Jeb Bush"],a:1,w:"News values like novelty and conflict rewarded him with attention his rivals could not match."},
+ {q:"One experiment found viewers' opinions of a debate depended most on:",o:["The candidates' answers","The tone of post-debate coverage","The moderators"],a:1,w:"Gore was judged the winner of the first 2000 debate and, a week later, the loser."},
+ {q:"A poll shows a candidate at 51%. This means:",o:["The candidate has a 51% chance of winning","About 51% of respondents back the candidate","The race is decided"],a:1,w:"A share of the vote is not a probability of winning, and subgroup results carry even wider margins of error."},
+ {q:"How does the book describe the journalistic norm of objectivity?",o:["Required by the First Amendment","As old as the republic","Historically contingent, growing as owners sought broader audiences"],a:2,w:"The partisan press lasted into the 1900s. Wire services and a 1922 code of ethics spread impartiality."},
+ {q:"Markus Prior argues that having more channels:",o:["Lets uninterested people avoid news, splitting an attentive minority from a tuned-out majority","Makes everyone better informed","Has no effect on who follows politics"],a:0,w:"News junkies are stronger partisans, so outlets cater to the already-convinced."}
+]},
+ch9:{pts:100, qs:[
+ {q:"Where do the 538 electoral votes come from?",o:["One per House seat, plus one per state","435 House seats, plus 100 senators, plus 3 for D.C.","One per 600,000 people"],a:1,w:"A candidate needs 270 to win."},
+ {q:"Which of these presidents won the electoral college while losing the popular vote?",o:["Benjamin Harrison, 1888","Ronald Reagan, 1980","Barack Obama, 2008"],a:0,w:"The others are John Quincy Adams (1824), Hayes (1876), Bush (2000) and Trump (2016)."},
+ {q:"The invisible primary of endorsements, money and organization is:",o:["Enough to win the nomination","Necessary but not sufficient","No longer important"],a:1,w:"Front-runners now often skip early debates, as Biden and Trump both did in 2024."},
+ {q:"Democrats award delegates proportionally to candidates who clear what threshold?",o:["5%","15%","50%"],a:1,w:"Republicans have historically allowed winner-take-all contests but have shifted toward proportional and hybrid rules."},
+ {q:"Why do early contests matter far beyond their delegate counts?",o:["They signal viability and narrow the field","Their delegates count double","They choose the running mate"],a:0,w:"Seven Republicans were running in December 2023; after New Hampshire, two remained."},
+ {q:"For 2024, Democrats moved which state's primary to go first?",o:["Iowa","New Hampshire","South Carolina"],a:2,w:"It was justified as diversity, and it also played to Biden's strength among Black primary voters."},
+ {q:"New Hampshire held the first primary in 2024 anyway. What happened?",o:["It lost all its delegates","It kept its delegates, and Biden was not on the ballot","Biden won it easily"],a:1,w:"State law requires New Hampshire to go first, so it defied the national party."},
+ {q:"Of seven candidates the book says gained early momentum, from Carter in 1976 to Cruz in 2016, how many won the nomination?",o:["Two","Five","All seven"],a:0,w:"Momentum helps, but it does not decide nominations."},
+ {q:"How much does a running mate move the vote?",o:["At most a point or two in a few states","Five to ten points nationally","They decide most close races"],a:0,w:"Democrats still argue Shapiro over Walz might have been worth a point in Pennsylvania."},
+ {q:"The average convention bump from 2008 to 2024 was about:",o:["2 points","5 points","16 points"],a:0,w:"The average since 1972 is about 5. In 2024 neither party gained even a point."},
+ {q:"Which two states split electoral votes by district?",o:["Iowa and Ohio","Maine and Nebraska","Vermont and Wyoming"],a:1,w:"Winner-take-all is state law, not the Constitution. In 2024 Harris won Nebraska's 2nd and Trump won Maine's 2nd."},
+ {q:"In 2024 Trump won 58.0% of the electoral votes. What share of the popular vote did he win?",o:["49.8%","52.5%","58.0%"],a:0,w:"Winner-take-all magnifies narrow wins into large electoral majorities."},
+ {q:"Of $356 million in presidential broadcast ads from August to Election Day 2024, how much ran in the seven battleground states?",o:["About 60%","About 75%","98%"],a:2,w:"Voters in 43 states plus D.C. were targeted only indirectly."},
+ {q:"About what share of presidents who seek reelection win?",o:["One-third","Two-thirds","Nine in ten"],a:1,w:"Incumbents start with bigger leads and hold more of them."},
+ {q:"In a presidential debate, a candidate's first goal is to:",o:["Land a knockout blow","Do no harm","Win over the moderator"],a:1,w:"Debates usually change little: partisans score them for their own side, and both messages reach viewers."},
+ {q:"Why do incumbent presidents often go negative, unlike other incumbents?",o:["Their opponent is already widely known, so attacking doesn't raise them up","They are behind in the polls","The law requires contrast ads"],a:0,w:"Clinton, Bush and Obama were all more negative in their reelection campaigns."}
+]},
+terms:{pts:200, kind:"case", qs:[
+ {q:"“A candidate's chances of winning the nomination.”",o:["Viability","Momentum","Front-loading"],a:0,w:"Viability is what early contests signal to donors, reporters and voters."},
+ {q:"“States moving their primaries and caucuses earlier in the calendar.”",o:["Narrow-casting","Front-loading","Pack journalism"],a:1,w:"National parties discourage it with calendar rules and delegate penalties."},
+ {q:"“Endorsements, money and organization gathered before any votes are cast.”",o:["The invisible primary","The convention bump","Coordinated expenditures"],a:0,w:"It is necessary but not sufficient for the nomination."},
+ {q:"“Targeting a smaller audience with specific messages by mail, email and phone.”",o:["Narrow-casting","Infotainment","Agenda setting"],a:0,w:"Campaigns run broad appeals on TV and base appeals through narrower channels."},
+ {q:"“Coverage focused on who is ahead and who is behind.”",o:["Interpretive journalism","Horse race journalism","Priming"],a:1,w:"In 2016, 42% of general-election coverage was horse race, against 10% on policy."},
+ {q:"“Reporters telling audiences what is really going on behind events.”",o:["Interpretive journalism","Wire services","The right to equal time"],a:0,w:"It casts reporters as analysts rather than recorders of what candidates say."},
+ {q:"“News blended with entertainment to hold an audience.”",o:["Infotainment","Narrow-casting","Pack journalism"],a:0,w:"Free outlets turned to it as advertising revenue fell."},
+ {q:"“News coverage shaping which issues people think about.”",o:["Priming","Agenda setting","Informing"],a:1,w:"Priming, by contrast, shapes the standards people use to judge candidates."},
+ {q:"“Broadcast stations must give rival candidates the same opportunity to appear.”",o:["The right to equal time","Coordinated expenditures","Viability"],a:0,w:"Debates, news interviews and on-the-spot events are exempt."},
+ {q:"“Party spending done in cooperation with the party's own candidate.”",o:["Independent expenditures","Coordinated expenditures","Soft money"],a:1,w:"Since 2004, party spending has shifted from coordinated toward independent expenditures."},
+ {q:"“A candidate's rise in the polls right after the party convention.”",o:["Momentum","The convention bump","Negative partisanship"],a:1,w:"It averaged about 5 points since 1972, but only about 2 points from 2008 to 2024."},
+ {q:"“Swing states where neither party's candidate wins consistently.”",o:["Battleground states","The Republican L","Base states"],a:0,w:"Fifteen states changed hands at least once from 2000 to 2024; the seven true battlegrounds held 93 electoral votes."}
+]}
+};
+const FINAL2 = {q:"Parties, super PACs and other interest groups all spend on campaigns. Which of them may coordinate its spending with a candidate's campaign?",
+  o:["A super PAC","A political party","Any interest group that discloses its donors"],a:1,
+  w:"Coordination is the one real privilege parties kept (Chapter 6). Super PACs and other independent groups must spend without the candidate's help (Chapters 4 and 7)."};
+const SORTS2 = {
+ parts:{cats:["In the electorate","As organization","In government"], tag:"parts-tag", items:[
+  {t:"A voter who has called herself a Republican for 30 years",c:0,w:"Party identifiers make up the party-in-the-electorate."},
+  {t:"The Democratic National Committee",c:1,w:"Official committees are the party-as-organization."},
+  {t:"The Senate majority leader",c:2,w:"Officeholders are the party-in-government."},
+  {t:"A county chair recruiting candidates for the legislature",c:1,w:"Recruiting candidates is a core job of the party organization."},
+  {t:"An independent who leans toward and reliably votes for one party",c:0,w:"Most independents are closet partisans."},
+  {t:"House members voting together on a bill",c:2,w:"Unified voting in Congress has grown over 40 years."},
+  {t:"A state party's get-out-the-vote drive",c:1,w:"Mobilizing voters is party organization work."},
+  {t:"A sitting president campaigning for the party's candidates",c:2,w:"Candidates are tied to their party's leaders and the president's approval."}
+ ]},
+ fx:{cats:["Agenda setting","Priming","Informing"], tag:"fx-tag", items:[
+  {t:"Weeks of immigration stories, and more voters name it the country's top problem",c:0,w:"Agenda setting shapes what people think about."},
+  {t:"Inflation coverage leads voters to judge the candidates on prices",c:1,w:"Priming shapes the criteria used to judge candidates."},
+  {t:"A news story teaches a voter where a candidate stands on taxes",c:2,w:"Informing is the plainest effect: people learn facts."},
+  {t:"After a spate of crime coverage, more people call crime the most important issue",c:0,w:"Coverage moved the issue up people's list."},
+  {t:"War coverage leads voters to rate the president on foreign policy",c:1,w:"The coverage changed the yardstick, not just the topic."},
+  {t:"Debate coverage tells viewers which candidate supports a new trade deal",c:2,w:"Learning a position is informing."}
+ ]}
+};
+const ERAS2 = [
+ {n:"The invisible primary",y:"The year before",d:"Candidates chase endorsements, money and organization before any votes."},
+ {n:"The early contests",y:"January to March",d:"A few early states signal viability and narrow the field."},
+ {n:"The running mate",y:"Just before the convention",d:"Recent nominees announce right before the convention to maximize it."},
+ {n:"The national convention",y:"Summer",d:"A four-day public-relations spectacle, and maybe a small bump."},
+ {n:"The fall debates",y:"September and October",d:"The first goal is to do no harm."}
+];
+
+const ROUNDS3 = {
+ch10:{pts:100, qs:[
+ {q:"What share of House incumbents won reelection in 2024?",o:["57%","77%","97%"],a:2,w:"88% of Senate incumbents won too. Losses are rare, which is why each one draws attention."},
+ {q:"How large was the House incumbency advantage in 2024?",o:["About 1 point","About 10 points","About 20 points"],a:0,w:"It rose from about 2 points in the late 1950s to just under 10 at its 1986 peak, then fell to 1.2 in 2024."},
+ {q:"Why has the incumbency advantage shrunk?",o:["Incumbents raise less money","Party loyalty grew, so district partisanship decides most races","Term limits"],a:1,w:"It has become very hard to build a personal vote that pulls in the other party's voters."},
+ {q:"If the incumbency advantage is small, why do incumbents still win nearly every race?",o:["They sit in districts that already lean toward their party","They outspend challengers 100 to 1","Challengers rarely file"],a:0,w:"Incumbents win on their district's partisan lean but earn few extra votes for being incumbents."},
+ {q:"What share of Americans can name both of their senators?",o:["One in five","Half","Four in five"],a:0,w:"Only a third can name their House member, so much of a challenger's campaign is just introducing a name."},
+ {q:"Why do many House candidates run little or no TV advertising?",o:["The FCC limits House ads","Ads are sold by media market, so they would pay to reach other districts","TV ads are banned in primaries"],a:1,w:"New Jersey has no market of its own, so its candidates must buy New York and Philadelphia airtime."},
+ {q:"The average House incumbent raised about $3 million in 2023–24. What did the average challenger raise?",o:["About $467,000","About $1.5 million","About $3 million"],a:0,w:"Senate incumbents averaged $31.2 million against $2.8 million for challengers."},
+ {q:"What share of the median House incumbent's individual contributions came from outside the district?",o:["12%","42%","82%"],a:1,w:"For the median Senate incumbent it was 68%. Donors are motivated by party control of Congress."},
+ {q:"How many House incumbents lost their primaries in 2024?",o:["Four","Forty","About a hundred"],a:0,w:"Ideological challenges are rising but rarely succeed. Open-seat primaries are the competitive ones."},
+ {q:"In the book's terms, a quality challenger is one who:",o:["Has held elected office before","Has raised the most money","Has the president's endorsement"],a:0,w:"Candidates without that experience are political amateurs."},
+ {q:"Compared with past decades, political amateurs today are:",o:["More likely to win","Less likely to win","Barred from party primaries"],a:0,w:"Political experience is worth less than it used to be."},
+ {q:"In 2024, how many of the 435 House races were decided by fewer than 10 points?",o:["67","167","267"],a:0,w:"Control of the House is competitive, but most individual races are not."},
+ {q:"Why do safe incumbents keep raising money constantly?",o:["Losses are rare but career-ending, so they signal invulnerability","The law requires a reserve","Their parties demand it"],a:0,w:"Anthony King called it “running scared.”"},
+ {q:"Why is turnout lower in midterm elections, according to Chapter 10?",o:["No presidential campaign is mobilizing voters, so congressional candidates must do it themselves","Midterms are held in odd years","Fewer people are registered"],a:0,w:"In presidential years, congressional candidates ride on the presidential campaigns' turnout efforts."},
+ {q:"Bob Casey lost his Pennsylvania Senate seat in 2024 by 0.22 points despite a moderate record. The book's explanation:",o:["Nationalization tied him to Biden","He outspent his opponent","He skipped the debates"],a:0,w:"Nationalization helped elect him in 2006, against an unpopular Bush, and defeated him in 2024."},
+ {q:"The book's verdict on the saying “all politics is local”:",o:["It is now false; national issues dominate congressional races","It still holds in the House","It never applied to Congress"],a:0,w:"Professional party messaging and stronger party loyalty have nationalized congressional campaigns."}
+]},
+ch11:{pts:100, qs:[
+ {q:"State and local elections arguably affect daily life the most. What does Chapter 11 say about them?",o:["They live up to the ideals of campaigns the least","They are the most competitive","They have the highest turnout"],a:0,w:"Low visibility, thin coverage and few contested races are the recurring problems."},
+ {q:"What share of city council and mayoral elections are nonpartisan?",o:["About 25%","About 50%","Over 75%"],a:2,w:"Nonpartisan ballots were a Progressive Era reform aimed at party machines."},
+ {q:"What do nonpartisan ballots do?",o:["Raise turnout","Lower turnout and help incumbents","Help challengers"],a:1,w:"Without a party cue, voting is harder, and voters fall back on incumbency."},
+ {q:"At-large city elections can:",o:["Disadvantage candidates of color where most voters are White","Guarantee every neighborhood a seat","Raise turnout"],a:0,w:"Some Jim Crow-era southern cities used them on purpose."},
+ {q:"How does turnout in off-cycle mayoral elections compare with presidential-year turnout?",o:["About the same","About 5 points lower","Over 20 points lower"],a:2,w:"It is also more than 15 points lower than in midterm years."},
+ {q:"In school districts with off-cycle elections, teachers are:",o:["Paid more","Paid less","Paid the same"],a:0,w:"Union members vote reliably in low-turnout elections while other voters pay little attention."},
+ {q:"Which reform does the book endorse for local elections?",o:["Holding them at the same time as presidential elections","Adding term limits","Making them nonpartisan"],a:0,w:"On-cycle elections bring higher turnout and a more representative electorate."},
+ {q:"In 2024, 38% of major-party state legislative candidates had no major-party opponent. What was the share for Congress?",o:["4%","20%","38%"],a:0,w:"State legislatures are roughly ten times less contested than Congress."},
+ {q:"Since 2020, what share of governors seeking reelection have won?",o:["About 60%","About 75%","Over 95%"],a:2,w:"It was about 85% in the 2010s."},
+ {q:"What do term limits do to state elections?",o:["Reliably increase competition","Fail to increase competition reliably and may attract more extreme candidates","Eliminate incumbency"],a:1,w:"Strong challengers wait for the open seat, and party leaders coordinate on one favorite."},
+ {q:"Professional legislatures, with long sessions, pay and staff:",o:["Attract more challengers, but incumbents win more often","Have no incumbents","Draw no challengers"],a:0,w:"The job is worth having, and incumbents have the resources to keep it."},
+ {q:"Each extra 10 points of a governor's vote share adds about how much for the party's other statewide candidates?",o:["1 to 2 points","About 10 points","Nothing"],a:0,w:"That is the coattail effect, strongest for challengers and open seats."},
+ {q:"How many states elect none of their state-level judges?",o:["8","25","42"],a:0,w:"Judicial elections can be partisan, nonpartisan or retention elections."},
+ {q:"Why did an Ohio union official say groups spend on judicial races?",o:["It's easier to elect seven judges than 132 legislators","Judges control redistricting","Judges set campaign finance limits"],a:0,w:"State supreme court fundraising rose from $9 million in 1989–90 to $100 million in 2021–22."},
+ {q:"What was the problem in Caperton v. A. T. Massey Coal (2009)?",o:["A justice elected with $3 million from a coal executive voted to overturn a $50 million verdict against the company","A judge refused to stand for retention","A court banned judicial campaign ads"],a:0,w:"The U.S. Supreme Court threw out the decision on due process grounds."},
+ {q:"In 2024, what share of 2,274 school bond measures passed?",o:["25%","50%","75%"],a:2,w:"Ballot language stresses benefits over costs. Where the personal cost must be stated, support drops."}
+]},
+ch12:{pts:100, qs:[
+ {q:"What was presidential turnout in 2024?",o:["54%","64%","74%"],a:1,w:"It was 67% in 2020, against about 60% in the 1950s and 1960s."},
+ {q:"Typical midterm turnout is about:",o:["40%, 10 to 20 points below presidential years","The same as presidential years","20%"],a:0,w:"2018 and 2022 were unusually high, near 50% and 47%."},
+ {q:"Does high turnout help Democrats?",o:["Yes, reliably","No; marginal voters “blow with the political wind” and can help either party","Only in midterms"],a:1,w:"Marginal voters are less interested and less informed, so they follow the conditions of the year."},
+ {q:"Why did Ted Cruz's 2018 team want Texas turnout above 8 million?",o:["O'Rourke's voters would show up anyway; the question was whether Republicans would","They expected new voters to favor Cruz","They needed it to qualify for public money"],a:0,w:"8.4 million voted, and Cruz won by 2.6 points."},
+ {q:"Why does the United States have lower turnout than many democracies?",o:["Americans care less about politics","The rules: no compulsory voting, frequent elections and a separate registration step","Elections are less competitive everywhere"],a:1,w:"Americans actually report stronger party attachment and more belief that voting matters."},
+ {q:"Enforced compulsory voting adds an estimated:",o:["2 to 3 points of turnout","15 to 19 points","40 points"],a:1,w:"Twenty-seven countries have compulsory voting."},
+ {q:"What does the book call the single most important individual factor in participation?",o:["Income","Free time","Political interest"],a:2,w:"Interest is stable across a lifetime, with roots in parents, education and personality."},
+ {q:"Why do low-income people participate less?",o:["They have more free time but less interest","They must work harder just to get by","Income matters most for voting"],a:1,w:"It isn't free time; high-income careers have little of it. Income matters most for donating."},
+ {q:"Which get-out-the-vote tactic costs the least per vote gained?",o:["Door-to-door canvassing, about $57","Volunteer phone calls, about $46","Telemarketer calls, about $106"],a:1,w:"Canvassing is the most effective per contact but takes more labor, so volunteer calls are cheaper per vote."},
+ {q:"What does direct mail from campaigns do to turnout?",o:["No significant effect","Raises it by 10 points","Lowers it"],a:0,w:"Nonpartisan and government mail does work. The messenger matters."},
+ {q:"Are voters in markets saturated with TV ads more likely to vote?",o:["No","Yes, much more","Only in midterms"],a:0,w:"TV advertising does not mobilize, and negative ads do not consistently depress turnout either."},
+ {q:"What can get-out-the-vote drives do to participation gaps?",o:["Close them completely","Widen them, since likely voters are easiest to mobilize","Nothing"],a:1,w:"Mobilization is easier among people who were already likely to vote."},
+ {q:"Which of these raises turnout?",o:["Threatening to show neighbors who voted","Sending emails","Leaving materials on doors"],a:0,w:"Social pressure works. Emails and door hangers showed no significant effect."},
+ {q:"Why does a competitive race raise participation?",o:["Voters think their vote is likelier to decide it","Voters are more likely to be asked to vote","Polling places stay open longer"],a:1,w:"The mechanism is mobilization, not the odds of casting the deciding vote."},
+ {q:"In 2024, how did turnout among 18- to 24-year-olds compare with turnout among people 65 and older?",o:["48% vs. 75%","65% vs. 70%","30% vs. 90%"],a:0,w:"Young people intend to vote as much as older people but often don't follow through."},
+ {q:"Over-reporting of turnout in surveys is concentrated among:",o:["Older, educated, wealthy and engaged people","Young people","People who rarely vote"],a:0,w:"So survey-based income and age gaps are likely exaggerated. Race is unrelated to over-reporting."}
+]},
+ch13:{pts:100, qs:[
+ {q:"Models published in August 2024 averaged Trump at 50.2% of the two-party vote. What did he get?",o:["46.0%","50.8%","55.0%"],a:1,w:"They averaged 292 electoral votes; he won 312. If campaigns matter, how can elections be forecast so early?"},
+ {q:"What share of Democrats and Republicans vote for their own party's presidential nominee?",o:["About half","About 70%","Over 90%"],a:2,w:"Party identification filters information, motivates turnout and predicts the vote."},
+ {q:"On the seven-point party scale, about what share of Americans are pure independents who lean toward neither party?",o:["About 7%","About 25%","About 40%"],a:0,w:"Self-described independents rose to 15% in 2024, but most lean toward a party and vote like partisans."},
+ {q:"Since the 1980s, how have partisans' ratings of the parties changed?",o:["Ratings of their own party collapsed","Ratings of the other party fell from the 40s into the teens, while own-party ratings held steady","Both rose"],a:1,w:"That is affective polarization: dislike of the other side, not more love for one's own."},
+ {q:"What share of 2024 voters split their presidential and congressional ballots?",o:["5%","15%","25%"],a:0,w:"Still, four states Trump carried elected Democratic senators."},
+ {q:"Whose votes respond most to how the economy is doing?",o:["Strong Democrats","Strong Republicans","Independents"],a:2,w:"Partisans' economic ratings follow who holds power: Democrats' flipped from positive to negative between October 2024 and January 2025."},
+ {q:"Why do most voters not cast issue-based votes?",o:["Few have both opinions and knowledge of where the candidates stand","Ballots don't list issues","Issues never differ between candidates"],a:0,w:"One study estimates fewer than half the electorate has what issue voting requires."},
+ {q:"Gabriel Lenz finds that voters more often:",o:["Choose candidates by issue positions","Adopt the positions of the candidate they already support","Ignore candidates' positions entirely"],a:1,w:"The causation often runs from candidate to issue, not the other way."},
+ {q:"What share of Black voters backed Harris in 2024?",o:["43%","63%","83%"],a:2,w:"About 90% of Black voters have backed every Democratic presidential candidate since the Voting Rights Act."},
+ {q:"How do social groups shape the vote, according to the Columbia school?",o:["Through regular contact with other members and opinion leaders","Through demographics alone","Through campaign ads aimed at the group"],a:0,w:"Voting a group identity depends on conversation and reminders that “people like you” vote a certain way."},
+ {q:"Campaigns matter most when:",o:["Candidates are familiar and evenly funded","Candidates are unfamiliar or one side's resources dominate","Turnout is high"],a:1,w:"When resources are matched, the two sides' efforts cancel out."},
+ {q:"Where do campaigns matter most?",o:["Presidential primaries","Presidential general elections","Reelection races for incumbent presidents"],a:0,w:"In 2020, Biden went from 17% to 53% in national primary polls in 17 days after South Carolina."},
+ {q:"Of 14 presidential elections from 1948 to 2000, how many appear to have been decided by the campaign?",o:["One","Five","Twelve"],a:1,w:"In general elections the campaigns usually fight to a draw, and the fundamentals decide."},
+ {q:"Why do volatile polls end up near the forecasts?",o:["Campaigns prime the fundamentals, focusing voters on them as the race goes on","Pollsters adjust their numbers","Undecided voters stay home"],a:0,w:"Candidates favored by conditions who campaign on those conditions win more often."},
+ {q:"What does the book say about negative ads?",o:["They always work","They lower views of the target but also of the attacker, and the backlash may be larger","They have no effect"],a:1,w:"They are more memorable, which makes them a risky strategy at best."},
+ {q:"Trump's 2024 win rested on fewer than how many votes across Michigan, Pennsylvania and Wisconsin?",o:["23,000","230,000","2.3 million"],a:1,w:"So campaigns can decide elections even if they usually don't."}
+]},
+terms3:{pts:200, kind:"case", qs:[
+ {q:"“The extra share of the vote a candidate gets just for being the incumbent.”",o:["The incumbency advantage","The coattail effect","The personal vote"],a:0,w:"In the House it fell from about 10 points in 1986 to 1.2 in 2024."},
+ {q:"“Support an incumbent earns personally, through visibility and service, beyond party.”",o:["The personal vote","Casework","Reinforcement"],a:0,w:"It is built from visibility, mailings and constituent service."},
+ {q:"“Members of Congress mailing constituents at government expense.”",o:["Casework","The franking privilege","Earned media"],a:1,w:"It is one of the tools that built the incumbency advantage."},
+ {q:"“Helping constituents solve problems with government agencies.”",o:["Casework","Roll-off","Sociotropic voting"],a:0,w:"Professional legislatures give incumbents the staff to do more of it."},
+ {q:"“A challenger who has held elected office before.”",o:["A political amateur","A quality challenger","An opinion leader"],a:1,w:"Strong incumbents scare them off; they wait for open seats."},
+ {q:"“A strong candidate at the top of the ticket lifting the party's other candidates.”",o:["The coattail effect","The incumbency advantage","Reinforcement"],a:0,w:"Each 10 points of a governor's vote share adds 1 to 2 points for the party's other statewide candidates."},
+ {q:"“Voters decide yes or no on whether a sitting judge keeps the job.”",o:["A referendum","A retention election","A recall"],a:1,w:"In 2024 an Oklahoma justice became the state's first to lose one."},
+ {q:"“A legislature with short sessions, low pay and little staff.”",o:["A citizen legislature","A professional legislature","A unicameral legislature"],a:0,w:"Montana, North Dakota, South Dakota and Wyoming have them."},
+ {q:"“Voters skipping the races further down the ballot.”",o:["Roll-off","Off-cycle voting","Split-ticket voting"],a:0,w:"Nonpartisan ballots make it worse."},
+ {q:"“The social rewards of taking part alongside other people.”",o:["Material benefits","Solidary benefits","Purposive benefits"],a:1,w:"Purposive benefits come from advancing a cause; material benefits are tangible rewards."},
+ {q:"“Judging the incumbent by the nation's economy rather than your own finances.”",o:["Pocketbook voting","Sociotropic voting","Proximity voting"],a:1,w:"Pocketbook voting judges by your own finances."},
+ {q:"“An issue used to split the other side's coalition by exploiting cross pressures.”",o:["A wedge issue","An issue public","A heuristic"],a:0,w:"With about 90% party loyalty, solidifying the base usually beats wedging."}
+]}
+};
+const FINAL3 = {q:"Political scientists forecast the 2024 result months in advance. What does Chapter 13 say presidential general-election campaigns mostly do?",
+  o:["Persuade large numbers of undecided voters","Fight to a draw, so the fundamentals decide","Manipulate voters through advertising"],a:1,
+  w:"Both sides are known and well funded, so their efforts cancel out. Campaigns reinforce and prime the fundamentals, which is why forecasts work."};
+const SORTS3 = {
+ amo:{cats:["Ability","Motivation","Opportunity"], tag:"amo-tag", items:[
+  {t:"A college degree",c:0,w:"Education is among the strongest predictors of participation."},
+  {t:"A strong interest in politics",c:1,w:"Political interest is the most important individual factor."},
+  {t:"Same-day registration",c:2,w:"Rules that lower the cost of voting are opportunity."},
+  {t:"Civic skills learned running a church committee",c:0,w:"Workplaces and churches teach the skills participation takes."},
+  {t:"Strong attachment to a party",c:1,w:"Partisan strength motivates turnout."},
+  {t:"A polling place that closed and moved across town",c:2,w:"Consolidating polling places reduces turnout through confusion."}
+ ]}
+};
+const ERAS3 = [
+ {n:"Door-to-door canvassing",y:"1 vote per 17 contacted",d:"Volunteers knock and talk face to face."},
+ {n:"Volunteer phone calls",y:"1 vote per 36 contacted",d:"Supporters call voters from a list."},
+ {n:"Telemarketer calls",y:"1 vote per 106 contacted",d:"A paid call center reads a script."},
+ {n:"Nonpartisan direct mail",y:"1 vote per 260 reached",d:"A mailer from a nonpartisan or government source."},
+ {n:"Robocalls",y:"1 vote per 425",d:"A recorded message plays when someone answers."}
+];
+
+const ROUNDS = {...ROUNDS1, ...ROUNDS2, ...ROUNDS3};
+const SORTS = {...SORTS1, ...SORTS2, ...SORTS3};
+const ORDERS = {eras:{items:ERAS1, unit:"era"}, cal:{items:ERAS2, unit:"stage"}, gotv:{items:ERAS3, unit:"tactic"}};
+const EXAMS = {1:[1,2,3,4,5], 2:[6,7,8,9], 3:[10,11,12,13]};
+const EXAM_NAMES = {1:"Exam I", 2:"Exam II", 3:"Exam III"};
+const FINALS = {1:{...FINAL1, kicker:"Chapters 1 and 4"}, 2:{...FINAL2, kicker:"Chapters 4, 6 and 7"}, 3:{...FINAL3, kicker:"Chapter 13"}};
+/* The final question comes from the exam with the most chapters in play; ties go to the later exam. */
+function finalExam(){ const sel=new Set(G.chapters||[]); let best=3, n=-1;
+  [1,2,3].forEach(e=>{ const k=EXAMS[e].filter(c=>sel.has(c)).length; if (k>=n){ n=k; best=e; } }); return best; }
+const curFinal = () => FINALS[finalExam()];
+
 /* Each game gets its own seed; question order, answer order and game items are shuffled from it. */
 function rngFor(str){ let h=1779033703^str.length; for(let i=0;i<str.length;i++){ h=Math.imul(h^str.charCodeAt(i),3432918353); h=h<<13|h>>>19; }
   return ()=>{ h=Math.imul(h^h>>>16,2246822507); h=Math.imul(h^h>>>13,3266489909); h^=h>>>16; return (h>>>0)/4294967296; }; }
@@ -759,8 +1259,8 @@ const nQ = R => Math.min(PER_GAME, R.qs.length);
 const slots = R => Array.from({length:nQ(R)});
 function QV(id, i){ const R=ROUNDS[id], rs=(G.reseed||{})[id]||0, order=perm(R.qs.length, id+"#"+rs), src=R.qs[order[i]], op=perm(src.o.length, id+"#"+rs+"#"+order[i]);
   return {q:src.q, o:op.map(x=>src.o[x]), a:op.indexOf(src.a), w:src.w}; }
-function FV(){ const op=perm(FINAL.o.length, "final"); return {q:FINAL.q, o:op.map(x=>FINAL.o[x]), a:op.indexOf(FINAL.a), w:FINAL.w}; }
-function eraOrder(){ const p=perm(ERAS.length, "eras"); return p.every((v,i)=>v===i) ? p.slice(1).concat(p[0]) : p; }
+function FV(){ const FN=curFinal(), op=perm(FN.o.length, "final"+finalExam()); return {q:FN.q, o:op.map(x=>FN.o[x]), a:op.indexOf(FN.a), w:FN.w}; }
+function orderPerm(id){ const n=ORDERS[id].items.length, p=perm(n, "order-"+id); return p.every((v,i)=>v===i) ? p.slice(1).concat(p[0]) : p; }
 function sortOrder(id){ return perm(SORTS[id].items.length, "sort-"+id); }
 
 /* ===================== CONFIG ===================== */
@@ -779,12 +1279,14 @@ const params = new URLSearchParams(location.search);
 const IS_PLAYER = params.has("code") || params.has("play");
 
 /* ===================== HOST STATE ===================== */
-const KEY = "c5-review-ch1-5-v3";
+const KEY = "c5-review-all-v1";
 const reader = () => window.innerWidth < 760;
 const newCode = () => Array.from({length:4},()=>"ABCDEFGHJKMNPQRSTUVWXYZ"[Math.floor(Math.random()*23)]).join("");
+/* Before Exam II (November 10, 2026) the default is Chapters 6-9; after it, Chapters 10-13. */
+function defaultChapters(){ return (Date.now() < Date.parse("2026-11-11T05:00:00Z") ? EXAMS[2] : EXAMS[3]).slice(); }
 function fresh(mode){
   return {seed:Math.random().toString(36).slice(2,10), reseed:{}, mode, teams: mode==="solo" ? ["You"] : ["Team 1","Team 2","Team 3","Team 4"], timer:true, code:newCode(),
-    awards:{}, picks:{}, rev:{}, open:{}, live:{}, sortHits:{}, sortMiss:{}, eraDone:[], eraMiss:0, adj:Array(10).fill(0),
+    awards:{}, picks:{}, rev:{}, open:{}, live:{}, sortHits:{}, sortMiss:{}, orderDone:{}, orderMiss:{}, chapters:defaultChapters(), adj:Array(10).fill(0),
     wagers:Array(10).fill(0), locked:false, finalRes:Array(10).fill(null), fin:{phase:"wager", at:0, w:{}, p:{}}, qi:{}, slide:0};
 }
 let G;
@@ -792,6 +1294,10 @@ try { G = JSON.parse(localStorage.getItem(KEY)); } catch(e) { G = null; }
 if (!G || !G.teams) G = fresh(reader() ? "solo" : "live");
 if (!G.dev) { G.dev = Math.random().toString(36).slice(2,12); }
 if (!G.seed) { G.seed = Math.random().toString(36).slice(2,10); }
+if (!Array.isArray(G.chapters) || !G.chapters.length) G.chapters = defaultChapters();
+G.orderDone = G.orderDone||{}; G.orderMiss = G.orderMiss||{};
+const EXAM_Q = params.get("exam");
+if (!IS_PLAYER && EXAMS[EXAM_Q] && G.examQ!==EXAM_Q){ G.chapters = EXAMS[EXAM_Q].slice(); G.examQ = EXAM_Q; G.slide = 0; }
 ["adj","wagers"].forEach(f=>{ while((G[f]=G[f]||[]).length<10) G[f].push(0); }); while((G.finalRes=G.finalRes||[]).length<10) G.finalRes.push(null);
 function save(){ try { localStorage.setItem(KEY, JSON.stringify(G)); } catch(e){} }
 
@@ -933,9 +1439,20 @@ function renderSetup(){
   document.getElementById("team-count").innerHTML = [2,3,4,5,6,7,8,9,10].map(n=>`<button class="btn tc" data-n="${n}" aria-pressed="${G.teams.length===n}">${n}</button>`).join("");
   document.getElementById("team-names").innerHTML = solo ? "" : G.teams.map((n,i)=>`<span class="tn"><span class="dot" style="background:${TCOL[i]}"></span><input id="team-${i}" value="${esc(n)}" maxlength="18" aria-label="Team ${i+1} name"></span>`).join("");
   document.getElementById("keys-hint").textContent = G.mode==="live" ? "→ opens each question, reveals it early if you like, then moves on · N shows notes" : "→ reveals the answer, then the next question, then the next slide · A, B or C picks an answer · N shows notes";
-  renderJoin();
+  renderPicker(); renderJoin();
 }
-function keepIdentity(old){ G.dev=old.dev; G.nick=old.nick; G.lbSent=old.lbSent; }
+function renderPicker(){
+  const sel = new Set(G.chapters), same = a => a.length===sel.size && a.every(c=>sel.has(c));
+  document.getElementById("ex-row").innerHTML = [1,2,3].map(e=>`<button class="btn exb" data-e="${e}" aria-pressed="${same(EXAMS[e])}">${EXAM_NAMES[e]} <span class="micro">Ch. ${EXAMS[e][0]}–${EXAMS[e].at(-1)}</span></button>`).join("")
+    + `<button class="btn exb" data-e="all" aria-pressed="${sel.size===13}">All 13</button>`;
+  document.getElementById("ch-row").innerHTML = Array.from({length:13},(_,i)=>i+1).map(c=>`<button class="btn chb" data-c="${c}" aria-pressed="${sel.has(c)}" aria-label="Chapter ${c}">${c}</button>`).join("");
+}
+function setChapters(a){ G.chapters = [...new Set(a)].sort((x,y)=>x-y); save(); applyChapters(); renderPicker(); show(cur); }
+document.getElementById("ex-row").addEventListener("click", e=>{ const b=e.target.closest(".exb"); if(!b) return;
+  setChapters(b.dataset.e==="all" ? Array.from({length:13},(_,i)=>i+1) : EXAMS[b.dataset.e]); });
+document.getElementById("ch-row").addEventListener("click", e=>{ const b=e.target.closest(".chb"); if(!b) return; const c=+b.dataset.c;
+  if (G.chapters.includes(c)){ if (G.chapters.length>1) setChapters(G.chapters.filter(x=>x!==c)); } else setChapters([...G.chapters, c]); });
+function keepIdentity(old){ G.dev=old.dev; G.nick=old.nick; G.lbSent=old.lbSent; G.chapters=old.chapters; G.examQ=old.examQ; }
 function setMode(m){ if(G.mode===m) return; const code=G.code, old=G; G = fresh(m); G.code=code; keepIdentity(old); save(); connectHost(); rebuildAll(); }
 document.getElementById("m-live").onclick=()=>setMode("live");
 document.getElementById("m-teams").onclick=()=>setMode("teams");
@@ -1143,33 +1660,35 @@ function makeSort(el, id){
   el._render = render; render();
 }
 
-/* ===================== ERA ORDER ===================== */
-function makeOrder(el){
-  const pts = () => Math.max(0, 200-50*G.eraMiss);
+/* ===================== ORDER GAMES ===================== */
+function makeOrder(el, id){
+  const O = ORDERS[id], E = O.items;
+  const done = () => (G.orderDone[id] = G.orderDone[id]||[]), miss = () => G.orderMiss[id]||0;
+  const pts = () => Math.max(0, 200-50*miss());
   const render = () => {
-    const d = G.eraDone, complete = d.length===ERAS.length;
-    el.innerHTML = `<div class="col" style="gap:1.1rem"><div class="slots">${ERAS.map((e,i)=> d[i]!==undefined
+    const d = done(), m = miss(), complete = d.length===E.length, g = n => `${n} wrong guess${n===1?"":"es"}`;
+    el.innerHTML = `<div class="col" style="gap:1.1rem"><div class="slots">${E.map((e,i)=> d[i]!==undefined
       ? `<div class="slot filled"><span class="n">${i+1}</span><b>${e.n}</b><span>${e.y}</span></div>`
       : `<div class="slot"><span class="n">${i+1}</span></div>`).join("")}</div>
-      <div class="pool">${eraOrder().map(i=>`<button class="ecard ${d.includes(i)?"used":""}" data-i="${i}" ${d.includes(i)?"tabindex=\"-1\"":""}><b>${ERAS[i].n}</b><span>${ERAS[i].d}</span></button>`).join("")}</div>
-      <div class="qfoot"><p class="fb" style="min-height:0">${complete ? `<b class="ok">In order.</b> ${G.eraMiss} wrong guess${G.eraMiss===1?"":"es"}.` : (G.eraMiss? `${G.eraMiss} wrong guess${G.eraMiss===1?"":"es"} so far.` : "")}</p>
-      <div class="award">${complete?awardRow("eras", pts(), "Who placed the last era?"):""}</div></div></div>`;
-    document.getElementById("era-tag").textContent = `${pts()} points`;
+      <div class="pool">${orderPerm(id).map(i=>`<button class="ecard ${d.includes(i)?"used":""}" data-i="${i}" ${d.includes(i)?"tabindex=\"-1\"":""}><b>${E[i].n}</b><span>${E[i].d}</span></button>`).join("")}</div>
+      <div class="qfoot"><p class="fb" style="min-height:0">${complete ? `<b class="ok">In order.</b> ${g(m)}.` : (m ? `${g(m)} so far.` : "")}</p>
+      <div class="award">${complete?awardRow("order:"+id, pts(), `Who placed the last ${O.unit}?`):""}</div></div></div>`;
+    document.getElementById(id+"-tag").textContent = `${pts()} points`;
   };
   el.addEventListener("click", e=>{
     const c = e.target.closest(".ecard"); if(!c || c.classList.contains("used")) return;
-    const i = +c.dataset.i;
-    if (i===G.eraDone.length){ G.eraDone.push(i);
-      if (G.eraDone.length===ERAS.length && G.mode==="solo") G.awards["eras"]={pts:pts(),teams:[0]};
+    const i = +c.dataset.i, d = done();
+    if (i===d.length){ d.push(i);
+      if (d.length===E.length && G.mode==="solo") G.awards["order:"+id]={pts:pts(),teams:[0]};
       save(); render(); renderBoard();
-    } else { G.eraMiss++; save(); render(); el.querySelector(`.ecard[data-i="${i}"]`)?.classList.add("shake","miss"); }
+    } else { G.orderMiss[id]=miss()+1; save(); render(); el.querySelector(`.ecard[data-i="${i}"]`)?.classList.add("shake","miss"); }
   });
   el._render = render; render();
 }
 
-/* ===================== CALCULATOR ===================== */
+/* ===================== CALCULATOR: VOTE TARGET (Chapter 5) ===================== */
 const CDEF = {reg:8.2,to:75,tg:52,fl:40,ce:55};
-function calc(){
+function calcVT(){
   const v = k => +document.getElementById("c-"+k).value;
   const reg=v("reg")*1e6, to=v("to"), tg=v("tg"), fl=v("fl"), ce=Math.max(v("ce"), fl);
   const cast = Math.round(reg*to/100), target = Math.ceil(cast*tg/100/100000)*100000, base = Math.round(cast*fl/100);
@@ -1193,8 +1712,34 @@ function calc(){
     : pct>100 ? `<b>Not winnable on these assumptions.</b> Even every persuadable voter leaves the campaign ${f(need-pers)} votes short.`
     : `of the persuadable voters: <b>${f(need)}</b> out of <b>${f(pers)}</b>.`;
 }
-["reg","to","tg","fl","ce"].forEach(k=>document.getElementById("c-"+k).addEventListener("input", calc));
-document.getElementById("c-reset").onclick=()=>{ for(const k in CDEF) document.getElementById("c-"+k).value=CDEF[k]; calc(); };
+["reg","to","tg","fl","ce"].forEach(k=>document.getElementById("c-"+k).addEventListener("input", calcVT));
+document.getElementById("c-reset").onclick=()=>{ for(const k in CDEF) document.getElementById("c-"+k).value=CDEF[k]; calcVT(); };
+
+/* ===================== CALCULATOR: PATH TO 270 (Figure 9.2) ===================== */
+const EC_BASE = {D:194, R:155};
+const EC_STATES = [["Arizona",11,1],["Colorado",10,0],["Florida",30,0],["Georgia",16,1],["Indiana",11,0],["Iowa",6,0],["Michigan",15,1],["Nevada",6,1],
+  ["New Hampshire",4,0],["New Mexico",5,0],["North Carolina",16,1],["Ohio",17,0],["Pennsylvania",19,1],["Virginia",13,0],["Wisconsin",10,1]];
+const EC_2024_D = ["Colorado","New Hampshire","New Mexico","Virginia"];
+const EC = {};
+function calc270(){
+  const grid = document.getElementById("ec-grid");
+  grid.innerHTML = EC_STATES.map(([n,ev,bg])=>`<button class="ecbtn ${EC[n]==="D"?"d":EC[n]==="R"?"r":""}" data-s="${n}" aria-label="${n}, ${ev} electoral votes: ${EC[n]==="D"?"Democratic":EC[n]==="R"?"Republican":"undecided"}">
+    <span>${n}${bg?" ★":""}</span><span class="ev">${ev}</span></button>`).join("");
+  let d = EC_BASE.D, r = EC_BASE.R, open = 0;
+  EC_STATES.forEach(([n,ev])=>{ if(EC[n]==="D") d+=ev; else if(EC[n]==="R") r+=ev; else open+=ev; });
+  document.getElementById("ec-d").textContent = d; document.getElementById("ec-r").textContent = r;
+  document.getElementById("ec-dbar").style.width = (d/538*100)+"%"; document.getElementById("ec-rbar").style.width = (r/538*100)+"%";
+  const say = document.getElementById("ec-say");
+  say.textContent = d>=270 ? `Democrats win, ${d} to ${r}` : r>=270 ? `Republicans win, ${r} to ${d}` : d===269 && r===269 ? "A 269–269 tie" : "Nobody has 270 yet";
+  document.getElementById("ec-left").innerHTML = open ? `<b>${open}</b> electoral votes still undecided. Democrats need ${Math.max(0,270-d)} more; Republicans need ${Math.max(0,270-r)}.`
+    : (d===269 && r===269 ? "A tie sends the election to the House, one vote per state delegation." : "Every swing state is assigned.");
+}
+document.getElementById("ec-grid").addEventListener("click", e=>{
+  const b = e.target.closest(".ecbtn"); if(!b) return; const n = b.dataset.s;
+  EC[n] = EC[n]===undefined || EC[n]==="" ? "D" : EC[n]==="D" ? "R" : ""; calc270();
+});
+document.getElementById("ec-clear").onclick = ()=>{ for(const k in EC) delete EC[k]; calc270(); };
+document.getElementById("ec-2024").onclick = ()=>{ EC_STATES.forEach(([n])=>EC[n] = EC_2024_D.includes(n) ? "D" : "R"); calc270(); };
 
 /* ===================== FINAL ===================== */
 function onFinal(){ return typeof slides!=="undefined" && slides[cur]?.contains(document.getElementById("final")); }
@@ -1295,25 +1840,37 @@ function confetti(){
 const PRESENTER = {
   sort:"Teams take turns: name a box for the next item and the presenter clicks it. A wrong pick turns red and the next team tries. When all are sorted, the presenter taps the team that placed the most.",
   disc:"Every group below can spend on elections. Teams take turns saying who learns its donors' names: the FEC, the IRS, or nobody. When all six are sorted, the presenter taps the team that placed the most.",
+  fx:"Teams take turns saying which media effect each example shows: agenda setting, priming or informing. The presenter clicks it. When all six are sorted, the presenter taps the team that placed the most.",
+  amo:"Teams take turns saying whether each item is about ability, motivation or opportunity. The presenter clicks it. When all six are sorted, the presenter taps the team that placed the most.",
   order:"Teams take turns naming the next era, earliest first, and the presenter clicks it. Each wrong guess passes the turn and knocks 50 points off the prize. Whoever places the last era wins what is left.",
-  calc:"No points on this slide. Predict first: if turnout falls to 65%, does the campaign's job get easier or harder? Then drag the sliders to check."
+  ordercal:"Teams take turns naming the next stage, earliest first, and the presenter clicks it. Each wrong guess passes the turn and knocks 50 points off the prize. Whoever places the last stage wins what is left.",
+  ordergotv:"Teams take turns naming the next tactic, starting with the one that gains the most votes per person contacted. The presenter clicks it. Each wrong guess passes the turn and knocks 50 points off the prize. Whoever places the last tactic wins what is left.",
+  calc:"No points on this slide. Predict first: if turnout falls to 65%, does the campaign's job get easier or harder? Then drag the sliders to check.",
+  calc270:"No points on this slide. Predict first: can either party reach 270 without Pennsylvania? Then click a state once for Democrats, twice for Republicans, and a third time to clear it."
 };
 const HOW = {
  live:{...PRESENTER,
   quiz:"Answer on your team's computer. The first answer from your team counts. A right answer earns half the points, and the other half shrinks as the 24-second clock runs down.",
   case:"Read the holding and pick the case on your team's computer. Up to 200 points: half for being right, half for speed.",
+  terms:"Read the definition and pick the term on your team's computer. Up to 200 points: half for being right, half for speed.",
   final:"On your team's computer, lock a wager of up to your score or 500, whichever is higher. Then answer within 36 seconds. Right adds the wager; wrong or no answer subtracts it."},
  teams:{...PRESENTER,
   quiz:"Huddle while the timer runs. When it ends, each team holds up A, B or C. The presenter reveals the answer and taps every team that got it right.",
   case:"Read the holding, then name the case. Huddle, hold up A, B or C, and every team that gets it right earns 200.",
+  terms:"Read the definition, then name the term. Huddle, hold up A, B or C, and every team that gets it right earns 200.",
   final:"Each team writes a wager of up to its score or 500, whichever is higher. Lock the wagers to show the question. Teams write their answers, then reveal and mark each team right or wrong."},
  solo:{
   quiz:"Click an answer. A right answer earns 50 points plus up to 50 more for speed. Your first click counts.",
   case:"Read the holding and click the case. A right answer earns 100 plus up to 100 for speed.",
+  terms:"Read the definition and click the term. A right answer earns 100 plus up to 100 for speed.",
   sort:"Click the right box for each item. Each one right on the first try is worth 25 points.",
   disc:"Click who learns each group's donors' names: the FEC, the IRS, or nobody. 25 points for each one right on the first try.",
+  fx:"Click the media effect each example shows: agenda setting, priming or informing. 25 points for each one right on the first try.",
+  amo:"Click ability, motivation or opportunity for each item. 25 points for each one right on the first try.",
   order:"Click the eras from earliest to latest. You start with 200 points, and each wrong click costs 50.",
-  calc:PRESENTER.calc,
+  ordercal:"Click the stages from earliest to latest. You start with 200 points, and each wrong click costs 50.",
+  ordergotv:"Click the tactics from most to least effective per person contacted. You start with 200 points, and each wrong click costs 50.",
+  calc:PRESENTER.calc, calc270:PRESENTER.calc270,
   final:"Type a wager of up to your score or 500, whichever is higher. Lock it to see the question, then click your answer."}
 };
 const STEPS = {
@@ -1321,6 +1878,23 @@ const STEPS = {
  teams:[["Huddle","Each question has a 24-second timer. Talk it over with your team."],["Answer","When time is up, every team holds up A, B or C at once. No changing it after."],["Reveal","The presenter shows the answer and a short explanation from the book."],["Score","Every team that got it right earns the points. The scoreboard is along the bottom."]],
  solo:[["Read","Each chapter has a recap slide, then a round of questions."],["Answer","Click an answer. Your first click is the one that counts."],["Beat the clock","A right answer earns half the points; answering quickly earns the rest."],["Score","Your total is along the bottom, and your progress is saved in this browser."]]
 };
+const chList = a => { a = [...new Set(a)].sort((x,y)=>x-y); return a.length===1 ? `Ch. ${a[0]}` : `Chs. ${a.slice(0,-1).join(", ")}${a.length>2?",":""} and ${a.at(-1)}`; };
+function renderRounds(){
+  const live = slides.filter(s=>s.dataset.ch), rows = [];
+  const ch = s => s.dataset.ch.split(",").map(Number).filter(c=>G.chapters.includes(c));
+  const title = s => s.querySelector("h2")?.textContent || "";
+  const qr = live.filter(s=>{ const q=s.querySelector(".quiz[data-round]"); return q && ROUNDS[q.dataset.round].kind!=="case"; });
+  if (qr.length) rows.push([`${qr.length} round${qr.length===1?"":"s"}`, `A recap slide, then eight questions per chapter (${chList(qr.flatMap(ch))}). Half the points for a right answer, half for speed.`, "Up to 100 each"]);
+  const mg = live.filter(s=>s.querySelector(".sort,.order"));
+  if (mg.length) rows.push(["Mini-games", mg.map(s=>`${title(s)} (${chList(ch(s))})`).join(" · "), "200 each"]);
+  const cl = live.filter(s=>s.querySelector(".calc"));
+  if (cl.length) rows.push([cl.length===1?"Calculator":"Calculators", cl.map(s=>`${title(s)} (${chList(ch(s))})`).join(" · "), "No points"]);
+  const bn = live.filter(s=>{ const q=s.querySelector(".quiz[data-round]"); return q && ROUNDS[q.dataset.round].kind==="case"; });
+  if (bn.length) rows.push(["Bonus", bn.map(s=>title(s)).join(" · "), "Up to 200 each"]);
+  rows.push(["Final", "Wager any part of your score on one last question", "Your bet"]);
+  document.getElementById("rounds-body").innerHTML = rows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("");
+  document.getElementById("rounds-note").textContent = `Every question comes from the book: ${chList(G.chapters).replace("Ch.","Chapter").replace("Chs.","Chapters")}.`;
+}
 function renderHow(){
   const m = G.mode;
   document.querySelectorAll(".howto").forEach(el=>el.textContent = HOW[m][el.dataset.how]);
@@ -1328,15 +1902,26 @@ function renderHow(){
 }
 
 /* ===================== DECK ===================== */
-const slides = [...document.querySelectorAll(".slide")];
-let cur = Math.min(G.slide||0, slides.length-1);
+const ALL = [...document.querySelectorAll(".slide")];
+let slides = ALL;
+function inPlay(s){ if (!s.dataset.ch) return true; const sel = new Set(G.chapters); return s.dataset.ch.split(",").some(c=>sel.has(+c)); }
+function applyChapters(){
+  const keep = slides[cur];
+  slides = ALL.filter(inPlay);
+  ALL.forEach(s=>s.classList.toggle("off", !slides.includes(s)));
+  cur = Math.max(0, slides.indexOf(keep));
+  const FN = curFinal(); document.getElementById("final-kicker").textContent = "Final round · " + FN.kicker;
+  renderRounds();
+}
+let cur = 0;
+slides = ALL.filter(inPlay); cur = Math.min(G.slide||0, slides.length-1);
 function fit(){
   const r = reader() && !IS_PLAYER; document.body.classList.toggle("reader", r);
   document.documentElement.style.fontSize = IS_PLAYER ? "16px" : r ? "10px" : Math.min(innerWidth/100, innerHeight/(56.25+3.6)) + "px";
 }
 function show(i){
   cur = Math.max(0, Math.min(slides.length-1, i)); G.slide = cur; save();
-  slides.forEach((s,j)=>s.classList.toggle("on", j===cur));
+  ALL.forEach(s=>s.classList.toggle("on", s===slides[cur]));
   document.getElementById("count").textContent = `${cur+1} / ${slides.length}`;
   document.getElementById("part").textContent = slides[cur].dataset.part || "";
   document.getElementById("progress").style.width = ((cur+1)/slides.length*100)+"%";
@@ -1370,14 +1955,15 @@ function rebuildAll(){
   renderHow(); renderSetup(); renderBoard();
   quizzes.forEach(q=>q.render());
   document.querySelectorAll(".sort").forEach(s=>s._render&&s._render());
-  document.getElementById("order-eras")._render?.();
+  document.querySelectorAll(".order").forEach(o=>o._render&&o._render());
+  applyChapters();
   renderFinal();
 }
 
 /* ===================== PLAYER ===================== */
 const P = {ch:null, st:null, team:null, code:(params.get("code")||"").toUpperCase(), dev:null, picks:{}, deadline:0, dlKey:"", lastSeen:0, tick:null, err:""};
-function pStore(){ try{ localStorage.setItem("c5-review-player-v3", JSON.stringify({code:P.code, team:P.team, dev:P.dev, picks:P.picks})); }catch(e){} }
-function pLoad(){ try{ const s=JSON.parse(localStorage.getItem("c5-review-player-v3")); if (s && s.code===P.code){ P.team=s.team; P.picks=s.picks||{}; } if (s?.dev) P.dev=s.dev; }catch(e){} if(!P.dev) P.dev=Math.random().toString(36).slice(2,10); }
+function pStore(){ try{ localStorage.setItem("c5-review-all-player-v1", JSON.stringify({code:P.code, team:P.team, dev:P.dev, picks:P.picks})); }catch(e){} }
+function pLoad(){ try{ const s=JSON.parse(localStorage.getItem("c5-review-all-player-v1")); if (s && s.code===P.code){ P.team=s.team; P.picks=s.picks||{}; } if (s?.dev) P.dev=s.dev; }catch(e){} if(!P.dev) P.dev=Math.random().toString(36).slice(2,10); }
 function pConnect(){
   if (!sbOK()){ P.err="This page can't reach the game server. Check the link from your instructor."; return pRender(); }
   if (P.ch){ try{ P.sb.removeChannel(P.ch); }catch(e){} }
@@ -1469,10 +2055,9 @@ if (IS_PLAYER){
 } else {
   fit(); addEventListener("resize", fit);
   document.querySelectorAll(".quiz[data-round]").forEach(makeQuiz);
-  makeSort(document.getElementById("sort-fw"), "fw");
-  makeSort(document.getElementById("sort-dis"), "dis");
-  makeOrder(document.getElementById("order-eras"));
-  calc(); renderHow(); renderSetup(); renderBoard(); renderFinal(); show(cur);
+  Object.keys(SORTS).forEach(id=>makeSort(document.getElementById("sort-"+id), id));
+  Object.keys(ORDERS).forEach(id=>makeOrder(document.getElementById("order-"+id), id));
+  calcVT(); calc270(); applyChapters(); renderHow(); renderSetup(); renderBoard(); renderFinal(); show(cur);
   connectHost();
 }
 </script>
