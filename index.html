@@ -285,7 +285,11 @@ body.reader .srow{grid-template-columns:2rem 1fr 4rem}
 body.reader .srow .barw{grid-column:1 / -1;order:4}
 body.reader h1{font-size:3.6rem}
 body.reader #bar{gap:.5rem;padding-inline:.6rem}
-body.reader #bar .part,body.reader #bar .navb,body.reader #count,body.reader #progress,body.reader #notesbtn{display:none}
+body.reader #bar .part,body.reader #progress,body.reader #notesbtn{display:none}
+/* phones: one slide at a time, moved with the arrow buttons in the bottom bar */
+body.reader .slide:not(.on){display:none}
+body.reader #keys-hint{display:none}
+body.reader #bar .navb{padding:.5rem 1rem;font-size:1.3rem}
 body.reader #board{justify-content:center;flex-wrap:wrap}
 body.reader .ecard.used{display:none}
 body.reader .slot{min-height:0}
@@ -395,6 +399,7 @@ body.reader .ecgrid{grid-template-columns:1fr 1fr}
 body.reader .ecrow{grid-template-columns:7rem 1fr 3rem}
 @media (prefers-reduced-motion: reduce){.ecbar i{transition:none}}
 .slide.off{display:none!important}
+.startbtn{font-size:1.4rem;padding:.6rem 1.6rem;white-space:nowrap}
 .chpick{flex-direction:column;align-items:flex-start;gap:.5rem}
 #ch-row{flex-wrap:nowrap;gap:.35rem}
 .chb{min-width:2.5rem;padding:.3rem .45rem;font-variant-numeric:tabular-nums}
@@ -406,7 +411,7 @@ body.reader #ch-row{flex-wrap:wrap}
 <div id="viewport"><main id="stage">
 
 <!-- ============ TITLE + SETUP ============ -->
-<section class="slide" data-part="Setup" style="justify-content:center;gap:1.5rem">
+<section class="slide" data-part="Setup" style="justify-content:center;gap:1.1rem">
   <p class="kicker">Campaigns and Elections · The review game · Chapters 1–13</p>
   <h1 style="max-width:80rem;font-size:4.2rem">Pick your chapters, then play</h1>
   <div class="setup" id="setup">
@@ -427,7 +432,7 @@ body.reader #ch-row{flex-wrap:wrap}
     <div class="joinbox"><span class="code" id="j-code">····</span><span class="lbl">On each team's computer, open</span><span class="url" id="j-url"></span></div>
     <div class="liveline"><span id="j-status">Connecting…</span><span class="devs" id="j-devs"></span><button class="btn" id="newcode">New code</button></div>
   </div>
-  <p class="micro" id="keys-hint">→ reveals the answer, then the next question, then the next slide · N shows notes</p>
+  <div class="btns" style="align-items:center;gap:1.4rem;flex-wrap:nowrap"><button class="btn primary startbtn" id="start-btn">Start playing →</button><p class="micro" id="keys-hint">→ reveals the answer, then the next question, then the next slide · N shows notes</p></div>
   <aside class="notes">Pick a mode. "Teams on their own computers" gives you a four-letter code: each team opens the link on one computer, types the code and picks its team, then answers every question there. The presenter screen collects the answers and scores them, half for being right and half for speed. "Teams on one shared screen" is the old version: you click the answer the room calls out and tap the teams that got it. Solo is for students studying alone. Everything is saved in this browser.</aside>
 </section>
 
@@ -1470,8 +1475,9 @@ document.getElementById("team-names").addEventListener("input", e=>{
   const i = +e.target.id.split("-")[1]; G.teams[i] = e.target.value || ("Team "+(i+1)); save(); renderBoard(); renderJoin();
 });
 document.getElementById("reset-btn").onclick=()=>{ document.getElementById("reset-confirm").hidden=false; };
-document.getElementById("reset-no").onclick=()=>{ document.getElementById("reset-confirm").hidden=true; };
-document.getElementById("reset-yes").onclick=()=>{ const t=G.teams.slice(), m=G.mode, tm=G.timer, old=G; G=fresh(m); G.teams=t; G.timer=tm; keepIdentity(old); save(); document.getElementById("reset-confirm").hidden=true; connectHost(); rebuildAll(); };
+document.getElementById("reset-no").onclick=()=>{ document.getElementById("reset-confirm").hidden=true; show(1); };
+document.getElementById("start-btn").onclick=()=>show(1);
+document.getElementById("reset-yes").onclick=()=>{ const t=G.teams.slice(), m=G.mode, tm=G.timer, old=G; G=fresh(m); G.teams=t; G.timer=tm; keepIdentity(old); save(); document.getElementById("reset-confirm").hidden=true; connectHost(); rebuildAll(); show(1); };
 
 /* ===================== QUIZ ===================== */
 const quizzes = [];
@@ -1922,7 +1928,9 @@ function fit(){
   document.documentElement.style.fontSize = IS_PLAYER ? "16px" : r ? "10px" : Math.min(innerWidth/100, innerHeight/(56.25+3.6)) + "px";
 }
 function show(i){
+  const moved = cur !== Math.max(0, Math.min(slides.length-1, i));
   cur = Math.max(0, Math.min(slides.length-1, i)); G.slide = cur; save();
+  if (moved && document.body.classList.contains("reader")) window.scrollTo(0, 0);
   ALL.forEach(s=>s.classList.toggle("on", s===slides[cur]));
   document.getElementById("count").textContent = `${cur+1} / ${slides.length}`;
   document.getElementById("part").textContent = slides[cur].dataset.part || "";
