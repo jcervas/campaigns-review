@@ -1281,7 +1281,8 @@ const IS_PLAYER = params.has("code") || params.has("play");
 
 /* ===================== HOST STATE ===================== */
 const KEY = "c5-review-all-v1";
-const reader = () => window.innerWidth < 760;
+/* The stacked phone layout is for touch screens only; a narrow desktop window keeps the slide deck. */
+const reader = () => window.innerWidth < 760 && matchMedia("(pointer: coarse)").matches;
 const newCode = () => Array.from({length:4},()=>"ABCDEFGHJKMNPQRSTUVWXYZ"[Math.floor(Math.random()*23)]).join("");
 /* Before Exam II (November 10, 2026) the default is Chapters 6-9; after it, Chapters 10-13. */
 function defaultChapters(){ return (Date.now() < Date.parse("2026-11-11T05:00:00Z") ? EXAMS[2] : EXAMS[3]).slice(); }
